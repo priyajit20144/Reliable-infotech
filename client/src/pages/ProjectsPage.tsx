@@ -287,18 +287,14 @@ export const ProjectsPage: React.FC = () => {
     { name: 'Recent', count: 30 },
   ];
 
-  // Handle tech toggle
+  // Handle tech single option toggle
   const toggleTech = (tech: string) => {
-    setSelectedTechs((prev) =>
-      prev.includes(tech) ? prev.filter((t) => t !== tech) : [...prev, tech]
-    );
+    setSelectedTechs((prev) => (prev.includes(tech) ? [] : [tech]));
   };
 
-  // Handle type toggle
+  // Handle type single option toggle
   const toggleType = (type: string) => {
-    setSelectedTypes((prev) =>
-      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
-    );
+    setSelectedTypes((prev) => (prev.includes(type) ? [] : [type]));
   };
 
   // Reset all filters

@@ -65,18 +65,12 @@ export const CatalogFilterSidebar: React.FC<CatalogFilterSidebarProps> = ({
   isMobile = false,
   onCloseMobile,
 }) => {
-  // Collapsible accordion state for sections
-  const [openSections, setOpenSections] = useState<Record<string, boolean>>({
-    category: true,
-    technology: true,
-    projectType: true,
-  });
+  type SectionKey = 'category' | 'technology' | 'projectType';
+  // Single active accordion section (only one section can be open at a time)
+  const [activeSection, setActiveSection] = useState<SectionKey | null>('category');
 
-  const toggleSection = (section: string) => {
-    setOpenSections((prev) => ({
-      ...prev,
-      [section]: !prev[section],
-    }));
+  const toggleSection = (section: SectionKey) => {
+    setActiveSection((current) => (current === section ? null : section));
   };
 
   const activeFiltersCount =
@@ -132,7 +126,7 @@ export const CatalogFilterSidebar: React.FC<CatalogFilterSidebarProps> = ({
                 </span>
               )}
             </div>
-            <p className="text-[9px] text-gray-400">Refine catalog showcase</p>
+            <p className="text-[9px] text-gray-400">Single option refine</p>
           </div>
         </div>
 
@@ -150,13 +144,13 @@ export const CatalogFilterSidebar: React.FC<CatalogFilterSidebarProps> = ({
       </div>
 
       {/* =================================================================== */}
-      {/* 2. CATEGORY ACCORDION (Compact Animated Gradient Pills)            */}
+      {/* 2. CATEGORY SECTION (Single Option Expandable)                      */}
       {/* =================================================================== */}
       <div className="relative z-10 space-y-1.5">
         <button
           type="button"
           onClick={() => toggleSection('category')}
-          className="w-full flex items-center justify-between py-0.5 group/header cursor-pointer text-left"
+          className="w-full flex items-center justify-between py-1 group/header cursor-pointer text-left transition-colors"
         >
           <div className="flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
@@ -164,21 +158,19 @@ export const CatalogFilterSidebar: React.FC<CatalogFilterSidebarProps> = ({
               Category
             </h4>
           </div>
-          <div className="flex items-center gap-1">
-            {selectedCategory !== 'All Projects' && (
-              <span className="text-[9px] text-indigo-400 font-semibold truncate max-w-[85px]">
-                {selectedCategory}
-              </span>
-            )}
+          <div className="flex items-center gap-1.5">
+            <span className="text-[9px] text-indigo-300 font-semibold truncate max-w-[100px] px-1.5 py-0.2 rounded bg-indigo-500/15 border border-indigo-500/25">
+              {selectedCategory}
+            </span>
             <ChevronDown
               className={`w-3 h-3 text-gray-400 group-hover/header:text-white transition-transform duration-300 ${
-                openSections.category ? 'rotate-180' : 'rotate-0'
+                activeSection === 'category' ? 'rotate-180 text-indigo-400' : 'rotate-0'
               }`}
             />
           </div>
         </button>
 
-        {openSections.category && (
+        {activeSection === 'category' && (
           <div className="space-y-0.5 pt-0.5 animate-in fade-in slide-in-from-top-1 duration-200">
             {categoriesList.map((cat) => {
               const Icon = cat.icon || Layers;
@@ -231,13 +223,13 @@ export const CatalogFilterSidebar: React.FC<CatalogFilterSidebarProps> = ({
       </div>
 
       {/* =================================================================== */}
-      {/* 3. TECHNOLOGY ACCORDION (Compact Custom Checkbox Badges)            */}
+      {/* 3. TECHNOLOGY SECTION (Single Option Expandable Radio)              */}
       {/* =================================================================== */}
       <div className="relative z-10 space-y-1.5 pt-3 border-t border-white/10">
         <button
           type="button"
           onClick={() => toggleSection('technology')}
-          className="w-full flex items-center justify-between py-0.5 group/header cursor-pointer text-left"
+          className="w-full flex items-center justify-between py-1 group/header cursor-pointer text-left transition-colors"
         >
           <div className="flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
@@ -245,22 +237,53 @@ export const CatalogFilterSidebar: React.FC<CatalogFilterSidebarProps> = ({
               Technology
             </h4>
           </div>
-          <div className="flex items-center gap-1">
-            {selectedTechs.length > 0 && (
-              <span className="text-[9px] px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-semibold font-mono">
-                {selectedTechs.length}
-              </span>
-            )}
+          <div className="flex items-center gap-1.5">
+            <span className="text-[9px] text-cyan-300 font-semibold truncate max-w-[100px] px-1.5 py-0.2 rounded bg-cyan-500/15 border border-cyan-500/25">
+              {selectedTechs.length > 0 ? selectedTechs[0] : 'All'}
+            </span>
             <ChevronDown
               className={`w-3 h-3 text-gray-400 group-hover/header:text-white transition-transform duration-300 ${
-                openSections.technology ? 'rotate-180' : 'rotate-0'
+                activeSection === 'technology' ? 'rotate-180 text-cyan-400' : 'rotate-0'
               }`}
             />
           </div>
         </button>
 
-        {openSections.technology && (
+        {activeSection === 'technology' && (
           <div className="space-y-0.5 pt-0.5 animate-in fade-in slide-in-from-top-1 duration-200">
+            {/* All Technologies Option */}
+            <div
+              onClick={() => {
+                if (selectedTechs.length > 0) onToggleTech(selectedTechs[0]);
+              }}
+              className={`w-full flex items-center justify-between px-2 py-1.5 rounded-lg text-[11px] transition-all duration-200 group/tech cursor-pointer active:scale-[0.98] border ${
+                selectedTechs.length === 0
+                  ? 'bg-cyan-500/15 border-cyan-500/35 text-white shadow-sm'
+                  : 'border-transparent hover:bg-white/[0.04] text-gray-400 hover:text-gray-200'
+              }`}
+            >
+              <div className="flex items-center gap-2 min-w-0">
+                <div
+                  className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center transition-all duration-200 shrink-0 ${
+                    selectedTechs.length === 0
+                      ? 'border-cyan-400 bg-cyan-500/20 shadow-[0_0_8px_rgba(6,182,212,0.5)]'
+                      : 'border-slate-700 bg-slate-900/80 group-hover/tech:border-cyan-400/50'
+                  }`}
+                >
+                  {selectedTechs.length === 0 && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_#22D3EE] animate-in zoom-in-50 duration-150" />
+                  )}
+                </div>
+                <span className={`truncate text-[11px] ${selectedTechs.length === 0 ? 'font-bold text-white' : 'font-normal'}`}>
+                  All Technologies
+                </span>
+              </div>
+              <span className={`text-[9px] font-mono px-1.5 py-0.2 rounded-md ${selectedTechs.length === 0 ? 'bg-cyan-500/30 text-cyan-200 font-bold' : 'text-gray-500'}`}>
+                50
+              </span>
+            </div>
+
+            {/* Individual Tech Single Options */}
             {techOptions.map((t) => {
               const isChecked = selectedTechs.includes(t.name);
 
@@ -268,23 +291,22 @@ export const CatalogFilterSidebar: React.FC<CatalogFilterSidebarProps> = ({
                 <div
                   key={t.name}
                   onClick={() => onToggleTech(t.name)}
-                  className={`w-full flex items-center justify-between px-2 py-1 rounded-lg text-[11px] transition-all duration-200 group/tech cursor-pointer active:scale-[0.98] border ${
+                  className={`w-full flex items-center justify-between px-2 py-1.5 rounded-lg text-[11px] transition-all duration-200 group/tech cursor-pointer active:scale-[0.98] border ${
                     isChecked
-                      ? 'bg-indigo-500/15 border-indigo-500/35 text-white shadow-sm'
+                      ? 'bg-cyan-500/15 border-cyan-500/35 text-white shadow-sm'
                       : 'border-transparent hover:bg-white/[0.04] text-gray-400 hover:text-gray-200'
                   }`}
                 >
                   <div className="flex items-center gap-2 min-w-0">
-                    {/* Custom Compact Animated Checkbox */}
                     <div
-                      className={`w-3.5 h-3.5 rounded border flex items-center justify-center transition-all duration-200 shrink-0 ${
+                      className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center transition-all duration-200 shrink-0 ${
                         isChecked
-                          ? 'bg-gradient-to-tr from-indigo-500 to-purple-500 border-indigo-400 text-white shadow-[0_0_8px_rgba(99,102,241,0.5)] scale-105'
-                          : 'bg-slate-900/80 border-slate-700/80 group-hover/tech:border-indigo-400/50'
+                          ? 'border-cyan-400 bg-cyan-500/20 shadow-[0_0_8px_rgba(6,182,212,0.5)]'
+                          : 'border-slate-700 bg-slate-900/80 group-hover/tech:border-cyan-400/50'
                       }`}
                     >
                       {isChecked && (
-                        <Check className="w-2 h-2 text-white stroke-[3] animate-in zoom-in-50 duration-150" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_#22D3EE] animate-in zoom-in-50 duration-150" />
                       )}
                     </div>
 
@@ -302,7 +324,7 @@ export const CatalogFilterSidebar: React.FC<CatalogFilterSidebarProps> = ({
                   <span
                     className={`text-[9px] font-mono px-1.5 py-0.2 rounded-md transition-colors ${
                       isChecked
-                        ? 'bg-indigo-500/30 text-indigo-200 font-bold'
+                        ? 'bg-cyan-500/30 text-cyan-200 font-bold'
                         : 'text-gray-500 group-hover/tech:text-gray-300'
                     }`}
                   >
@@ -316,13 +338,13 @@ export const CatalogFilterSidebar: React.FC<CatalogFilterSidebarProps> = ({
       </div>
 
       {/* =================================================================== */}
-      {/* 4. PROJECT TYPE ACCORDION (Compact Badges with Icons)               */}
+      {/* 4. PROJECT TYPE SECTION (Single Option Expandable Radio)            */}
       {/* =================================================================== */}
       <div className="relative z-10 space-y-1.5 pt-3 border-t border-white/10">
         <button
           type="button"
           onClick={() => toggleSection('projectType')}
-          className="w-full flex items-center justify-between py-0.5 group/header cursor-pointer text-left"
+          className="w-full flex items-center justify-between py-1 group/header cursor-pointer text-left transition-colors"
         >
           <div className="flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
@@ -330,22 +352,54 @@ export const CatalogFilterSidebar: React.FC<CatalogFilterSidebarProps> = ({
               Project Type
             </h4>
           </div>
-          <div className="flex items-center gap-1">
-            {selectedTypes.length > 0 && (
-              <span className="text-[9px] px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30 font-semibold font-mono">
-                {selectedTypes.length}
-              </span>
-            )}
+          <div className="flex items-center gap-1.5">
+            <span className="text-[9px] text-purple-300 font-semibold truncate max-w-[100px] px-1.5 py-0.2 rounded bg-purple-500/15 border border-purple-500/25">
+              {selectedTypes.length > 0 ? selectedTypes[0] : 'All'}
+            </span>
             <ChevronDown
               className={`w-3 h-3 text-gray-400 group-hover/header:text-white transition-transform duration-300 ${
-                openSections.projectType ? 'rotate-180' : 'rotate-0'
+                activeSection === 'projectType' ? 'rotate-180 text-purple-400' : 'rotate-0'
               }`}
             />
           </div>
         </button>
 
-        {openSections.projectType && (
+        {activeSection === 'projectType' && (
           <div className="space-y-0.5 pt-0.5 animate-in fade-in slide-in-from-top-1 duration-200">
+            {/* All Types Option */}
+            <div
+              onClick={() => {
+                if (selectedTypes.length > 0) onToggleType(selectedTypes[0]);
+              }}
+              className={`w-full flex items-center justify-between px-2 py-1.5 rounded-lg text-[11px] transition-all duration-200 group/type cursor-pointer active:scale-[0.98] border ${
+                selectedTypes.length === 0
+                  ? 'bg-purple-500/15 border-purple-500/35 text-white shadow-sm'
+                  : 'border-transparent hover:bg-white/[0.04] text-gray-400 hover:text-gray-200'
+              }`}
+            >
+              <div className="flex items-center gap-2 min-w-0">
+                <div
+                  className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center transition-all duration-200 shrink-0 ${
+                    selectedTypes.length === 0
+                      ? 'border-purple-400 bg-purple-500/20 shadow-[0_0_8px_rgba(168,85,247,0.5)]'
+                      : 'border-slate-700 bg-slate-900/80 group-hover/type:border-purple-400/50'
+                  }`}
+                >
+                  {selectedTypes.length === 0 && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-purple-400 shadow-[0_0_6px_#C084FC] animate-in zoom-in-50 duration-150" />
+                  )}
+                </div>
+                <SlidersHorizontal className={`w-3 h-3 shrink-0 ${selectedTypes.length === 0 ? 'text-purple-300' : 'text-gray-400'}`} />
+                <span className={`truncate text-[11px] ${selectedTypes.length === 0 ? 'font-bold text-white' : 'font-normal'}`}>
+                  All Types
+                </span>
+              </div>
+              <span className={`text-[9px] font-mono px-1.5 py-0.2 rounded-md ${selectedTypes.length === 0 ? 'bg-purple-500/30 text-purple-200 font-bold' : 'text-gray-500'}`}>
+                50
+              </span>
+            </div>
+
+            {/* Individual Project Type Single Options */}
             {typeOptions.map((type) => {
               const isChecked = selectedTypes.includes(type.name);
               const Icon = getTypeIcon(type.name);
@@ -354,23 +408,22 @@ export const CatalogFilterSidebar: React.FC<CatalogFilterSidebarProps> = ({
                 <div
                   key={type.name}
                   onClick={() => onToggleType(type.name)}
-                  className={`w-full flex items-center justify-between px-2 py-1 rounded-lg text-[11px] transition-all duration-200 group/type cursor-pointer active:scale-[0.98] border ${
+                  className={`w-full flex items-center justify-between px-2 py-1.5 rounded-lg text-[11px] transition-all duration-200 group/type cursor-pointer active:scale-[0.98] border ${
                     isChecked
                       ? 'bg-purple-500/15 border-purple-500/35 text-white shadow-sm'
                       : 'border-transparent hover:bg-white/[0.04] text-gray-400 hover:text-gray-200'
                   }`}
                 >
                   <div className="flex items-center gap-2 min-w-0">
-                    {/* Custom Compact Animated Checkbox */}
                     <div
-                      className={`w-3.5 h-3.5 rounded border flex items-center justify-center transition-all duration-200 shrink-0 ${
+                      className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center transition-all duration-200 shrink-0 ${
                         isChecked
-                          ? 'bg-gradient-to-tr from-purple-500 to-indigo-500 border-purple-400 text-white shadow-[0_0_8px_rgba(168,85,247,0.5)] scale-105'
-                          : 'bg-slate-900/80 border-slate-700/80 group-hover/type:border-purple-400/50'
+                          ? 'border-purple-400 bg-purple-500/20 shadow-[0_0_8px_rgba(168,85,247,0.5)]'
+                          : 'border-slate-700 bg-slate-900/80 group-hover/type:border-purple-400/50'
                       }`}
                     >
                       {isChecked && (
-                        <Check className="w-2 h-2 text-white stroke-[3] animate-in zoom-in-50 duration-150" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-purple-400 shadow-[0_0_6px_#C084FC] animate-in zoom-in-50 duration-150" />
                       )}
                     </div>
 
