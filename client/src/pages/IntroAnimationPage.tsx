@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Rocket,
-  Shield,
   Code2,
+  Smartphone,
   Cloud,
+  ShieldCheck,
   ArrowRight,
-  Sparkles,
   ExternalLink,
-  Laptop,
-  CheckCircle2,
 } from 'lucide-react';
 
 let hasSeenIntroThisSession = false;
@@ -33,7 +30,6 @@ export interface IntroAnimationPageProps {
 export const IntroAnimationPage: React.FC<IntroAnimationPageProps> = ({ onComplete }) => {
   const navigate = useNavigate();
   const [progress, setProgress] = useState<number>(0);
-  const [statusText, setStatusText] = useState<string>('Initializing DevCraft Core...');
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
   const [autoRedirect] = useState<boolean>(true);
 
@@ -46,307 +42,321 @@ export const IntroAnimationPage: React.FC<IntroAnimationPageProps> = ({ onComple
     }
   };
 
-  // Realistic non-linear progress counter (similar to the 72% checkpoint in reference image)
+  // Realistic non-linear progress counter (smooth load from 0% to 100%)
   useEffect(() => {
     let current = 0;
     const interval = setInterval(() => {
-      // Non-linear simulation with natural easing
       if (current < 25) {
-        current += 1.2;
-        setStatusText('Initializing DevCraft Engine...');
-      } else if (current < 55) {
-        current += 0.8;
-        setStatusText('Loading Architectural Modules...');
-      } else if (current < 72) {
-        current += 0.6;
-        setStatusText('Compiling Reactive Workspaces...');
-      } else if (current < 92) {
+        current += 1.8;
+      } else if (current < 60) {
         current += 1.4;
-        setStatusText('Optimizing High-Performance Assets...');
+      } else if (current < 85) {
+        current += 1.1;
       } else if (current < 100) {
-        current += 0.9;
-        setStatusText('Finalizing Cloud Infrastructure...');
+        current += 1.5;
       } else {
         current = 100;
         clearInterval(interval);
         setIsCompleted(true);
-        setStatusText('All Systems Operational • Welcome!');
       }
-
       setProgress(Math.min(100, Math.round(current)));
-    }, 45);
+    }, 40);
 
     return () => clearInterval(interval);
   }, []);
 
-  // Optional auto-redirect after completion
+  // Auto-transition shortly after completion
   useEffect(() => {
     if (isCompleted && autoRedirect) {
       const timeout = setTimeout(() => {
         handleExit();
-      }, 3500);
+      }, 1600);
       return () => clearTimeout(timeout);
     }
-  }, [isCompleted, autoRedirect, onComplete]);
-
-
+  }, [isCompleted, autoRedirect]);
 
   return (
-    <div className="relative min-h-screen w-full bg-[#060913] text-white overflow-hidden flex flex-col justify-between select-none">
-      {/* 1. Deep Cosmic Nebula Background with Glowing Neon Curves */}
+    <div className="relative min-h-screen w-full bg-[#020515] text-white overflow-hidden flex flex-col justify-between select-none">
+      {/* 1. COSMIC BACKGROUND WITH LENS FLARE, NEON WAVES & STARLIT PARTICLES */}
       <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-        {/* Radial Center Glow */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] sm:w-[900px] h-[500px] rounded-full bg-blue-600/15 blur-[140px]" />
-        <div className="absolute top-1/4 left-1/3 w-[500px] h-[400px] rounded-full bg-indigo-600/10 blur-[130px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[400px] rounded-full bg-cyan-500/10 blur-[120px]" />
+        {/* Top-Left Brilliant Cyan/Blue Lens Flare */}
+        <div className="absolute -top-32 -left-32 w-[550px] h-[550px] rounded-full bg-cyan-500/20 blur-[130px]" />
+        <div className="absolute -top-16 -left-16 w-80 h-80 rounded-full bg-blue-600/30 blur-[90px]" />
+        <div className="absolute top-4 left-4 w-28 h-28 rounded-full bg-cyan-300/40 blur-[30px]" />
+        <div className="absolute top-10 left-10 w-8 h-8 rounded-full bg-white/90 blur-[10px] animate-pulse" />
 
-        {/* Dynamic Curved Neon Wave Ribbons (Matching reference image) */}
+        {/* Ambient Center Blue & Magenta Nebula Glow */}
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] sm:w-[900px] h-[500px] rounded-full bg-blue-600/15 blur-[140px]" />
+        <div className="absolute top-1/2 left-2/3 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[400px] rounded-full bg-purple-600/10 blur-[130px]" />
+        <div className="absolute bottom-10 left-1/3 w-[600px] h-[300px] rounded-full bg-cyan-500/10 blur-[120px]" />
+
+        {/* Flowing Curved Neon Wave Ribbons (Matching reference image curves) */}
         <svg
-          className="absolute inset-0 w-full h-full opacity-60"
+          className="absolute inset-0 w-full h-full opacity-70"
           preserveAspectRatio="none"
           viewBox="0 0 1440 900"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          {/* Violet wave ribbon */}
+          {/* Cyan neon wave ribbon */}
           <path
-            d="M-100 280 C 350 450, 750 150, 1550 320"
-            stroke="url(#neon-violet-grad)"
-            strokeWidth="2.5"
+            d="M-80 620 C 320 740, 780 480, 1550 640"
+            stroke="url(#reliable-cyan-grad)"
+            strokeWidth="3"
             strokeLinecap="round"
             className="animate-wave-glow"
           />
-          {/* Cyan wave ribbon */}
+          {/* Violet / Magenta wave ribbon */}
           <path
-            d="M-50 480 C 450 620, 950 340, 1600 480"
-            stroke="url(#neon-cyan-grad)"
+            d="M-100 700 C 420 540, 920 720, 1560 560"
+            stroke="url(#reliable-violet-grad)"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            className="animate-wave-glow"
+            style={{ animationDelay: '1.8s' }}
+          />
+          {/* Deep blue accent wave */}
+          <path
+            d="M-50 780 C 460 760, 900 640, 1500 750"
+            stroke="url(#reliable-blue-grad)"
             strokeWidth="1.8"
             strokeLinecap="round"
             className="animate-wave-glow"
-            style={{ animationDelay: '2s' }}
+            style={{ animationDelay: '3.2s' }}
           />
           <defs>
-            <linearGradient id="neon-violet-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#8B5CF6" stopOpacity="0.05" />
-              <stop offset="40%" stopColor="#A855F7" stopOpacity="0.8" />
-              <stop offset="70%" stopColor="#EC4899" stopOpacity="0.6" />
-              <stop offset="100%" stopColor="#3B82F6" stopOpacity="0.1" />
+            <linearGradient id="reliable-cyan-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#00d2ff" stopOpacity="0.1" />
+              <stop offset="35%" stopColor="#00f0ff" stopOpacity="0.95" />
+              <stop offset="70%" stopColor="#38bdf8" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="#818cf8" stopOpacity="0.15" />
             </linearGradient>
-            <linearGradient id="neon-cyan-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.1" />
-              <stop offset="45%" stopColor="#06B6D4" stopOpacity="0.8" />
-              <stop offset="75%" stopColor="#38BDF8" stopOpacity="0.7" />
-              <stop offset="100%" stopColor="#8B5CF6" stopOpacity="0.05" />
+            <linearGradient id="reliable-violet-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#6366f1" stopOpacity="0.1" />
+              <stop offset="40%" stopColor="#a855f7" stopOpacity="0.9" />
+              <stop offset="75%" stopColor="#d946ef" stopOpacity="0.85" />
+              <stop offset="100%" stopColor="#ec4899" stopOpacity="0.1" />
+            </linearGradient>
+            <linearGradient id="reliable-blue-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#1e3a8a" stopOpacity="0.05" />
+              <stop offset="50%" stopColor="#3b82f6" stopOpacity="0.6" />
+              <stop offset="100%" stopColor="#06b6d4" stopOpacity="0.05" />
             </linearGradient>
           </defs>
         </svg>
 
-        {/* Cosmic floating particle sparkles */}
+        {/* Ambient Glossy Floor Glow Reflection at Bottom */}
+        <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-blue-950/40 via-cyan-950/15 to-transparent pointer-events-none" />
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-3/4 h-12 bg-cyan-500/10 rounded-full blur-2xl pointer-events-none" />
+
+        {/* Floating Starlight Particle Sparkles */}
         {[...Array(24)].map((_, i) => (
           <div
             key={i}
-            className="absolute rounded-full bg-cyan-300 animate-pulse"
+            className="absolute rounded-full animate-pulse pointer-events-none"
             style={{
               width: `${(i % 3) + 1.5}px`,
               height: `${(i % 3) + 1.5}px`,
-              top: `${(i * 19) % 95}%`,
-              left: `${(i * 29) % 95}%`,
-              opacity: (i % 5) * 0.15 + 0.2,
+              top: `${(i * 17) % 94}%`,
+              left: `${(i * 31) % 96}%`,
+              backgroundColor: i % 2 === 0 ? '#38bdf8' : '#c084fc',
+              opacity: (i % 5) * 0.15 + 0.3,
+              boxShadow: i % 2 === 0 ? '0 0 8px #38bdf8' : '0 0 8px #c084fc',
               animationDuration: `${(i % 4) + 2.5}s`,
-              animationDelay: `${i * 0.3}s`,
+              animationDelay: `${i * 0.25}s`,
             }}
           />
         ))}
       </div>
 
-      {/* 2. Top Navigation Bar & Brand Header */}
+      {/* 2. TOP BAR: Skip / Enter Site Button */}
       <header className="relative z-20 px-6 pt-6 sm:pt-8 max-w-7xl mx-auto w-full flex items-center justify-between">
-        {/* Spacer to keep central branding perfectly centered */}
-        <div className="w-28 sm:w-32 invisible pointer-events-none" aria-hidden="true" />
+        {/* Invisible spacer on left for balanced flex distribution */}
+        <div className="w-28 sm:w-32 invisible" aria-hidden="true" />
 
-        {/* Central Logo Header: Glowing D Badge + DevCraft + Tagline */}
-        <div className="flex flex-col items-center">
-          <div className="flex items-center gap-3">
-            {/* 3D Hexagon / Pill Logo Icon with Inner Glyph */}
-            <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-400 p-[1.5px] shadow-[0_0_25px_rgba(59,130,246,0.6)]">
-              <div className="w-full h-full bg-[#080E21] rounded-2xl flex items-center justify-center relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/20 to-transparent" />
-                {/* Stylized code arrow "D" */}
-                <div className="flex items-center text-cyan-300 font-black text-lg sm:text-xl drop-shadow-[0_0_8px_rgba(6,182,212,0.8)]">
-                  <span>&gt;</span>
-                </div>
-              </div>
-            </div>
+        {/* Empty Center Space */}
+        <div className="flex-1" />
 
-            {/* Brand Title */}
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-              <span className="text-white">Dev</span>
-              <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-cyan-400 bg-clip-text text-transparent">
-                Craft
-              </span>
-            </h1>
-          </div>
-
-          {/* Tagline */}
-          <p className="text-[11px] sm:text-xs text-slate-400 font-medium tracking-widest mt-1.5 flex items-center gap-2">
-            <span>Build</span>
-            <span className="text-cyan-400 text-base leading-none">•</span>
-            <span>Innovate</span>
-            <span className="text-cyan-400 text-base leading-none">•</span>
-            <span>Grow</span>
-          </p>
-        </div>
-
-        {/* Right CTA: Skip / Enter Site Button */}
+        {/* Right CTA: Skip Intro Button */}
         <div className="w-28 sm:w-32 flex justify-end">
           <button
             onClick={handleExit}
-            className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/40 hover:border-blue-400 text-xs font-bold text-blue-200 hover:text-white transition-all backdrop-blur-md active:scale-95 shadow-[0_0_15px_rgba(59,130,246,0.2)] whitespace-nowrap"
+            className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 border border-cyan-500/40 hover:border-cyan-300 text-xs font-bold text-cyan-200 hover:text-white transition-all backdrop-blur-md active:scale-95 shadow-[0_0_15px_rgba(6,182,212,0.25)] whitespace-nowrap"
           >
             <span>Skip Intro</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <ArrowRight className="w-3.5 h-3.5 text-cyan-300" />
           </button>
         </div>
       </header>
 
-      {/* 3. Center Section: 3D Workstation Scene + Typography + Glowing Progress Bar */}
-      <main className="relative z-10 flex-1 flex flex-col items-center justify-center px-4 py-6 max-w-5xl mx-auto w-full">
-        {/* 3D Floating Workstation Container */}
-        <div className="relative flex flex-col items-center justify-center my-2 sm:my-4 group">
-          {/* Luminous Neon Disc Halo Floor Ring (Underneath Laptop Platform) */}
-          <div className="absolute bottom-2 sm:bottom-4 w-[340px] sm:w-[520px] md:w-[620px] h-20 sm:h-28 rounded-full border border-cyan-400/50 bg-gradient-to-t from-cyan-500/15 via-indigo-500/10 to-transparent blur-sm animate-pulse-halo pointer-events-none" />
+      {/* 3. MAIN CENTER & RIGHT GRID: Responsive 2-Column Showcase */}
+      <main className="relative z-10 flex-1 flex flex-col justify-center px-4 sm:px-8 py-4 sm:py-6 max-w-7xl mx-auto w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center w-full">
+          {/* LEFT/CENTER HERO BLOCK (Span 12 on mobile, Span 9 on desktop to center relative to right features) */}
+          <div className="lg:col-span-9 flex flex-col items-center justify-center text-center">
+            {/* 3D "R" Planetary Orbital Logo */}
+            <div className="relative group flex items-center justify-center my-1 sm:my-2">
+              {/* Radial Cyan & Purple Neon Aura Behind Logo */}
+              <div className="absolute w-52 sm:w-64 md:w-72 h-52 sm:h-64 md:h-72 rounded-full bg-gradient-to-tr from-cyan-500/30 via-blue-600/20 to-fuchsia-600/30 blur-3xl pointer-events-none animate-pulse" />
 
-          {/* Floating Workstation Graphic */}
-          <div className="relative z-10 animate-float-gentle transition-transform duration-500 hover:scale-[1.02]">
-            <img
-              src="/intro-workstation-smooth.png"
-              alt="DevCraft 3D Workstation with live code"
-              className="w-[320px] sm:w-[480px] md:w-[580px] lg:w-[620px] max-h-[300px] sm:max-h-[360px] object-contain drop-shadow-[0_20px_40px_rgba(6,182,212,0.25)] select-none pointer-events-none"
-              onError={(e) => {
-                // Fallback to hero image if crop is unavailable
-                (e.target as HTMLImageElement).src = '/intro-hero.png';
-              }}
-            />
-
-            {/* Holographic glowing micro-badges floating around the laptop */}
-            <div className="absolute top-4 left-6 sm:left-12 px-2.5 py-1 rounded-xl bg-indigo-950/70 border border-indigo-500/50 backdrop-blur-md text-[10px] sm:text-xs font-mono font-bold text-indigo-300 shadow-[0_0_15px_rgba(99,102,241,0.5)] flex items-center gap-1 animate-bounce">
-              <Code2 className="w-3 h-3 text-cyan-400" />
-              <span>&lt;/&gt;</span>
+              {/* The High-Fidelity 3D R Logo */}
+              <img
+                src="/reliable-logo-transparent.png"
+                alt="Reliable Info Tech Logo"
+                className="relative z-10 w-44 sm:w-56 md:w-64 max-w-full object-contain drop-shadow-[0_0_35px_rgba(6,182,212,0.65)] select-none pointer-events-none transition-transform duration-500 hover:scale-105"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = '/reliable-logo-perfect.png';
+                }}
+              />
             </div>
 
-            <div
-              className="absolute top-2 right-12 sm:right-24 px-2.5 py-1 rounded-xl bg-cyan-950/70 border border-cyan-400/50 backdrop-blur-md text-[10px] sm:text-xs font-mono font-bold text-cyan-300 shadow-[0_0_15px_rgba(6,182,212,0.5)] flex items-center gap-1.5"
-              style={{ animation: 'float 3.5s ease-in-out infinite 1s' }}
-            >
-              <Cloud className="w-3 h-3 text-cyan-300" />
-              <span>Cloud Ready</span>
+            {/* Brand Title: "Reliable Info Tech" */}
+            <div className="mt-2 sm:mt-3 space-y-1">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-black tracking-tight flex items-center justify-center gap-2 sm:gap-3 leading-tight">
+                <span className="text-white drop-shadow-[0_2px_15px_rgba(255,255,255,0.4)]">
+                  Reliable
+                </span>
+                <span className="bg-gradient-to-r from-cyan-400 via-sky-300 to-cyan-300 bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(6,182,212,0.7)]">
+                  Info
+                </span>
+                <span className="bg-gradient-to-r from-purple-400 via-fuchsia-400 to-pink-500 bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(192,38,211,0.7)]">
+                  Tech
+                </span>
+              </h1>
+
+              {/* Tagline: "Your Vision • Our Technology • A Better Tomorrow" */}
+              <p className="text-xs sm:text-sm md:text-base text-slate-300 font-medium tracking-wide flex items-center justify-center gap-2 sm:gap-2.5 pt-1">
+                <span>Your Vision</span>
+                <span className="text-cyan-400 text-sm font-bold">•</span>
+                <span>Our Technology</span>
+                <span className="text-cyan-400 text-sm font-bold">•</span>
+                <span>A Better Tomorrow</span>
+              </p>
+            </div>
+
+            {/* Glowing Loading Bar & Status */}
+            <div className="w-full max-w-xs sm:max-w-sm md:max-w-md mt-6 sm:mt-7 space-y-2.5">
+              {/* Progress Track */}
+              <div className="relative w-full h-2.5 sm:h-3 bg-[#070D1E]/95 rounded-full border border-slate-700/60 p-[1.5px] shadow-[inset_0_2px_4px_rgba(0,0,0,0.8)] overflow-hidden">
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-cyan-400 via-sky-400 to-fuchsia-500 transition-all duration-150 ease-out shadow-[0_0_18px_rgba(6,182,212,0.85)]"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+
+              {/* Status Row */}
+              <div className="flex items-center justify-center">
+                <p className="text-[10px] sm:text-xs font-mono font-bold tracking-[0.25em] text-slate-400 uppercase flex items-center gap-2">
+                  <span className="inline-block w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
+                  <span>{isCompleted ? 'ALL SYSTEMS OPERATIONAL' : 'LOADING...'}</span>
+                  <span className="text-cyan-400 font-bold ml-1">{progress}%</span>
+                </p>
+              </div>
+            </div>
+
+            {/* Completion CTA (Appears when loading finishes) */}
+            {isCompleted && (
+              <div className="mt-5 flex flex-wrap items-center justify-center gap-3 animate-in fade-in zoom-in-95 duration-300">
+                <button
+                  onClick={handleExit}
+                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white font-bold text-xs sm:text-sm shadow-[0_0_25px_rgba(6,182,212,0.6)] transition-all active:scale-95"
+                >
+                  <span>Explore Reliable InfoTech</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+
+                <button
+                  onClick={() => {
+                    markIntroSeen();
+                    navigate('/admin');
+                  }}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-700 hover:border-slate-600 text-slate-200 hover:text-white font-semibold text-xs sm:text-sm transition-all backdrop-blur-md active:scale-95"
+                >
+                  <span>Admin Console</span>
+                  <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* RIGHT SERVICES PILLARS (Span 3 on Desktop, matching reference image) */}
+          <div className="lg:col-span-3 flex flex-col gap-3.5 sm:gap-4 max-w-sm mx-auto lg:mx-0 w-full">
+            {/* Feature 1: Web Development */}
+            <div className="flex items-center gap-3.5 p-2 rounded-2xl bg-slate-900/40 hover:bg-slate-900/70 border border-slate-800/80 hover:border-cyan-500/40 transition-all group cursor-default backdrop-blur-sm shadow-sm">
+              <div className="w-10 h-10 rounded-xl bg-[#081026] border border-cyan-500/40 text-cyan-400 flex items-center justify-center shrink-0 shadow-[0_0_12px_rgba(6,182,212,0.3)] group-hover:scale-105 group-hover:border-cyan-300 transition-all">
+                <Code2 className="w-4 h-4" />
+              </div>
+              <div className="min-w-0 text-left">
+                <h4 className="text-xs font-bold text-white group-hover:text-cyan-300 transition-colors truncate">
+                  Web Development
+                </h4>
+                <p className="text-[10px] text-slate-400 font-medium truncate mt-0.5">
+                  Modern • Scalable • Fast
+                </p>
+              </div>
+            </div>
+
+            {/* Feature 2: Mobile Apps */}
+            <div className="flex items-center gap-3.5 p-2 rounded-2xl bg-slate-900/40 hover:bg-slate-900/70 border border-slate-800/80 hover:border-cyan-500/40 transition-all group cursor-default backdrop-blur-sm shadow-sm">
+              <div className="w-10 h-10 rounded-xl bg-[#081026] border border-cyan-500/40 text-cyan-400 flex items-center justify-center shrink-0 shadow-[0_0_12px_rgba(6,182,212,0.3)] group-hover:scale-105 group-hover:border-cyan-300 transition-all">
+                <Smartphone className="w-4 h-4" />
+              </div>
+              <div className="min-w-0 text-left">
+                <h4 className="text-xs font-bold text-white group-hover:text-cyan-300 transition-colors truncate">
+                  Mobile Apps
+                </h4>
+                <p className="text-[10px] text-slate-400 font-medium truncate mt-0.5">
+                  iOS • Android • Cross-Platform
+                </p>
+              </div>
+            </div>
+
+            {/* Feature 3: Cloud Solutions */}
+            <div className="flex items-center gap-3.5 p-2 rounded-2xl bg-slate-900/40 hover:bg-slate-900/70 border border-slate-800/80 hover:border-cyan-500/40 transition-all group cursor-default backdrop-blur-sm shadow-sm">
+              <div className="w-10 h-10 rounded-xl bg-[#081026] border border-cyan-500/40 text-cyan-400 flex items-center justify-center shrink-0 shadow-[0_0_12px_rgba(6,182,212,0.3)] group-hover:scale-105 group-hover:border-cyan-300 transition-all">
+                <Cloud className="w-4 h-4" />
+              </div>
+              <div className="min-w-0 text-left">
+                <h4 className="text-xs font-bold text-white group-hover:text-cyan-300 transition-colors truncate">
+                  Cloud Solutions
+                </h4>
+                <p className="text-[10px] text-slate-400 font-medium truncate mt-0.5">
+                  Secure • Flexible • Reliable
+                </p>
+              </div>
+            </div>
+
+            {/* Feature 4: IT Consulting */}
+            <div className="flex items-center gap-3.5 p-2 rounded-2xl bg-slate-900/40 hover:bg-slate-900/70 border border-slate-800/80 hover:border-cyan-500/40 transition-all group cursor-default backdrop-blur-sm shadow-sm">
+              <div className="w-10 h-10 rounded-xl bg-[#081026] border border-cyan-500/40 text-cyan-400 flex items-center justify-center shrink-0 shadow-[0_0_12px_rgba(6,182,212,0.3)] group-hover:scale-105 group-hover:border-cyan-300 transition-all">
+                <ShieldCheck className="w-4 h-4" />
+              </div>
+              <div className="min-w-0 text-left">
+                <h4 className="text-xs font-bold text-white group-hover:text-cyan-300 transition-colors truncate">
+                  IT Consulting
+                </h4>
+                <p className="text-[10px] text-slate-400 font-medium truncate mt-0.5">
+                  Strategy • Support • Growth
+                </p>
+              </div>
             </div>
           </div>
         </div>
-
-        {/* Central Headline & Tagline */}
-        <div className="text-center mt-2 sm:mt-4 space-y-1.5 sm:space-y-2">
-          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight drop-shadow-lg">
-            <span className="text-white">Your Ideas. </span>
-            <span className="bg-gradient-to-r from-blue-400 via-indigo-300 to-cyan-300 bg-clip-text text-transparent">
-              Our Code.
-            </span>
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-400 font-medium tracking-wide">
-            Building something amazing for you...
-          </p>
-        </div>
-
-        {/* 4. Futuristic Animated Glowing Loading Bar */}
-        <div className="w-full max-w-sm sm:max-w-md md:max-w-lg mt-5 sm:mt-6 space-y-2">
-          {/* Progress Track */}
-          <div className="relative w-full h-3 sm:h-3.5 bg-slate-900/90 rounded-full border border-slate-700/60 p-[2px] shadow-inner backdrop-blur-md overflow-hidden">
-            <div
-              className="h-full rounded-full bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 transition-all duration-150 ease-out shimmer-bar shadow-[0_0_20px_rgba(6,182,212,0.7)]"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-
-          {/* Status Label & Percentage Row */}
-          <div className="flex items-center justify-between text-xs px-1">
-            <div className="flex items-center gap-2 text-slate-400 font-medium">
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
-              <span className="truncate max-w-[200px] sm:max-w-[320px]">{statusText}</span>
-            </div>
-
-            <div className="font-mono font-bold text-cyan-400 tracking-tight text-xs sm:text-sm">
-              {progress}%
-            </div>
-          </div>
-        </div>
-
-        {/* 5. Completion Overlay CTA (Appears when progress reaches 100%) */}
-        {isCompleted && (
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-3 animate-in fade-in zoom-in-95 duration-300">
-            <button
-              onClick={handleExit}
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-bold text-xs sm:text-sm shadow-[0_0_25px_rgba(6,182,212,0.5)] transition-all active:scale-95"
-            >
-              <span>Explore DevCraft</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
-
-            <button
-              onClick={() => {
-                markIntroSeen();
-                navigate('/admin');
-              }}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-700 hover:border-slate-600 text-slate-200 hover:text-white font-semibold text-xs sm:text-sm transition-all backdrop-blur-md active:scale-95"
-            >
-              <span>Admin Console</span>
-              <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
-            </button>
-          </div>
-        )}
       </main>
 
-      {/* 6. Bottom Feature Trust Pillars (Matching Reference Image Exactly) */}
-      <footer className="relative z-20 px-4 py-6 sm:py-8 border-t border-slate-900/80 bg-[#060913]/70 backdrop-blur-md">
-        <div className="max-w-4xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 divide-y sm:divide-y-0 sm:divide-x divide-slate-800/80">
-          {/* Pillar 1: Fast & Reliable */}
-          <div className="flex flex-col items-center justify-center pt-3 sm:pt-0 sm:px-4 group cursor-default">
-            <div className="w-8 h-8 rounded-xl bg-blue-600/10 text-blue-400 flex items-center justify-center mb-2 group-hover:scale-110 group-hover:bg-blue-600/20 group-hover:text-cyan-300 transition-all">
-              <Rocket className="w-4 h-4" />
-            </div>
-            <span className="text-xs font-semibold text-slate-300 group-hover:text-white transition-colors text-center">
-              Fast & Reliable
-            </span>
-          </div>
+      {/* 4. FOOTER: Bottom-Left Tagline ("LET'S BUILD TOGETHER") */}
+      <footer className="relative z-20 px-6 sm:px-12 pb-6 sm:pb-8 max-w-7xl mx-auto w-full flex items-center justify-between">
+        {/* Bottom-Left Accent Line & Text (Matching reference image) */}
+        <div className="flex items-center gap-3">
+          <span className="w-6 sm:w-8 h-[2px] rounded-full bg-cyan-400 shadow-[0_0_10px_#00f0ff]" />
+          <span className="text-[10px] sm:text-xs font-mono font-bold tracking-[0.25em] text-slate-400 uppercase">
+            Let's Build Together
+          </span>
+        </div>
 
-          {/* Pillar 2: Secure */}
-          <div className="flex flex-col items-center justify-center pt-3 sm:pt-0 sm:px-4 group cursor-default">
-            <div className="w-8 h-8 rounded-xl bg-indigo-600/10 text-indigo-400 flex items-center justify-center mb-2 group-hover:scale-110 group-hover:bg-indigo-600/20 group-hover:text-indigo-300 transition-all">
-              <Shield className="w-4 h-4" />
-            </div>
-            <span className="text-xs font-semibold text-slate-300 group-hover:text-white transition-colors text-center">
-              Secure
-            </span>
-          </div>
-
-          {/* Pillar 3: Modern Technology */}
-          <div className="flex flex-col items-center justify-center pt-3 sm:pt-0 sm:px-4 group cursor-default">
-            <div className="w-8 h-8 rounded-xl bg-cyan-600/10 text-cyan-400 flex items-center justify-center mb-2 group-hover:scale-110 group-hover:bg-cyan-600/20 group-hover:text-cyan-300 transition-all">
-              <Code2 className="w-4 h-4" />
-            </div>
-            <span className="text-xs font-semibold text-slate-300 group-hover:text-white transition-colors text-center">
-              Modern Technology
-            </span>
-          </div>
-
-          {/* Pillar 4: Always Online */}
-          <div className="flex flex-col items-center justify-center pt-3 sm:pt-0 sm:px-4 group cursor-default">
-            <div className="w-8 h-8 rounded-xl bg-purple-600/10 text-purple-400 flex items-center justify-center mb-2 group-hover:scale-110 group-hover:bg-purple-600/20 group-hover:text-purple-300 transition-all">
-              <Cloud className="w-4 h-4" />
-            </div>
-            <span className="text-xs font-semibold text-slate-300 group-hover:text-white transition-colors text-center">
-              Always Online
-            </span>
-          </div>
+        {/* Bottom Right Minimal Indicator */}
+        <div className="text-[10px] font-mono text-slate-500 tracking-wider">
+          v2.0 • RELIABLE INFOTECH
         </div>
       </footer>
     </div>
