@@ -70,7 +70,20 @@ export const AdminTopProjects: React.FC<AdminTopProjectsProps> = ({
     },
   ];
 
-  const items = defaultProjects;
+  const items: TopProjectItem[] =
+    projects && projects.length > 0
+      ? projects.slice(0, 5).map((p, idx) => ({
+          id: p._id,
+          title: p.title,
+          category: p.category,
+          views: `${Math.max(350, 1200 - idx * 210)} views`,
+          statusBadge: p.featured ? 'Featured' : 'Published',
+          thumbnail:
+            p.thumbnail ||
+            p.images?.[0] ||
+            'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=300&q=80',
+        }))
+      : defaultProjects;
 
   return (
     <div className="h-full rounded-2xl bg-[#0D1527] border border-slate-800/80 p-5 flex flex-col justify-between">

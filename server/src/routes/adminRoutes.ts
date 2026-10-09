@@ -8,6 +8,7 @@ import {
   assignRequestTeam,
   getAllInquiries,
 } from '../controllers/adminController.js';
+import { deleteProject } from '../controllers/projectController.js';
 import { authenticate, requireRole } from '../middleware/authMiddleware.js';
 
 const router = Router();
@@ -22,5 +23,6 @@ router.delete('/requests/:id', deleteCustomRequest);
 router.patch('/requests/:id/status', updateRequestStatus);
 router.patch('/requests/:id/assign', assignRequestTeam);
 router.get('/inquiries', getAllInquiries);
+router.delete('/projects/:id', deleteProject);
 
 export default router;

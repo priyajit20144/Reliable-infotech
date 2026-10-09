@@ -56,6 +56,7 @@ import { AdminQuickActionsAndStatus } from '../components/admin/AdminQuickAction
 import { AdminBuildCtaCard } from '../components/admin/AdminBuildCtaCard';
 import { AdminRequestModal } from '../components/admin/AdminRequestModal';
 import { AdminSystemStatusModal } from '../components/admin/AdminSystemStatusModal';
+import { AdminDeleteProjectModal } from '../components/admin/AdminDeleteProjectModal';
 
 // Dedicated Sub-views for All Sidebar Options
 import { AdminClientsView } from '../components/admin/AdminClientsView';
@@ -127,6 +128,20 @@ export const AdminDashboardPage: React.FC = () => {
   const [projDemoUrl, setProjDemoUrl] = useState('');
   const [projGithubUrl, setProjGithubUrl] = useState('');
   const [creatingProj, setCreatingProj] = useState(false);
+
+  // Showcase project deletion & filter state
+  const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
+  const [isDeletingProject, setIsDeletingProject] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [projectSearchQuery, setProjectSearchQuery] = useState('');
+  const [projectCategoryFilter, setProjectCategoryFilter] = useState('ALL');
+
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => {
+      setToastMessage((cur) => (cur === msg ? null : cur));
+    }, 4000);
+  };
 
   // Sync tab with URL
   useEffect(() => {
@@ -309,6 +324,8 @@ export const AdminDashboardPage: React.FC = () => {
         setProjDesc('');
         setProjDemoUrl('');
         setProjGithubUrl('');
+        window.dispatchEvent(new Event('devcraft_projects_updated'));
+        localStorage.setItem('devcraft_last_project_update', Date.now().toString());
         await fetchAdminData(true);
       }
     } catch (err: any) {
@@ -317,6 +334,67 @@ export const AdminDashboardPage: React.FC = () => {
       setCreatingProj(false);
     }
   };
+
+  // Delete showcase project
+  const handleConfirmDeleteProject = async () => {
+    if (!projectToDelete) return;
+    try {
+      setIsDeletingProject(true);
+      const targetId = projectToDelete._id || projectToDelete.slug;
+      await adminService.deleteProject(targetId);
+
+      // Instantly update local state
+      setProjects((prev) =>
+        prev.filter((p) => p._id !== projectToDelete._id && p.slug !== projectToDelete.slug)
+      );
+
+      if (stats) {
+        setStats((prevStats: any) => ({
+          ...prevStats,
+          totalProjects: Math.max(0, (prevStats?.totalProjects || 1) - 1),
+        }));
+      }
+
+      // Notify home page, catalog, and other tabs in real-time
+      window.dispatchEvent(new Event('devcraft_projects_updated'));
+      localStorage.setItem('devcraft_last_project_update', Date.now().toString());
+
+      showToast(`Showcase project "${projectToDelete.title}" deleted successfully.`);
+      setProjectToDelete(null);
+
+      await fetchAdminData(true);
+    } catch (err: any) {
+      alert(err.message || 'Failed to delete showcase project');
+    } finally {
+      setIsDeletingProject(false);
+    }
+  };
+
+  const projectCategories = useMemo(() => {
+    const cats = new Set<string>();
+    projects.forEach((p) => {
+      if (p.category) cats.add(p.category);
+    });
+    return ['ALL', ...Array.from(cats)];
+  }, [projects]);
+
+  const filteredProjects = useMemo(() => {
+    return projects.filter((p) => {
+      const q = projectSearchQuery.toLowerCase().trim();
+      const matchesSearch =
+        !q ||
+        p.title.toLowerCase().includes(q) ||
+        p.shortDescription?.toLowerCase().includes(q) ||
+        p.description?.toLowerCase().includes(q) ||
+        p.technologies?.some((t) => t.toLowerCase().includes(q));
+
+      const matchesCat =
+        projectCategoryFilter === 'ALL' ||
+        p.category?.toLowerCase() === projectCategoryFilter.toLowerCase();
+
+      return matchesSearch && matchesCat;
+    });
+  }, [projects, projectSearchQuery, projectCategoryFilter]);
 
   // Status Badge Helper
   const getStatusBadge = (status: CustomRequestStatus) => {
@@ -948,11 +1026,16 @@ export const AdminDashboardPage: React.FC = () => {
       {/* ========================================================================= */}
       {activeTab === 'projects' && (
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h3 className="text-base font-bold text-white">Live Showcase Portfolio Catalog</h3>
-              <p className="text-xs text-gray-400">
-                Manage demo websites, tech stacks, and acquisition pricing displayed on the public projects page
+              <div className="flex items-center gap-2.5">
+                <h3 className="text-base font-bold text-white">Live Showcase Portfolio Catalog</h3>
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-mono">
+                  {projects.length} Total
+                </span>
+              </div>
+              <p className="text-xs text-gray-400 mt-0.5">
+                Manage demo websites, tech stacks, acquisition pricing, and delete showcase builds
               </p>
             </div>
             <Button
@@ -965,77 +1048,172 @@ export const AdminDashboardPage: React.FC = () => {
             </Button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {projects.map((proj) => (
-              <Card key={proj._id} className="p-0 overflow-hidden flex flex-col justify-between group">
-                <div>
-                  <div className="h-44 w-full bg-slate-800 relative overflow-hidden">
-                    <img
-                      src={proj.thumbnail || proj.images?.[0] || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80'}
-                      alt={proj.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute top-3 right-3 flex items-center gap-1.5">
-                      <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-slate-950/80 text-emerald-400 border border-emerald-500/30 backdrop-blur-md font-mono">
-                        ${proj.price?.toLocaleString()}
-                      </span>
-                    </div>
-                    <div className="absolute bottom-3 left-3">
-                      <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-slate-950/80 text-white border border-white/10 backdrop-blur-md">
-                        {proj.category}
-                      </span>
-                    </div>
-                  </div>
+          {/* Search & Category Filter Toolbar */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-2xl bg-[#0D1527] border border-slate-800">
+            <div className="relative flex-1 max-w-md">
+              <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                placeholder="Search showcase by title, stack, or category..."
+                value={projectSearchQuery}
+                onChange={(e) => setProjectSearchQuery(e.target.value)}
+                className="w-full pl-9 pr-8 py-2 rounded-xl bg-white/5 border border-white/10 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500/60 focus:ring-1 focus:ring-indigo-500/30 transition-all"
+              />
+              {projectSearchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setProjectSearchQuery('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+                  aria-label="Clear search"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
 
-                  <div className="p-4 space-y-2">
-                    <h4 className="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors line-clamp-1">
-                      {proj.title}
-                    </h4>
-                    <p className="text-xs text-gray-400 line-clamp-2 leading-relaxed">
-                      {proj.shortDescription || proj.description}
-                    </p>
-
-                    <div className="flex flex-wrap gap-1 pt-1">
-                      {proj.technologies?.slice(0, 4).map((tech, i) => (
-                        <span
-                          key={i}
-                          className="px-2 py-0.5 rounded-md text-[10px] bg-white/5 text-gray-300 border border-white/5"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-4 pt-0 flex items-center justify-between border-t border-white/5 mt-2">
-                  <span className="text-[11px] text-gray-400 font-mono">
-                    Status: <strong className="text-emerald-400">{proj.status}</strong>
-                  </span>
-                  <div className="flex items-center gap-1.5 pt-2">
-                    {proj.demoUrl && (
-                      <a
-                        href={proj.demoUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
-                        title="View Live Demo"
-                      >
-                        <ExternalLink className="w-3.5 h-3.5" />
-                      </a>
-                    )}
-                    <Link
-                      to={`/projects/${proj.slug || proj._id}`}
-                      className="p-1.5 rounded-lg text-gray-400 hover:text-indigo-400 hover:bg-white/10 transition-colors"
-                      title="Inspect Public View"
-                    >
-                      <Eye className="w-3.5 h-3.5" />
-                    </Link>
-                  </div>
-                </div>
-              </Card>
-            ))}
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+              {projectCategories.map((cat) => (
+                <button
+                  key={cat}
+                  type="button"
+                  onClick={() => setProjectCategoryFilter(cat)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition-all ${
+                    projectCategoryFilter === cat
+                      ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
+                      : 'bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 border border-white/5'
+                  }`}
+                >
+                  {cat === 'ALL' ? 'All Categories' : cat}
+                </button>
+              ))}
+            </div>
           </div>
+
+          {filteredProjects.length === 0 ? (
+            <Card className="p-12 text-center border-dashed border-white/10">
+              <div className="w-12 h-12 rounded-2xl bg-white/5 mx-auto flex items-center justify-center text-gray-400 mb-3">
+                <FolderGit2 className="w-6 h-6" />
+              </div>
+              <h4 className="text-sm font-bold text-white mb-1">No Showcase Projects Found</h4>
+              <p className="text-xs text-gray-400 mb-4 max-w-sm mx-auto">
+                {projectSearchQuery || projectCategoryFilter !== 'ALL'
+                  ? 'No projects matched your search criteria. Try resetting your search filters.'
+                  : 'There are currently no projects in the live showcase catalog.'}
+              </p>
+              {projectSearchQuery || projectCategoryFilter !== 'ALL' ? (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    setProjectSearchQuery('');
+                    setProjectCategoryFilter('ALL');
+                  }}
+                >
+                  Reset Filters
+                </Button>
+              ) : (
+                <Button
+                  variant="primary"
+                  size="sm"
+                  icon={<Plus className="w-4 h-4" />}
+                  onClick={() => setCreateProjectModal(true)}
+                >
+                  Add Showcase
+                </Button>
+              )}
+            </Card>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filteredProjects.map((proj) => (
+                <Card key={proj._id} className="p-0 overflow-hidden flex flex-col justify-between group hover:border-slate-700 transition-all duration-300">
+                  <div>
+                    <div className="h-44 w-full bg-slate-800 relative overflow-hidden">
+                      <img
+                        src={proj.thumbnail || proj.images?.[0] || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80'}
+                        alt={proj.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute top-3 right-3 flex items-center gap-1.5">
+                        <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-slate-950/80 text-emerald-400 border border-emerald-500/30 backdrop-blur-md font-mono">
+                          ${proj.price?.toLocaleString()}
+                        </span>
+                        {/* Quick Delete button visible on hover */}
+                        <button
+                          type="button"
+                          onClick={() => setProjectToDelete(proj)}
+                          className="w-7 h-7 rounded-full bg-slate-950/80 text-rose-400 hover:text-white hover:bg-rose-600 border border-rose-500/30 backdrop-blur-md flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 shadow-lg"
+                          title={`Delete ${proj.title}`}
+                          aria-label={`Delete ${proj.title}`}
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                      <div className="absolute bottom-3 left-3">
+                        <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-slate-950/80 text-white border border-white/10 backdrop-blur-md">
+                          {proj.category}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="p-4 space-y-2">
+                      <h4 className="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors line-clamp-1">
+                        {proj.title}
+                      </h4>
+                      <p className="text-xs text-gray-400 line-clamp-2 leading-relaxed">
+                        {proj.shortDescription || proj.description}
+                      </p>
+
+                      <div className="flex flex-wrap gap-1 pt-1">
+                        {proj.technologies?.slice(0, 4).map((tech, i) => (
+                          <span
+                            key={i}
+                            className="px-2 py-0.5 rounded-md text-[10px] bg-white/5 text-gray-300 border border-white/5"
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-4 pt-0 flex items-center justify-between border-t border-white/5 mt-2">
+                    <span className="text-[11px] text-gray-400 font-mono">
+                      Status: <strong className="text-emerald-400">{proj.status}</strong>
+                    </span>
+                    <div className="flex items-center gap-1.5 pt-2">
+                      {proj.demoUrl && (
+                        <a
+                          href={proj.demoUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
+                          title="View Live Demo"
+                        >
+                          <ExternalLink className="w-3.5 h-3.5" />
+                        </a>
+                      )}
+                      <Link
+                        to={`/projects/${proj.slug || proj._id}`}
+                        className="p-1.5 rounded-lg text-gray-400 hover:text-indigo-400 hover:bg-white/10 transition-colors"
+                        title="Inspect Public View"
+                      >
+                        <Eye className="w-3.5 h-3.5" />
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => setProjectToDelete(proj)}
+                        className="p-1.5 rounded-lg text-gray-400 hover:text-rose-400 hover:bg-rose-500/10 border border-transparent hover:border-rose-500/20 transition-all"
+                        title="Delete Showcase Project"
+                        aria-label={`Delete ${proj.title}`}
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          )}
         </div>
       )}
 
@@ -1480,6 +1658,23 @@ export const AdminDashboardPage: React.FC = () => {
         isOpen={systemStatusModalOpen}
         onClose={() => setSystemStatusModalOpen(false)}
       />
+
+      {/* Delete Showcase Project Modal */}
+      <AdminDeleteProjectModal
+        isOpen={!!projectToDelete}
+        project={projectToDelete}
+        onClose={() => setProjectToDelete(null)}
+        onConfirm={handleConfirmDeleteProject}
+        isDeleting={isDeletingProject}
+      />
+
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 rounded-2xl bg-emerald-600 text-white text-xs font-bold shadow-2xl shadow-emerald-600/40 animate-in slide-in-from-bottom duration-200">
+          <Check className="w-4 h-4" />
+          <span>{toastMessage}</span>
+        </div>
+      )}
     </div>
   );
 };

@@ -14,6 +14,6 @@ router.get('/', getProjects);
 router.get('/:id', getProjectById);
 router.post('/', authenticate, requireRole(['ADMIN', 'TEAM_MEMBER']), createProject);
 router.patch('/:id', authenticate, requireRole(['ADMIN', 'TEAM_MEMBER']), updateProject);
-router.delete('/:id', authenticate, requireRole(['ADMIN']), deleteProject);
+router.delete('/:id', authenticate, requireRole(['ADMIN', 'TEAM_MEMBER']), deleteProject);
 
 export default router;

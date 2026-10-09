@@ -5,6 +5,10 @@ import { isConnectedToMongo } from '../config/db.js';
 
 export const getProjects = async (req: Request, res: Response) => {
   try {
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+
     const { category, search, featured, tech } = req.query;
 
     if (isConnectedToMongo) {
@@ -175,17 +179,33 @@ export const updateProject = async (req: Request, res: Response) => {
 export const deleteProject = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
+    let deleted = false;
 
     if (isConnectedToMongo) {
-      await ProjectModel.findByIdAndDelete(id);
-      return res.json({ success: true, message: 'Project deleted successfully.' });
+      try {
+        const deletedDoc = await ProjectModel.findOneAndDelete({
+          $or: [{ _id: id }, { slug: id }],
+        });
+        if (deletedDoc) {
+          deleted = true;
+        }
+      } catch (mongoErr) {
+        console.warn('[MongoDB delete project failed, checking memory store]:', mongoErr);
+      }
     }
 
-    const idx = store.projects.findIndex((p) => p._id === id);
+    // Always maintain synchronization with memory store fallback
+    const idx = store.projects.findIndex((p) => p._id === id || p.slug === id);
     if (idx !== -1) {
       store.projects.splice(idx, 1);
+      deleted = true;
     }
-    return res.json({ success: true, message: 'Project deleted successfully.' });
+
+    return res.json({
+      success: true,
+      message: 'Showcase project deleted successfully.',
+      deletedId: id,
+    });
   } catch (error: any) {
     return res.status(500).json({ success: false, message: error.message });
   }

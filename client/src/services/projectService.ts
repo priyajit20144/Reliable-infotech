@@ -27,4 +27,10 @@ export const projectService = {
   async getMyInquiries() {
     return apiRequest<{ success: boolean; count: number; data: ProjectInquiry[] }>('/project-inquiries/my');
   },
+
+  async deleteProject(id: string) {
+    return apiRequest<{ success: boolean; message: string }>(`/projects/${id}`, {
+      method: 'DELETE',
+    });
+  },
 };

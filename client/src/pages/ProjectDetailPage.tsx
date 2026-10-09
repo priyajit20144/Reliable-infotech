@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
   ExternalLink,
   Github,
@@ -9,7 +9,10 @@ import {
   Layers,
   ShieldCheck,
   Zap,
+  Trash2,
 } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import { adminService } from '../services/adminService';
 import { projectService } from '../services/projectService';
 import { Project } from '../types';
 import { Button } from '../components/common/Button';
@@ -21,13 +24,18 @@ import { Textarea } from '../components/common/Textarea';
 import { BrandLoader } from '../components/common/BrandLoader';
 import { PublicNavbar } from '../components/landing/PublicNavbar';
 import { Footer } from '../components/layout/Footer';
+import { AdminDeleteProjectModal } from '../components/admin/AdminDeleteProjectModal';
 
 export const ProjectDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const { user } = useAuth();
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedImg, setSelectedImg] = useState<string>('');
   const [inquiryModalOpen, setInquiryModalOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   // Inquiry form
   const [name, setName] = useState('');
@@ -79,6 +87,22 @@ export const ProjectDetailPage: React.FC = () => {
     }
   };
 
+  const handleDeleteProject = async () => {
+    if (!project) return;
+    try {
+      setDeleting(true);
+      await adminService.deleteProject(project._id || project.slug);
+      window.dispatchEvent(new Event('devcraft_projects_updated'));
+      localStorage.setItem('devcraft_last_project_update', Date.now().toString());
+      setDeleteModalOpen(false);
+      navigate('/admin?tab=projects');
+    } catch (err: any) {
+      alert(err.message || 'Failed to delete showcase project');
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   if (loading) {
     return <BrandLoader message="Loading project specifications..." />;
   }
@@ -104,6 +128,39 @@ export const ProjectDetailPage: React.FC = () => {
       <PublicNavbar />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        {/* Admin Management Bar */}
+        {user?.role === 'ADMIN' && (
+          <div className="mb-6 p-4 rounded-2xl bg-indigo-950/40 border border-indigo-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-xl bg-indigo-600/30 text-indigo-400 flex items-center justify-center shrink-0">
+                <ShieldCheck className="w-4 h-4" />
+              </div>
+              <div>
+                <span className="text-xs font-bold text-white block">Administrator Control Bar</span>
+                <span className="text-[11px] text-gray-400">
+                  Managing showcase portfolio item: <strong className="text-white">{project.title}</strong>
+                </span>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <Link
+                to="/admin?tab=projects"
+                className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-medium text-gray-300 hover:text-white border border-white/10 transition-colors"
+              >
+                Back to Admin Catalog
+              </Link>
+              <button
+                type="button"
+                onClick={() => setDeleteModalOpen(true)}
+                className="px-3.5 py-1.5 rounded-xl bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white border border-rose-500/30 text-xs font-semibold transition-all flex items-center gap-1.5 shadow-sm"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                <span>Delete Showcase Project</span>
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Breadcrumb / Back Link */}
         <Link
           to="/projects"
@@ -309,6 +366,15 @@ export const ProjectDetailPage: React.FC = () => {
           </form>
         )}
       </Modal>
+
+      {/* Delete Showcase Project Modal */}
+      <AdminDeleteProjectModal
+        isOpen={deleteModalOpen}
+        project={project}
+        onClose={() => setDeleteModalOpen(false)}
+        onConfirm={handleDeleteProject}
+        isDeleting={deleting}
+      />
 
       <Footer />
     </div>

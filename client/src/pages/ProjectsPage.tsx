@@ -36,6 +36,7 @@ import { CatalogFilterSidebar } from '../components/projects/CatalogFilterSideba
 
 interface CatalogProject {
   id: string;
+  slug?: string;
   title: string;
   category: string;
   categoryBadge: string;
@@ -258,6 +259,66 @@ export const ProjectsPage: React.FC = () => {
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
+  // Live dynamic projects synchronization
+  const [liveProjects, setLiveProjects] = useState<CatalogProject[]>([]);
+  const [isLiveLoaded, setIsLiveLoaded] = useState(false);
+
+  const fetchLiveCatalog = async () => {
+    try {
+      const res = await projectService.getProjects();
+      if (res.success && Array.isArray(res.data) && res.data.length > 0) {
+        const mapped: CatalogProject[] = res.data.map((p, idx) => {
+          const cat = (p.category || '').toLowerCase();
+          let badgeColor = 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30';
+          if (cat.includes('cloud') || cat.includes('devops')) badgeColor = 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30';
+          else if (cat.includes('fintech') || cat.includes('pay')) badgeColor = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30';
+          else if (cat.includes('ai') || cat.includes('intel')) badgeColor = 'bg-purple-500/20 text-purple-300 border-purple-500/30';
+          else if (cat.includes('commerce') || cat.includes('retail')) badgeColor = 'bg-amber-500/20 text-amber-300 border-amber-500/30';
+
+          return {
+            id: p._id,
+            slug: p.slug || p._id,
+            title: p.title,
+            category: p.category || 'Web Application',
+            categoryBadge: p.category || 'Web Application',
+            badgeColor,
+            isFeatured: Boolean(p.featured),
+            projectType: (p.featured ? 'Featured' : (idx % 2 === 0 ? 'Popular' : 'Recent')) as 'Featured' | 'Popular' | 'Recent',
+            description: p.shortDescription || p.description,
+            technologies: p.technologies || ['React', 'TypeScript', 'Node.js'],
+            image: p.thumbnail || p.images?.[0] || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80',
+            demoUrl: p.demoUrl,
+            githubUrl: p.githubUrl,
+            rating: 4.8 + ((idx * 3) % 3) * 0.1,
+            likesCount: 25 + ((idx * 7) % 35),
+            features: p.features || [],
+          };
+        });
+        setLiveProjects(mapped);
+      } else if (res.success && Array.isArray(res.data) && res.data.length === 0) {
+        setLiveProjects([]);
+      }
+    } catch (err) {
+      console.error('Failed to load projects from API, using catalog fallback:', err);
+    } finally {
+      setIsLiveLoaded(true);
+    }
+  };
+
+  useEffect(() => {
+    fetchLiveCatalog();
+
+    const handleSync = () => fetchLiveCatalog();
+    window.addEventListener('devcraft_projects_updated', handleSync);
+    window.addEventListener('storage', handleSync);
+    return () => {
+      window.removeEventListener('devcraft_projects_updated', handleSync);
+      window.removeEventListener('storage', handleSync);
+    };
+  }, []);
+
+  const currentCatalog = isLiveLoaded ? liveProjects : initialProjects;
+
   // Categories config matching reference image sidebar
   const categoriesList = [
     { label: 'All Projects', count: 50, icon: Layers },
@@ -327,7 +388,7 @@ export const ProjectsPage: React.FC = () => {
 
   // Filtered & Sorted Projects
   const filteredProjects = useMemo(() => {
-    return initialProjects.filter((p) => {
+    return currentCatalog.filter((p) => {
       // Category filter
       if (selectedCategory !== 'All Projects') {
         const matchesCat =
@@ -364,7 +425,7 @@ export const ProjectsPage: React.FC = () => {
 
       return true;
     });
-  }, [initialProjects, selectedCategory, selectedTechs, selectedTypes, searchQuery]);
+  }, [currentCatalog, selectedCategory, selectedTechs, selectedTypes, searchQuery]);
 
   return (
     <div className="min-h-screen bg-[#0B0F19] text-[#F8FAFC]">
@@ -837,10 +898,14 @@ export const ProjectsPage: React.FC = () => {
 
                         {/* Bottom Row: View Project link & Interested button */}
                         <div className="pt-3 border-t border-white/5 flex items-center justify-between">
-                          <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-400 group-hover:text-indigo-300 transition-colors">
+                          <Link
+                            to={`/projects/${project.slug || project.id}`}
+                            onClick={(e) => e.stopPropagation()}
+                            className="inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-400 group-hover:text-indigo-300 transition-colors hover:underline"
+                          >
                             <span>View Project</span>
                             <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                          </span>
+                          </Link>
 
                           <button
                             type="button"
@@ -1043,14 +1108,21 @@ export const ProjectsPage: React.FC = () => {
               )}
 
               {/* Actions in Footer */}
-              <div className="pt-3 border-t border-white/10 flex items-center justify-between gap-3">
-                <Link to="/request" className="flex-1">
-                  <Button variant="primary" size="sm" className="w-full">
-                    <span>Commission Custom Solution</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Button>
-                </Link>
-                <Button variant="secondary" size="sm" onClick={() => setSelectedProject(null)}>
+              <div className="pt-3 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
+                <div className="flex items-center gap-2">
+                  <Link to={`/projects/${selectedProject.slug || selectedProject.id}`}>
+                    <Button variant="primary" size="sm">
+                      <span>Inspect Full Architecture</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Button>
+                  </Link>
+                  <Link to="/request">
+                    <Button variant="secondary" size="sm">
+                      <span>Commission Solution</span>
+                    </Button>
+                  </Link>
+                </div>
+                <Button variant="ghost" size="sm" onClick={() => setSelectedProject(null)}>
                   Close
                 </Button>
               </div>
