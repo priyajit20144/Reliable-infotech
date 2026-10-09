@@ -6,8 +6,8 @@ interface AuthContextType {
   user: User | null;
   token: string | null;
   loading: boolean;
-  login: (data: { email: string; password: string }) => Promise<User | undefined>;
-  register: (data: { name: string; email: string; password: string; phone?: string }) => Promise<void>;
+  login: (data: { email: string; password: string }) => Promise<User>;
+  register: (data: { name: string; email: string; password: string; phone?: string }) => Promise<User>;
   logout: () => Promise<void>;
   updateUser: (updatedUser: User) => void;
   isAdmin: boolean;
@@ -35,10 +35,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         } else {
           localStorage.removeItem('devcraft_token');
           setToken(null);
+          setUser(null);
         }
-      } catch (err) {
+      } catch (_err) {
         localStorage.removeItem('devcraft_token');
         setToken(null);
+        setUser(null);
       } finally {
         setLoading(false);
       }
@@ -47,51 +49,43 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     fetchMe();
   }, []);
 
-  const login = async (data: { email: string; password: string }): Promise<User | undefined> => {
-    try {
-      const res = await authService.login(data);
-      if (res.success && res.token && res.user) {
-        localStorage.setItem('devcraft_token', res.token);
-        setToken(res.token);
-        setUser(res.user);
-        return res.user;
-      }
-    } catch (err) {
-      console.warn('Login request failed, fallback to demo client profile:', err);
-      if (data.email.toLowerCase().includes('client')) {
-        const fallbackClient: User = {
-          id: 'usr_client_1',
-          name: 'Rahul Sharma',
-          email: 'client@devcraft.io',
-          role: 'USER',
-          phone: '+1 (555) 234-5678',
-          avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80',
-        };
-        setUser(fallbackClient);
-        return fallbackClient;
-      }
+  const login = async (data: { email: string; password: string }): Promise<User> => {
+    const res = await authService.login(data);
+    if (res.success && res.token && res.user) {
+      localStorage.setItem('devcraft_token', res.token);
+      setToken(res.token);
+      setUser(res.user);
+      return res.user;
     }
-    return undefined;
+    throw new Error(res.message || 'Login failed. Please check your credentials.');
   };
 
-  const register = async (data: { name: string; email: string; password: string; phone?: string }) => {
+  const register = async (data: {
+    name: string;
+    email: string;
+    password: string;
+    phone?: string;
+  }): Promise<User> => {
     const res = await authService.register(data);
     if (res.success && res.token && res.user) {
       localStorage.setItem('devcraft_token', res.token);
       setToken(res.token);
       setUser(res.user);
+      return res.user;
     }
+    throw new Error(res.message || 'Registration failed.');
   };
 
   const logout = async () => {
     try {
       await authService.logout();
-    } catch (e) {
+    } catch (_e) {
       // Ignore network errors during logout
+    } finally {
+      localStorage.removeItem('devcraft_token');
+      setToken(null);
+      setUser(null);
     }
-    localStorage.removeItem('devcraft_token');
-    setToken(null);
-    setUser(null);
   };
 
   const updateUser = (updatedUser: User) => {
@@ -118,6 +112,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       {children}
     </AuthContext.Provider>
   );
+
 };
 
 export const useAuth = () => {

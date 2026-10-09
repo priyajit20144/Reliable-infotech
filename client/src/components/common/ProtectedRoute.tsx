@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { BrandLoader } from './BrandLoader';
@@ -13,35 +13,26 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
   allowedRoles,
 }) => {
-  const { user, loading, login } = useAuth();
+  const { user, loading } = useAuth();
   const location = useLocation();
-  const [initializingClient, setInitializingClient] = useState(false);
 
-  useEffect(() => {
-    // If accessing the client workspace dashboard without active session, seamlessly initialize client demo session
-    if (!loading && !user && !allowedRoles && location.pathname.startsWith('/dashboard')) {
-      setInitializingClient(true);
-      login({ email: 'client@devcraft.io', password: 'Client@123456' })
-        .catch((err) => {
-          console.warn('Auto client login error:', err);
-        })
-        .finally(() => {
-          setInitializingClient(false);
-        });
-    }
-  }, [loading, user, allowedRoles, location.pathname, login]);
-
-  if (loading || initializingClient) {
-    return <BrandLoader message="Loading DevCraft Client Workspace..." />;
+  if (loading) {
+    return <BrandLoader message="Verifying your DevCraft session..." />;
   }
 
+  // Not authenticated: cleanly redirect to login, preserving destination in state.from
   if (!user) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    // If attempting to access admin route, pass hint to login page
+    const isAdminTarget = location.pathname.startsWith('/admin') || (allowedRoles && allowedRoles.includes('ADMIN'));
+    const loginPath = isAdminTarget ? '/login?role=admin' : '/login';
+    return <Navigate to={loginPath} state={{ from: location }} replace />;
   }
 
+  // Role authorization check: user lacks required permissions
   if (allowedRoles && !allowedRoles.includes(user.role)) {
     return <Navigate to="/dashboard" replace />;
   }
 
   return <>{children}</>;
 };
+

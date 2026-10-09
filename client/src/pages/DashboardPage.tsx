@@ -120,20 +120,20 @@ export const DashboardPage: React.FC = () => {
         }
 
         const [myRes, adminRes] = await Promise.all(promises);
-        if (myRes && myRes.success && Array.isArray(myRes.data) && myRes.data.length > 0) {
+        if (myRes && myRes.success && Array.isArray(myRes.data)) {
           const sorted = [...myRes.data].sort(
             (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
           );
           setRequests(sorted);
         } else {
-          setRequests(getUserDefaultRequests(user?.name, user?.email));
+          setRequests([]);
         }
         if (adminRes && adminRes.success && adminRes.data) {
           setAllClientRequests(adminRes.data);
         }
       } catch (err) {
         console.error('Failed to load dashboard data:', err);
-        setRequests(getUserDefaultRequests(user?.name, user?.email));
+        setRequests([]);
       } finally {
         setLoading(false);
       }

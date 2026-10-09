@@ -5,16 +5,38 @@ import { UserModel } from '../models/User.js';
 import { isConnectedToMongo } from '../config/db.js';
 import { signToken } from '../middleware/authMiddleware.js';
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export const register = async (req: Request, res: Response) => {
   try {
     const { name, email, password, phone } = req.body;
-    if (!name || !email || !password) {
-      return res.status(400).json({ success: false, message: 'Name, email, and password are required.' });
+
+    // 1. Strict Validation
+    if (!name || typeof name !== 'string' || name.trim().length < 2) {
+      return res.status(400).json({
+        success: false,
+        message: 'Full name is required and must be at least 2 characters.',
+      });
     }
 
+    if (!email || typeof email !== 'string' || !EMAIL_REGEX.test(email.trim())) {
+      return res.status(400).json({
+        success: false,
+        message: 'A valid email address is required.',
+      });
+    }
+
+    if (!password || typeof password !== 'string' || password.length < 8) {
+      return res.status(400).json({
+        success: false,
+        message: 'Password must be at least 8 characters long.',
+      });
+    }
+
+    const trimmedName = name.trim();
     const normalizedEmail = email.toLowerCase().trim();
 
-    // Check duplicate
+    // 2. Duplicate Account Check
     let existingUser: any = null;
     if (isConnectedToMongo) {
       try {
@@ -28,26 +50,27 @@ export const register = async (req: Request, res: Response) => {
     }
 
     if (existingUser) {
-      return res.status(409).json({ success: false, message: 'An account with this email address already exists.' });
+      return res.status(409).json({
+        success: false,
+        message: 'An account with this email address already exists. Please sign in instead.',
+      });
     }
 
+    // 3. Password Hashing
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(password, salt);
 
-    const isSpecialAdmin =
-      normalizedEmail.startsWith('admin@') ||
-      normalizedEmail === 'priyajitd80@gmail.com' ||
-      normalizedEmail.includes('priyajit');
-    const assignedRole = isSpecialAdmin ? 'ADMIN' : 'USER';
+    // 4. Strict Role Assignment: Public registrations NEVER receive elevated privileges
+    const assignedRole = 'USER';
 
     let newUser: any;
     if (isConnectedToMongo) {
       try {
         newUser = await UserModel.create({
-          name,
+          name: trimmedName,
           email: normalizedEmail,
           passwordHash,
-          phone: phone || '',
+          phone: phone ? String(phone).trim() : '',
           role: assignedRole,
           isActive: true,
         });
@@ -59,10 +82,10 @@ export const register = async (req: Request, res: Response) => {
     if (!newUser) {
       newUser = {
         _id: `usr_${Date.now()}`,
-        name,
+        name: trimmedName,
         email: normalizedEmail,
         passwordHash,
-        phone: phone || '',
+        phone: phone ? String(phone).trim() : '',
         avatar: '',
         role: assignedRole,
         isActive: true,
@@ -72,6 +95,7 @@ export const register = async (req: Request, res: Response) => {
       store.users.push(newUser);
     }
 
+    // 5. Generate Signed JWT Token
     const token = signToken({
       id: newUser._id.toString(),
       email: newUser.email,
@@ -88,7 +112,7 @@ export const register = async (req: Request, res: Response) => {
 
     return res.status(201).json({
       success: true,
-      message: 'Registration successful.',
+      message: 'Account created successfully. Welcome to DevCraft!',
       token,
       user: {
         id: newUser._id.toString(),
@@ -96,11 +120,11 @@ export const register = async (req: Request, res: Response) => {
         email: newUser.email,
         role: newUser.role,
         phone: newUser.phone,
-        avatar: newUser.avatar,
+        avatar: newUser.avatar || '',
       },
     });
   } catch (error: any) {
-    return res.status(500).json({ success: false, message: error.message });
+    return res.status(500).json({ success: false, message: error.message || 'Registration failed.' });
   }
 };
 
@@ -108,10 +132,13 @@ export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
-      return res.status(400).json({ success: false, message: 'Email and password are required.' });
+      return res.status(400).json({
+        success: false,
+        message: 'Email and password are required.',
+      });
     }
 
-    const normalizedEmail = email.toLowerCase().trim();
+    const normalizedEmail = String(email).toLowerCase().trim();
 
     let user: any = null;
     if (isConnectedToMongo) {
@@ -126,12 +153,25 @@ export const login = async (req: Request, res: Response) => {
     }
 
     if (!user) {
-      return res.status(401).json({ success: false, message: 'Invalid email or password.' });
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid email or password.',
+      });
     }
 
-    const isMatch = await bcrypt.compare(password, user.passwordHash);
+    if (user.isActive === false) {
+      return res.status(401).json({
+        success: false,
+        message: 'Your account is currently inactive. Please contact DevCraft support.',
+      });
+    }
+
+    const isMatch = await bcrypt.compare(String(password), user.passwordHash);
     if (!isMatch) {
-      return res.status(401).json({ success: false, message: 'Invalid email or password.' });
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid email or password.',
+      });
     }
 
     const token = signToken({
@@ -162,14 +202,19 @@ export const login = async (req: Request, res: Response) => {
       },
     });
   } catch (error: any) {
-    return res.status(500).json({ success: false, message: error.message });
+    return res.status(500).json({ success: false, message: error.message || 'Login failed.' });
   }
 };
 
 export const logout = async (_req: Request, res: Response) => {
-  res.clearCookie('token');
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+  });
   return res.json({ success: true, message: 'Logged out successfully.' });
 };
+
 
 export const getMe = async (req: Request, res: Response) => {
   try {
