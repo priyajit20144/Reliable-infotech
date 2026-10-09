@@ -19,6 +19,7 @@ import contactRoutes from './routes/contactRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 import aiRoutes from './routes/aiRoutes.js';
 import supabaseRoutes from './routes/supabaseRoutes.js';
+import emailRoutes from './routes/emailRoutes.js';
 
 dotenv.config();
 dotenv.config({ path: path.resolve(process.cwd(), '.env') });
@@ -74,6 +75,8 @@ app.use('/api/contact', contactRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/supabase', supabaseRoutes);
+app.use('/api/email', emailRoutes);
+
 
 // Health check
 app.get('/api/health', (_req, res) => {

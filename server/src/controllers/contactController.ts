@@ -3,6 +3,7 @@ import { store } from '../seed/seedData.js';
 import { ContactMessageModel } from '../models/ContactMessage.js';
 import { NotificationModel } from '../models/Notification.js';
 import { isConnectedToMongo } from '../config/db.js';
+import { sendContactNotification } from '../services/emailService.js';
 
 export const submitContact = async (req: Request, res: Response) => {
   try {
@@ -22,6 +23,11 @@ export const submitContact = async (req: Request, res: Response) => {
       createdAt: new Date(),
     };
 
+    // Dispatch transactional email via Brevo relay asynchronously
+    sendContactNotification({ name, email, phone, subject, message }).catch((err) => {
+      console.warn('[Brevo Contact Email Dispatch Error]:', err?.message);
+    });
+
     if (isConnectedToMongo) {
       const created = await ContactMessageModel.create(newContact);
       await NotificationModel.create({
@@ -33,6 +39,7 @@ export const submitContact = async (req: Request, res: Response) => {
       });
       return res.status(201).json({ success: true, message: 'Message sent! Our team will get back to you within 24 hours.' });
     }
+
 
     // Sync into conversations so it immediately shows up in Admin Panel Messages section
     const convId = `conv_contact_${Date.now()}`;

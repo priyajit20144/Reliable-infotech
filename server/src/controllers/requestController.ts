@@ -4,8 +4,10 @@ import { CustomRequestModel } from '../models/CustomRequest.js';
 import { NotificationModel } from '../models/Notification.js';
 import { UserModel } from '../models/User.js';
 import { isConnectedToMongo } from '../config/db.js';
+import { sendCustomRequestConfirmation } from '../services/emailService.js';
 
 export const createCustomRequest = async (req: Request, res: Response) => {
+
   try {
     const {
       name,
@@ -103,12 +105,25 @@ export const createCustomRequest = async (req: Request, res: Response) => {
       });
     }
 
+    // Dispatch custom website request confirmation email via Brevo asynchronously
+    sendCustomRequestConfirmation({
+      name,
+      email: normalizedEmail,
+      websiteType,
+      budgetMin: Number(budgetMin) || 500,
+      budgetMax: Number(budgetMax) || 2500,
+      description,
+    }).catch((err) => {
+      console.warn('[Brevo Request Email Dispatch Error]:', err?.message);
+    });
+
     return res.status(201).json({
       success: true,
       message: 'Your custom website request has been successfully created. Our team will review it promptly.',
       data: savedRequest,
     });
   } catch (error: any) {
+
     return res.status(500).json({ success: false, message: error.message });
   }
 };

@@ -4,8 +4,10 @@ import { store } from '../seed/seedData.js';
 import { UserModel } from '../models/User.js';
 import { isConnectedToMongo } from '../config/db.js';
 import { signToken } from '../middleware/authMiddleware.js';
+import { sendWelcomeEmail } from '../services/emailService.js';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -110,7 +112,13 @@ export const register = async (req: Request, res: Response) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
+    // Dispatch welcome email via Brevo asynchronously
+    sendWelcomeEmail(newUser.email, newUser.name).catch((err) => {
+      console.warn('[Brevo Welcome Email Dispatch Error]:', err?.message);
+    });
+
     return res.status(201).json({
+
       success: true,
       message: 'Account created successfully. Welcome to DevCraft!',
       token,
