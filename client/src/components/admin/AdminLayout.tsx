@@ -76,7 +76,7 @@ export const AdminLayout: React.FC = () => {
           />
 
           {/* Page Routed Content */}
-          <main className="flex-1 w-full min-w-0 p-4 sm:p-6 lg:p-7">
+          <main className="flex-1 w-full min-w-0 p-3.5 sm:p-6 lg:p-7">
             <Outlet context={{ searchQuery, activeTab, onSelectTab: handleSelectTab }} />
           </main>
         </div>

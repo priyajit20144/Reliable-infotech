@@ -1,13 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Rocket,
   Shield,
   Code2,
   Cloud,
-  Volume2,
-  VolumeX,
-  RotateCcw,
   ArrowRight,
   Sparkles,
   ExternalLink,
@@ -20,35 +17,7 @@ export const IntroAnimationPage: React.FC = () => {
   const [progress, setProgress] = useState<number>(0);
   const [statusText, setStatusText] = useState<string>('Initializing DevCraft Core...');
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
-  const [soundEnabled, setSoundEnabled] = useState<boolean>(false);
   const [autoRedirect, setAutoRedirect] = useState<boolean>(true);
-  const audioCtxRef = useRef<AudioContext | null>(null);
-
-  // Play subtle futuristic sound using Web Audio API
-  const playChime = (freq = 520, type: OscillatorType = 'sine', duration = 0.3) => {
-    if (!soundEnabled) return;
-    try {
-      if (!audioCtxRef.current) {
-        audioCtxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
-      }
-      const ctx = audioCtxRef.current;
-      if (ctx.state === 'suspended') {
-        ctx.resume();
-      }
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = type;
-      osc.frequency.setValueAtTime(freq, ctx.currentTime);
-      gain.gain.setValueAtTime(0.04, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start();
-      osc.stop(ctx.currentTime + duration);
-    } catch {
-      // Audio fallback silent
-    }
-  };
 
   // Realistic non-linear progress counter (similar to the 72% checkpoint in reference image)
   useEffect(() => {
@@ -75,7 +44,6 @@ export const IntroAnimationPage: React.FC = () => {
         clearInterval(interval);
         setIsCompleted(true);
         setStatusText('All Systems Operational • Welcome!');
-        playChime(880, 'sine', 0.6);
       }
 
       setProgress(Math.min(100, Math.round(current)));
@@ -94,22 +62,7 @@ export const IntroAnimationPage: React.FC = () => {
     }
   }, [isCompleted, autoRedirect, navigate]);
 
-  const handleRestart = () => {
-    setProgress(0);
-    setIsCompleted(false);
-    setStatusText('Initializing DevCraft Core...');
-    playChime(440, 'triangle', 0.2);
-  };
 
-  const toggleSound = () => {
-    setSoundEnabled((prev) => {
-      const next = !prev;
-      if (next) {
-        playChime(660, 'sine', 0.3);
-      }
-      return next;
-    });
-  };
 
   return (
     <div className="relative min-h-screen w-full bg-[#060913] text-white overflow-hidden flex flex-col justify-between select-none">
@@ -181,32 +134,8 @@ export const IntroAnimationPage: React.FC = () => {
 
       {/* 2. Top Navigation Bar & Brand Header */}
       <header className="relative z-20 px-6 pt-6 sm:pt-8 max-w-7xl mx-auto w-full flex items-center justify-between">
-        {/* Empty left anchor or quick actions */}
-        <div className="flex items-center gap-2">
-          <button
-            onClick={toggleSound}
-            aria-label={soundEnabled ? 'Mute audio' : 'Enable audio'}
-            className="p-2 sm:px-3 sm:py-1.5 rounded-xl bg-slate-900/60 hover:bg-slate-800/80 border border-slate-800 hover:border-slate-700 text-xs font-semibold text-slate-400 hover:text-white transition-all flex items-center gap-2 backdrop-blur-md"
-            title={soundEnabled ? 'Audio enabled' : 'Enable sound'}
-          >
-            {soundEnabled ? (
-              <Volume2 className="w-3.5 h-3.5 text-cyan-400" />
-            ) : (
-              <VolumeX className="w-3.5 h-3.5 text-slate-500" />
-            )}
-            <span className="hidden sm:inline">{soundEnabled ? 'Audio On' : 'Audio Off'}</span>
-          </button>
-
-          <button
-            onClick={handleRestart}
-            aria-label="Replay intro animation"
-            className="p-2 sm:px-3 sm:py-1.5 rounded-xl bg-slate-900/60 hover:bg-slate-800/80 border border-slate-800 hover:border-slate-700 text-xs font-semibold text-slate-400 hover:text-white transition-all flex items-center gap-1.5 backdrop-blur-md"
-            title="Replay animation"
-          >
-            <RotateCcw className="w-3.5 h-3.5 text-indigo-400" />
-            <span className="hidden sm:inline">Replay</span>
-          </button>
-        </div>
+        {/* Spacer to keep central branding perfectly centered */}
+        <div className="w-28 sm:w-32 invisible pointer-events-none" aria-hidden="true" />
 
         {/* Central Logo Header: Glowing D Badge + DevCraft + Tagline */}
         <div className="flex flex-col items-center">
@@ -242,10 +171,10 @@ export const IntroAnimationPage: React.FC = () => {
         </div>
 
         {/* Right CTA: Skip / Enter Site Button */}
-        <div>
+        <div className="w-28 sm:w-32 flex justify-end">
           <button
             onClick={() => navigate('/')}
-            className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/40 hover:border-blue-400 text-xs font-bold text-blue-200 hover:text-white transition-all backdrop-blur-md active:scale-95 shadow-[0_0_15px_rgba(59,130,246,0.2)]"
+            className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/40 hover:border-blue-400 text-xs font-bold text-blue-200 hover:text-white transition-all backdrop-blur-md active:scale-95 shadow-[0_0_15px_rgba(59,130,246,0.2)] whitespace-nowrap"
           >
             <span>Skip Intro</span>
             <ArrowRight className="w-3.5 h-3.5" />

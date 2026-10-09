@@ -467,21 +467,21 @@ export const AdminDashboardPage: React.FC = () => {
           <AdminKpiCards stats={stats} />
 
           {/* Middle Row (3 Cards): Project Analytics, Request Types Donut, Recent Activity */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5">
-            <div className="lg:col-span-5 xl:col-span-5" id="project-analytics-card">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-12 gap-4 sm:gap-5">
+            <div className="col-span-1 md:col-span-1 xl:col-span-5" id="project-analytics-card">
               <AdminProjectAnalyticsChart />
             </div>
-            <div className="lg:col-span-4 xl:col-span-4">
+            <div className="col-span-1 md:col-span-1 xl:col-span-4">
               <AdminRequestTypesDonut />
             </div>
-            <div className="lg:col-span-3 xl:col-span-3">
+            <div className="col-span-1 md:col-span-2 xl:col-span-3">
               <AdminRecentActivity onViewAll={() => handleTabChange('notifications')} />
             </div>
           </div>
 
           {/* Lower Row (2 Cards): Recent Requests Table (Left) + Top Performing Projects (Right) */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5">
-            <div className="lg:col-span-7 xl:col-span-7">
+          <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 sm:gap-5">
+            <div className="col-span-1 xl:col-span-7">
               <AdminRecentRequestsTable
                 requests={requests}
                 onViewRequest={(req) => {
@@ -491,7 +491,7 @@ export const AdminDashboardPage: React.FC = () => {
                 onViewAll={() => handleTabChange('requests')}
               />
             </div>
-            <div className="lg:col-span-5 xl:col-span-5">
+            <div className="col-span-1 xl:col-span-5">
               <AdminTopProjects
                 projects={projects}
                 onViewAll={() => handleTabChange('projects')}
@@ -501,11 +501,11 @@ export const AdminDashboardPage: React.FC = () => {
           </div>
 
           {/* Bottom Row (3 Cards): Team Members, Quick Actions & Status, Build CTA Card */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5">
-            <div className="lg:col-span-4 xl:col-span-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-12 gap-4 sm:gap-5">
+            <div className="col-span-1 md:col-span-1 xl:col-span-4">
               <AdminTeamMembers onViewAll={() => handleTabChange('team')} />
             </div>
-            <div className="lg:col-span-5 xl:col-span-5">
+            <div className="col-span-1 md:col-span-1 xl:col-span-5">
               <AdminQuickActionsAndStatus
                 onAddNewProject={() => setCreateProjectModal(true)}
                 onManageUsers={() => handleTabChange('users')}
@@ -514,7 +514,7 @@ export const AdminDashboardPage: React.FC = () => {
                 onViewStatusDetails={() => setSystemStatusModalOpen(true)}
               />
             </div>
-            <div className="lg:col-span-3 xl:col-span-3">
+            <div className="col-span-1 md:col-span-2 xl:col-span-3">
               <AdminBuildCtaCard
                 onViewAnalytics={() => {
                   document
@@ -983,40 +983,71 @@ export const AdminDashboardPage: React.FC = () => {
               <p className="text-xs text-gray-400">No showcase inquiries yet.</p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead className="bg-white/[0.03] text-gray-400 uppercase font-mono border-b border-white/10">
-                  <tr>
-                    <th className="p-4 pl-5">Client Name</th>
-                    <th className="p-4">Email</th>
-                    <th className="p-4">Referenced Project</th>
-                    <th className="p-4">Message</th>
-                    <th className="p-4 pr-5 text-right">Received Date</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-white/5">
-                  {inquiries.map((inq) => (
-                    <tr key={inq._id} className="hover:bg-white/[0.02]">
-                      <td className="p-4 pl-5 font-bold text-white">{inq.name}</td>
-                      <td className="p-4">
-                        <a
-                          href={`mailto:${inq.email}`}
-                          className="text-indigo-400 hover:underline flex items-center gap-1"
-                        >
-                          <Mail className="w-3 h-3" />
-                          <span>{inq.email}</span>
-                        </a>
-                      </td>
-                      <td className="p-4 font-mono text-indigo-300 font-semibold">{inq.projectId}</td>
-                      <td className="p-4 text-gray-300 max-w-md leading-relaxed">{inq.message}</td>
-                      <td className="p-4 pr-5 text-right text-gray-400 font-mono text-[11px]">
+            <>
+              {/* Mobile Card List (sm:hidden) */}
+              <div className="p-3.5 space-y-3 sm:hidden divide-y divide-white/5">
+                {inquiries.map((inq) => (
+                  <div key={inq._id} className="pt-3 first:pt-0 space-y-2">
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="font-bold text-xs text-white truncate">{inq.name}</p>
+                      <span className="font-mono text-[10px] text-gray-400">
                         {inq.createdAt ? new Date(inq.createdAt).toLocaleDateString() : '—'}
-                      </td>
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2 text-[11px]">
+                      <a
+                        href={`mailto:${inq.email}`}
+                        className="text-indigo-400 hover:underline flex items-center gap-1 truncate"
+                      >
+                        <Mail className="w-3 h-3 shrink-0" />
+                        <span className="truncate">{inq.email}</span>
+                      </a>
+                      <span className="text-gray-500">•</span>
+                      <span className="font-mono text-indigo-300 text-[10px]">{inq.projectId}</span>
+                    </div>
+                    <p className="text-xs text-gray-300 leading-relaxed bg-white/[0.02] p-2.5 rounded-lg border border-white/5">
+                      {inq.message}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Desktop & Tablet Table (hidden sm:block) */}
+              <div className="hidden sm:block overflow-x-auto">
+                <table className="w-full text-left text-xs min-w-[600px]">
+                  <thead className="bg-white/[0.03] text-gray-400 uppercase font-mono border-b border-white/10">
+                    <tr>
+                      <th className="p-4 pl-5">Client Name</th>
+                      <th className="p-4">Email</th>
+                      <th className="p-4">Referenced Project</th>
+                      <th className="p-4">Message</th>
+                      <th className="p-4 pr-5 text-right">Received Date</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody className="divide-y divide-white/5">
+                    {inquiries.map((inq) => (
+                      <tr key={inq._id} className="hover:bg-white/[0.02]">
+                        <td className="p-4 pl-5 font-bold text-white">{inq.name}</td>
+                        <td className="p-4">
+                          <a
+                            href={`mailto:${inq.email}`}
+                            className="text-indigo-400 hover:underline flex items-center gap-1"
+                          >
+                            <Mail className="w-3 h-3" />
+                            <span>{inq.email}</span>
+                          </a>
+                        </td>
+                        <td className="p-4 font-mono text-indigo-300 font-semibold">{inq.projectId}</td>
+                        <td className="p-4 text-gray-300 max-w-md leading-relaxed">{inq.message}</td>
+                        <td className="p-4 pr-5 text-right text-gray-400 font-mono text-[11px]">
+                          {inq.createdAt ? new Date(inq.createdAt).toLocaleDateString() : '—'}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
           )}
         </Card>
       )}
@@ -1137,11 +1168,11 @@ export const AdminDashboardPage: React.FC = () => {
                         <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-slate-950/80 text-emerald-400 border border-emerald-500/30 backdrop-blur-md font-mono">
                           ${proj.price?.toLocaleString()}
                         </span>
-                        {/* Quick Delete button visible on hover */}
+                        {/* Quick Delete button visible on hover / always visible on mobile */}
                         <button
                           type="button"
                           onClick={() => setProjectToDelete(proj)}
-                          className="w-7 h-7 rounded-full bg-slate-950/80 text-rose-400 hover:text-white hover:bg-rose-600 border border-rose-500/30 backdrop-blur-md flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 shadow-lg"
+                          className="w-7 h-7 rounded-full bg-slate-950/80 text-rose-400 hover:text-white hover:bg-rose-600 border border-rose-500/30 backdrop-blur-md flex items-center justify-center transition-all opacity-100 sm:opacity-0 sm:group-hover:opacity-100 shadow-lg"
                           title={`Delete ${proj.title}`}
                           aria-label={`Delete ${proj.title}`}
                         >
@@ -1232,8 +1263,40 @@ export const AdminDashboardPage: React.FC = () => {
             <span className="text-xs font-mono text-indigo-400">Total: {users.length}</span>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
+          {/* Mobile User Card List (sm:hidden) */}
+          <div className="p-3.5 space-y-3 sm:hidden divide-y divide-white/5">
+            {users.map((u) => (
+              <div key={u.id} className="pt-3 first:pt-0 space-y-2">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="w-8 h-8 rounded-full bg-slate-800 border border-white/10 flex items-center justify-center font-bold text-xs text-white shrink-0">
+                      {u.name?.charAt(0) || 'U'}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="font-bold text-xs text-white truncate">{u.name}</p>
+                      <p className="text-[11px] text-gray-400 font-mono truncate">{u.email}</p>
+                    </div>
+                  </div>
+                  <Badge
+                    variant={u.role === 'ADMIN' ? 'purple' : u.role === 'TEAM_MEMBER' ? 'sky' : 'gray'}
+                    size="sm"
+                  >
+                    {u.role}
+                  </Badge>
+                </div>
+                <div className="flex items-center justify-between text-[11px] text-gray-400 pl-10">
+                  <span>Phone: {u.phone || '—'}</span>
+                  <span className="font-mono text-[10px] text-gray-400">
+                    {u.createdAt ? new Date(u.createdAt).toLocaleDateString() : 'Active'}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop & Tablet Table (hidden sm:block) */}
+          <div className="hidden sm:block overflow-x-auto">
+            <table className="w-full text-left text-xs min-w-[550px]">
               <thead className="bg-white/[0.03] text-gray-400 uppercase font-mono border-b border-white/10">
                 <tr>
                   <th className="p-4 pl-5">User</th>

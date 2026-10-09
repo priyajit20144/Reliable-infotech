@@ -44,7 +44,7 @@ export const AdminRequestTypesDonut: React.FC = () => {
   });
 
   return (
-    <div className="h-full rounded-2xl bg-[#0D1527] border border-slate-800/80 p-5 flex flex-col justify-between relative">
+    <div className="h-full rounded-2xl bg-[#0D1527] border border-slate-800/80 p-4 sm:p-5 flex flex-col justify-between relative">
       {/* Header */}
       <div className="flex items-center justify-between pb-2 border-b border-slate-800/60">
         <div className="flex items-center gap-2">
@@ -107,7 +107,7 @@ export const AdminRequestTypesDonut: React.FC = () => {
       </div>
 
       {/* Donut Chart + Legend Grid */}
-      <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-5 pt-3 pb-1 flex-1">
+      <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-4 sm:gap-5 pt-3 pb-1 flex-1">
         {/* SVG Donut Center */}
         <div className="relative w-40 h-40 sm:w-44 sm:h-44 shrink-0 flex items-center justify-center">
           <svg className="w-full h-full -rotate-90 transform overflow-visible" viewBox={`0 0 ${size} ${size}`}>

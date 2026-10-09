@@ -7,7 +7,7 @@ interface AdminBuildCtaCardProps {
 
 export const AdminBuildCtaCard: React.FC<AdminBuildCtaCardProps> = ({ onViewAnalytics }) => {
   return (
-    <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0F1836] via-[#111A3A] to-[#0A1024] border border-blue-500/25 p-5 sm:p-6 flex flex-col justify-between group shadow-xl">
+    <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0F1836] via-[#111A3A] to-[#0A1024] border border-blue-500/25 p-4 sm:p-5 lg:p-6 flex flex-col justify-between group shadow-xl">
       {/* Background ambient lighting */}
       <div className="absolute top-0 right-0 w-44 h-44 bg-blue-600/15 rounded-full blur-2xl pointer-events-none group-hover:bg-blue-600/25 transition-all duration-500" />
       <div className="absolute -bottom-8 -left-8 w-36 h-36 bg-indigo-600/15 rounded-full blur-2xl pointer-events-none" />

@@ -86,7 +86,7 @@ export const AdminTopProjects: React.FC<AdminTopProjectsProps> = ({
       : defaultProjects;
 
   return (
-    <div className="h-full rounded-2xl bg-[#0D1527] border border-slate-800/80 p-5 flex flex-col justify-between">
+    <div className="h-full rounded-2xl bg-[#0D1527] border border-slate-800/80 p-4 sm:p-5 flex flex-col justify-between">
       {/* Header */}
       <div className="flex items-center justify-between pb-3 border-b border-slate-800/60">
         <div className="flex items-center gap-2">

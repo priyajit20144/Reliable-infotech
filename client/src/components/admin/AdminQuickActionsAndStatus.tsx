@@ -32,7 +32,7 @@ export const AdminQuickActionsAndStatus: React.FC<AdminQuickActionsAndStatusProp
   ];
 
   return (
-    <div className="h-full rounded-2xl bg-[#0D1527] border border-slate-800/80 p-5 flex flex-col justify-between">
+    <div className="h-full rounded-2xl bg-[#0D1527] border border-slate-800/80 p-4 sm:p-5 flex flex-col justify-between">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 h-full">
         {/* Left column: Quick Actions */}
         <div className="flex flex-col justify-between border-b sm:border-b-0 sm:border-r border-slate-800/60 pb-4 sm:pb-0 sm:pr-4">
@@ -41,40 +41,40 @@ export const AdminQuickActionsAndStatus: React.FC<AdminQuickActionsAndStatusProp
               Quick Actions
             </h4>
 
-            <div className="grid grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-2 gap-2 sm:gap-2.5">
               {/* Add New Project */}
               <button
                 onClick={onAddNewProject}
-                className="flex items-center gap-2 p-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs font-bold shadow-lg shadow-purple-600/25 transition-all active:scale-95 text-left"
+                className="flex items-center gap-1.5 sm:gap-2 p-2 sm:p-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-[11px] sm:text-xs font-bold shadow-lg shadow-purple-600/25 transition-all active:scale-95 text-left"
               >
-                <Plus className="w-4 h-4 shrink-0" />
+                <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
                 <span className="truncate">Add New Project</span>
               </button>
 
               {/* Manage Users */}
               <button
                 onClick={onManageUsers}
-                className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 text-slate-200 hover:text-white text-xs font-semibold transition-all active:scale-95 text-left"
+                className="flex items-center gap-1.5 sm:gap-2 p-2 sm:p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 text-slate-200 hover:text-white text-[11px] sm:text-xs font-semibold transition-all active:scale-95 text-left"
               >
-                <Users className="w-4 h-4 text-blue-400 shrink-0" />
+                <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-400 shrink-0" />
                 <span className="truncate">Manage Users</span>
               </button>
 
               {/* View Requests */}
               <button
                 onClick={onViewRequests}
-                className="flex items-center gap-2 p-2.5 rounded-xl bg-teal-950/60 hover:bg-teal-900/60 border border-teal-700/50 text-teal-200 text-xs font-semibold transition-all active:scale-95 text-left"
+                className="flex items-center gap-1.5 sm:gap-2 p-2 sm:p-2.5 rounded-xl bg-teal-950/60 hover:bg-teal-900/60 border border-teal-700/50 text-teal-200 text-[11px] sm:text-xs font-semibold transition-all active:scale-95 text-left"
               >
-                <FileText className="w-4 h-4 text-teal-400 shrink-0" />
+                <FileText className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-teal-400 shrink-0" />
                 <span className="truncate">View Requests</span>
               </button>
 
               {/* Contact Clients */}
               <button
                 onClick={onContactClients}
-                className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 text-slate-200 hover:text-white text-xs font-semibold transition-all active:scale-95 text-left"
+                className="flex items-center gap-1.5 sm:gap-2 p-2 sm:p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 text-slate-200 hover:text-white text-[11px] sm:text-xs font-semibold transition-all active:scale-95 text-left"
               >
-                <Mail className="w-4 h-4 text-indigo-400 shrink-0" />
+                <Mail className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-indigo-400 shrink-0" />
                 <span className="truncate">Contact Clients</span>
               </button>
             </div>

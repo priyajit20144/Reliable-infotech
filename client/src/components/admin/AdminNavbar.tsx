@@ -129,7 +129,7 @@ export const AdminNavbar: React.FC<AdminNavbarProps> = ({
             placeholder="Search anything..."
             className="w-full bg-[#111827]/80 text-sm text-white placeholder-slate-400 rounded-xl pl-9 pr-14 py-2 border border-slate-700/60 hover:border-slate-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all shadow-inner"
           />
-          <div className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none flex items-center">
+          <div className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none hidden sm:flex items-center">
             <kbd className="px-1.5 py-0.5 text-[10px] font-semibold text-slate-400 bg-slate-800/90 border border-slate-700/60 rounded flex items-center gap-0.5 shadow-sm">
               <span>⌘</span>
               <span>K</span>
@@ -157,7 +157,7 @@ export const AdminNavbar: React.FC<AdminNavbarProps> = ({
 
           {/* Notifications Dropdown Panel */}
           {showNotifications && (
-            <div className="absolute right-0 mt-2 w-80 sm:w-96 rounded-2xl bg-[#0F172A] border border-slate-700/80 shadow-2xl overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-150">
+            <div className="absolute right-0 mt-2 w-[calc(100vw-2rem)] max-w-sm sm:w-96 rounded-2xl bg-[#0F172A] border border-slate-700/80 shadow-2xl overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-150">
               <div className="p-3.5 border-b border-slate-800 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="font-bold text-sm text-white">Notifications</span>

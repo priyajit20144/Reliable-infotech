@@ -86,7 +86,7 @@ export const AdminProjectAnalyticsChart: React.FC = () => {
   const yTicks = [40, 30, 20, 10, 0];
 
   return (
-    <div className="h-full rounded-2xl bg-[#0D1527] border border-slate-800/80 p-5 flex flex-col justify-between relative">
+    <div className="h-full rounded-2xl bg-[#0D1527] border border-slate-800/80 p-4 sm:p-5 flex flex-col justify-between relative">
       {/* Card Header */}
       <div className="flex items-center justify-between pb-2 border-b border-slate-800/60">
         <div className="flex items-center gap-2">
@@ -138,7 +138,7 @@ export const AdminProjectAnalyticsChart: React.FC = () => {
           <div
             className="absolute z-20 pointer-events-none -translate-x-1/2 -translate-y-full px-2.5 py-1 rounded-lg bg-blue-950/90 border border-blue-500/50 text-white text-[11px] shadow-xl shadow-blue-900/40 backdrop-blur-md"
             style={{
-              left: `${(points[hoveredIndex].x / width) * 100}%`,
+              left: `${Math.max(15, Math.min(85, (points[hoveredIndex].x / width) * 100))}%`,
               top: `${(points[hoveredIndex].y / height) * 100 - 8}%`,
             }}
           >

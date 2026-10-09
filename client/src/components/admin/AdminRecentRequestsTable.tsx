@@ -176,7 +176,7 @@ export const AdminRecentRequestsTable: React.FC<AdminRecentRequestsTableProps> =
   };
 
   return (
-    <div className="h-full rounded-2xl bg-[#0D1527] border border-slate-800/80 p-5 flex flex-col justify-between">
+    <div className="h-full rounded-2xl bg-[#0D1527] border border-slate-800/80 p-4 sm:p-5 flex flex-col justify-between">
       {/* Header */}
       <div className="flex items-center justify-between pb-3 border-b border-slate-800/60">
         <div className="flex items-center gap-2">
@@ -196,8 +196,44 @@ export const AdminRecentRequestsTable: React.FC<AdminRecentRequestsTableProps> =
         </button>
       </div>
 
-      {/* Responsive Table */}
-      <div className="overflow-x-auto -mx-5 px-5 pt-2 pb-1 scrollbar-thin scrollbar-thumb-slate-800">
+      {/* Mobile Card List (sm:hidden) */}
+      <div className="space-y-3 pt-3 sm:hidden">
+        {displayRows.map((row) => (
+          <div
+            key={row.id}
+            className="p-3.5 rounded-xl bg-slate-800/30 border border-slate-800 hover:border-slate-700 transition-colors"
+          >
+            <div className="flex items-center justify-between gap-2 mb-2">
+              <span className="font-mono text-xs font-semibold text-slate-300">
+                {row.id}
+              </span>
+              <div className="flex items-center gap-1.5">
+                {renderPriorityBadge(row.priority)}
+                {renderStatusBadge(row.status)}
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between gap-2">
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-bold text-white truncate">{row.type}</p>
+                <p className="text-[11px] text-slate-400 mt-0.5 truncate">
+                  {row.client} · <span className="text-slate-400">{row.date}</span>
+                </p>
+              </div>
+
+              <button
+                onClick={() => onViewRequest(row)}
+                className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-blue-600 text-slate-200 hover:text-white text-xs font-semibold border border-slate-700 hover:border-blue-500 transition-all shadow-sm shrink-0"
+              >
+                View
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop / Tablet Responsive Table (hidden sm:block) */}
+      <div className="hidden sm:block overflow-x-auto -mx-5 px-5 pt-2 pb-1 scrollbar-thin scrollbar-thumb-slate-800">
         <table className="w-full text-left border-collapse min-w-[620px]">
           <thead>
             <tr className="border-b border-slate-800/60 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
