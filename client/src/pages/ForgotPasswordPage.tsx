@@ -458,41 +458,6 @@ export const ForgotPasswordPage: React.FC = () => {
                   )}
                 </motion.button>
 
-                {/* Quick Autofill Helper Buttons */}
-                <div className="mt-6 pt-5 border-t border-white/8 space-y-2.5">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
-                      Quick Test Accounts:
-                    </span>
-                    <span className="text-[10px] text-gray-500 font-mono">Live DB Active</span>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setEmail('client@devcraft.io')}
-                      className="p-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/8 text-left transition-all group"
-                    >
-                      <div className="flex items-center gap-1.5 text-xs font-semibold text-white group-hover:text-indigo-300">
-                        <User className="w-3.5 h-3.5 text-indigo-400" />
-                        <span>Client Account</span>
-                      </div>
-                      <p className="text-[10px] text-gray-400 mt-0.5 truncate">client@devcraft.io</p>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => setEmail('admin@devcraft.io')}
-                      className="p-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/8 text-left transition-all group"
-                    >
-                      <div className="flex items-center gap-1.5 text-xs font-semibold text-amber-300 group-hover:text-amber-200">
-                        <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
-                        <span>Lead Admin</span>
-                      </div>
-                      <p className="text-[10px] text-gray-400 mt-0.5 truncate">admin@devcraft.io</p>
-                    </button>
-                  </div>
-                </div>
               </form>
             )}
 

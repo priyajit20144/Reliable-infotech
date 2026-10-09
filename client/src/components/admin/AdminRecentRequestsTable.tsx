@@ -67,9 +67,9 @@ export const AdminRecentRequestsTable: React.FC<AdminRecentRequestsTableProps> =
     },
   ];
 
-  // If real requests are passed, blend them or use them if formatted
+  // If real requests array is passed, use it; only fallback to default mock rows if undefined
   const displayRows: RequestRowItem[] =
-    requests && requests.length > 0
+    Array.isArray(requests)
       ? requests.slice(0, 5).map((r, i) => {
           const formattedStatus =
             r.status === 'UNDER_REVIEW'
