@@ -302,6 +302,33 @@ export const AdminSettingsView: React.FC = () => {
                 className="w-full bg-[#111827] text-xs font-mono text-white rounded-xl px-3 py-2 border border-slate-700/80 focus:outline-none focus:border-blue-500"
               />
             </div>
+
+            {/* MongoDB AI Model APIs Gateway */}
+            <div className="pt-3 border-t border-slate-800/80">
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="text-xs text-slate-300 font-bold flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                  <span>MongoDB Atlas AI Model API (Voyage AI)</span>
+                </label>
+                <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">
+                  ai.mongodb.com
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="password"
+                  readOnly
+                  value="ai-zYNdkjNOzf6tUB48MbcgvmqBclTJXpwcXVMbqRX1JW_"
+                  className="flex-1 bg-[#111827] text-xs font-mono text-slate-300 rounded-xl px-3 py-2 border border-slate-700/80"
+                />
+                <span className="px-2.5 py-1.5 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-300 text-[11px] font-semibold">
+                  Embeddings Ready
+                </span>
+              </div>
+              <p className="text-[10px] text-slate-400 mt-1">
+                Connected to Voyage-3 and Rerank-2 models for vector embeddings & neural search.
+              </p>
+            </div>
           </div>
         </div>
 

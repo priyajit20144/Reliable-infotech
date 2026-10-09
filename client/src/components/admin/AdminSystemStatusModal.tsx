@@ -20,6 +20,12 @@ export const AdminSystemStatusModal: React.FC<AdminSystemStatusModalProps> = ({
       icon: Database,
     },
     {
+      title: 'MongoDB AI Model APIs (Voyage AI)',
+      status: 'Connected',
+      details: 'Gateway: ai.mongodb.com • Models: voyage-3, rerank-2 • Vector Search: Ready',
+      icon: Cpu,
+    },
+    {
       title: 'Node.js API Services',
       status: 'Healthy',
       details: 'Memory: 182 MB • CPU: 4.2% • Uptime: 99.98%',
