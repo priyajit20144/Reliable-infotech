@@ -1,0 +1,246 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --devcraft-bg: #0b0f19;
+    --devcraft-surface: #111827;
+    --devcraft-card: #161f30;
+    --devcraft-primary: #6366f1;
+    --devcraft-secondary: #8b5cf6;
+    --devcraft-border: rgba(255, 255, 255, 0.08);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    font-family:
+      "Inter",
+      system-ui,
+      -apple-system,
+      sans-serif;
+    color-scheme: dark;
+    /* Cross-browser dark scrollbar for Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: #1f293d #0b0f19;
+  }
+
+  body {
+    background-color: #0b0f19;
+    color: #f8fafc;
+    /* Modern overflow containment that does not break position: sticky */
+    overflow-x: clip;
+    min-height: 100vh;
+    width: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Custom DevCraft dark scrollbar for Webkit/Chromium */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0b0f19;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1f293d;
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #374151;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    background: rgba(17, 24, 39, 0.75);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .glass-card {
+    background: linear-gradient(
+      135deg,
+      rgba(22, 31, 48, 0.85) 0%,
+      rgba(17, 24, 39, 0.95) 100%
+    );
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .glow-border {
+    position: relative;
+  }
+  .glow-border::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      to right,
+      rgba(99, 102, 241, 0.5),
+      rgba(139, 92, 246, 0.5)
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 50%, #a5b4fc 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  .text-gradient-brand {
+    background: linear-gradient(135deg, #38bdf8 0%, #60a5fa 40%, #a855f7 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  .text-gradient-cyan {
+    background: linear-gradient(135deg, #38bdf8 0%, #06b6d4 50%, #818cf8 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  .neon-blue-glow {
+    box-shadow: 0 0 35px -5px rgba(59, 130, 246, 0.45);
+  }
+
+  .neon-cyan-glow {
+    box-shadow: 0 0 30px -5px rgba(6, 182, 212, 0.4);
+  }
+
+  .neon-purple-glow {
+    box-shadow: 0 0 35px -5px rgba(168, 85, 247, 0.4);
+  }
+
+  .animate-float {
+    animation: float 4s ease-in-out infinite;
+  }
+
+  .animate-float-slow {
+    animation: float-slow 6s ease-in-out infinite;
+  }
+
+  .animate-float-delayed {
+    animation: float 5s ease-in-out 2s infinite;
+  }
+
+  .animate-float-gentle {
+    animation: float-gentle 5s ease-in-out infinite;
+  }
+
+  .animate-wave-glow {
+    animation: wave-glow 8s ease-in-out infinite;
+  }
+
+  .animate-pulse-halo {
+    animation: pulse-halo 4s ease-in-out infinite;
+  }
+
+  .shimmer-bar {
+    background-size: 200% 100%;
+    animation: progress-shimmer 2.5s linear infinite;
+  }
+}
+
+/* Keyframes Definitions */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(1deg);
+  }
+}
+
+@keyframes float-gentle {
+  0%,
+  100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-10px) scale(1.01);
+  }
+}
+
+@keyframes wave-glow {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.04);
+  }
+}
+
+@keyframes pulse-halo {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.6;
+    box-shadow:
+      0 0 45px rgba(6, 182, 212, 0.45),
+      0 0 90px rgba(139, 92, 246, 0.35);
+  }
+  50% {
+    transform: scale(1.06);
+    opacity: 0.95;
+    box-shadow:
+      0 0 65px rgba(6, 182, 212, 0.7),
+      0 0 120px rgba(139, 92, 246, 0.55);
+  }
+}
+
+@keyframes progress-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Reduced motion accessibility support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
