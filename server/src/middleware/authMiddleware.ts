@@ -35,7 +35,26 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
       return res.status(401).json({ success: false, message: 'Authentication required. No token provided.' });
     }
 
-    const decoded = jwt.verify(token, JWT_SECRET) as any;
+    let decoded: any = null;
+    try {
+      decoded = jwt.verify(token, JWT_SECRET) as any;
+    } catch (_internalErr) {
+      // If internal verification failed, attempt Supabase JWT verification using active key
+      try {
+        const { verifySupabaseJWT } = await import('../services/supabaseService.js');
+        const supaResult = await verifySupabaseJWT(token);
+        if (supaResult && supaResult.claims) {
+          decoded = {
+            id: supaResult.claims.sub,
+            email: supaResult.claims.email || (supaResult.user as any)?.email,
+            role: (supaResult.claims.app_metadata as any)?.role || 'USER',
+          };
+        }
+      } catch (_supaErr) {
+        return res.status(401).json({ success: false, message: 'Invalid or expired token.' });
+      }
+    }
+
     if (!decoded || !decoded.id) {
       return res.status(401).json({ success: false, message: 'Invalid or expired token.' });
     }

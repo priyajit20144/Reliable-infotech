@@ -64,4 +64,42 @@ router.get('/buckets', async (_req: Request, res: Response) => {
   }
 });
 
+/**
+ * GET /api/supabase/jwt-info
+ * Returns status of the active JWT Key ID and verifies against the live JWKS endpoint
+ */
+router.get('/jwt-info', async (_req: Request, res: Response) => {
+  const activeKeyId = process.env.SUPABASE_JWT_KEY_ID || '5175BA28-799C-4933-87A0-C8D07E302B1F';
+  const jwksUrl = process.env.SUPABASE_JWKS_URL || 'https://tdsbiknxuvgkqrrhjfmd.supabase.co/auth/v1/.well-known/jwks.json';
+
+  try {
+    const response = await fetch(jwksUrl);
+    const jwksData: any = await response.json();
+    const activeKeyFound = jwksData.keys?.some((k: any) => k.kid?.toLowerCase() === activeKeyId.toLowerCase());
+
+    return res.json({
+      success: true,
+      data: {
+        activeKeyId,
+        algorithm: 'ES256',
+        keyType: 'ECC (P-256)',
+        jwksUrl,
+        activeKeyVerifiedOnJwks: activeKeyFound,
+        availableKeysCount: jwksData.keys?.length || 0,
+        keys: jwksData.keys,
+      },
+    });
+  } catch (err: any) {
+    return res.json({
+      success: true,
+      data: {
+        activeKeyId,
+        algorithm: 'ES256',
+        jwksUrl,
+        warning: `Could not reach JWKS: ${err.message}`,
+      },
+    });
+  }
+});
+
 export default router;
