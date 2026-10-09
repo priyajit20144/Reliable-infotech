@@ -266,6 +266,12 @@ export const LoginPage: React.FC = () => {
                   >
                     Password
                   </label>
+                  <Link
+                    to="/forgot-password"
+                    className="text-xs text-indigo-400 hover:text-indigo-300 font-medium transition-colors hover:underline underline-offset-4"
+                  >
+                    Forgot password?
+                  </Link>
                 </div>
                 <div className="relative rounded-xl">
                   <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">

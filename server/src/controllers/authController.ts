@@ -1,12 +1,25 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
+import jwt from 'jsonwebtoken';
 import { store } from '../seed/seedData.js';
 import { UserModel } from '../models/User.js';
+import { PasswordResetModel } from '../models/PasswordReset.js';
 import { isConnectedToMongo } from '../config/db.js';
-import { signToken } from '../middleware/authMiddleware.js';
-import { sendWelcomeEmail } from '../services/emailService.js';
+import { signToken, JWT_SECRET } from '../middleware/authMiddleware.js';
+import {
+  sendWelcomeEmail,
+  sendPasswordResetOtpEmail,
+  sendPasswordResetConfirmationEmail,
+} from '../services/emailService.js';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const OTP_EXPIRY_MINUTES = 10;
+const MAX_OTP_ATTEMPTS = 5;
+
+const hashOtp = (otp: string, email: string): string => {
+  return crypto.createHmac('sha256', JWT_SECRET).update(`${email.toLowerCase().trim()}:${otp.trim()}`).digest('hex');
+};
 
 
 export const register = async (req: Request, res: Response) => {
@@ -314,3 +327,358 @@ export const updateProfile = async (req: Request, res: Response) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
+
+/**
+ * Initiate Forgot Password Flow:
+ * Generates 6-digit cryptographic OTP, hashes it, stores with TTL,
+ * signs JWT resetToken, and dispatches email via Brevo.
+ */
+export const forgotPassword = async (req: Request, res: Response) => {
+  try {
+    const { email } = req.body;
+    if (!email || typeof email !== 'string' || !EMAIL_REGEX.test(email.trim())) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide a valid email address.',
+      });
+    }
+
+    const normalizedEmail = email.toLowerCase().trim();
+
+    // Verify user exists in Mongo or in-memory store
+    let user: any = null;
+    if (isConnectedToMongo) {
+      try {
+        user = await UserModel.findOne({ email: normalizedEmail });
+      } catch (e) {
+        console.warn('[MongoDB findOne failed in forgotPassword, checking store]:', e);
+      }
+    }
+    if (!user) {
+      user = store.users.find((u) => u.email === normalizedEmail);
+    }
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'No account registered with this email address.',
+      });
+    }
+
+    if (user.isActive === false) {
+      return res.status(403).json({
+        success: false,
+        message: 'This account has been deactivated. Please contact support.',
+      });
+    }
+
+    // 1. Generate 6-Digit Cryptographic OTP
+    const rawOtp = crypto.randomInt(100000, 999999).toString();
+    const otpHash = hashOtp(rawOtp, normalizedEmail);
+    const expiresAt = new Date(Date.now() + OTP_EXPIRY_MINUTES * 60 * 1000);
+
+    // 2. Sign JWT resetToken bound to this email and purpose
+    const resetToken = jwt.sign(
+      { email: normalizedEmail, purpose: 'pwd_reset_pending' },
+      JWT_SECRET,
+      { expiresIn: `${OTP_EXPIRY_MINUTES}m` }
+    );
+
+    // 3. Persist in MongoDB & In-Memory Store
+    if (isConnectedToMongo) {
+      try {
+        // Delete previous unused reset requests for this email to avoid clutter
+        await PasswordResetModel.deleteMany({ email: normalizedEmail, isUsed: false });
+        await PasswordResetModel.create({
+          email: normalizedEmail,
+          otpHash,
+          resetToken,
+          attempts: 0,
+          isUsed: false,
+          expiresAt,
+        });
+      } catch (dbErr) {
+        console.warn('[MongoDB PasswordResetModel create failed, falling back to store]:', dbErr);
+      }
+    }
+
+    // Always maintain in store for hybrid resilience
+    const existingStoreIndex = store.passwordResets.findIndex(
+      (r: any) => r.email === normalizedEmail && !r.isUsed
+    );
+    const storeRecord = {
+      _id: `rst_${Date.now()}`,
+      email: normalizedEmail,
+      otpHash,
+      resetToken,
+      attempts: 0,
+      isUsed: false,
+      expiresAt,
+      createdAt: new Date(),
+    };
+    if (existingStoreIndex >= 0) {
+      store.passwordResets[existingStoreIndex] = storeRecord;
+    } else {
+      store.passwordResets.push(storeRecord);
+    }
+
+    // 4. Dispatch Email via Brevo
+    const emailResult = await sendPasswordResetOtpEmail(normalizedEmail, user.name || 'User', rawOtp);
+    if (!emailResult.success) {
+      console.warn(`[ForgotPassword] Brevo delivery notification for ${normalizedEmail}:`, emailResult.error);
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: `A 6-digit verification code has been dispatched to ${normalizedEmail}. It will expire in ${OTP_EXPIRY_MINUTES} minutes.`,
+      resetToken,
+      email: normalizedEmail,
+    });
+  } catch (error: any) {
+    console.error('[forgotPassword error]:', error);
+    return res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to process password reset request.',
+    });
+  }
+};
+
+/**
+ * Verify 6-digit OTP code with JWT session token.
+ * Validates attempt limit, expiration, and returns signed verificationToken.
+ */
+export const verifyOtp = async (req: Request, res: Response) => {
+  try {
+    const { email, otp, resetToken } = req.body;
+
+    if (!email || !otp || !resetToken) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email, verification code (OTP), and session token are required.',
+      });
+    }
+
+    const normalizedEmail = String(email).toLowerCase().trim();
+    const cleanOtp = String(otp).trim();
+
+    if (!/^\d{6}$/.test(cleanOtp)) {
+      return res.status(400).json({
+        success: false,
+        message: 'The verification code must be exactly 6 digits.',
+      });
+    }
+
+    // 1. Verify incoming resetToken JWT
+    let decoded: any = null;
+    try {
+      decoded = jwt.verify(resetToken, JWT_SECRET) as any;
+    } catch (_err) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid or expired session. Please request a new verification code.',
+      });
+    }
+
+    if (decoded.email !== normalizedEmail || decoded.purpose !== 'pwd_reset_pending') {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid reset session token.',
+      });
+    }
+
+    // 2. Fetch reset record from MongoDB or Store
+    let resetRecord: any = null;
+    if (isConnectedToMongo) {
+      try {
+        resetRecord = await PasswordResetModel.findOne({
+          email: normalizedEmail,
+          resetToken,
+          isUsed: false,
+        }).sort({ createdAt: -1 });
+      } catch (dbErr) {
+        console.warn('[MongoDB findOne PasswordReset failed, using store]:', dbErr);
+      }
+    }
+    if (!resetRecord) {
+      resetRecord = store.passwordResets
+        .slice()
+        .reverse()
+        .find((r: any) => r.email === normalizedEmail && r.resetToken === resetToken && !r.isUsed);
+    }
+
+    if (!resetRecord) {
+      return res.status(400).json({
+        success: false,
+        message: 'No active verification request found. Please request a new code.',
+      });
+    }
+
+    // Check expiration
+    if (new Date() > new Date(resetRecord.expiresAt)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Verification code has expired. Please request a new code.',
+      });
+    }
+
+    // Check attempt lockout
+    if (resetRecord.attempts >= MAX_OTP_ATTEMPTS) {
+      return res.status(429).json({
+        success: false,
+        message: 'Too many incorrect attempts. For your security, this code has been invalidated. Please request a new one.',
+      });
+    }
+
+    // 3. Verify OTP Hash
+    const expectedHash = hashOtp(cleanOtp, normalizedEmail);
+    const hashMatches = resetRecord.otpHash === expectedHash;
+
+    if (!hashMatches) {
+      resetRecord.attempts += 1;
+      if (typeof resetRecord.save === 'function') {
+        await resetRecord.save();
+      }
+      const attemptsRemaining = MAX_OTP_ATTEMPTS - resetRecord.attempts;
+      return res.status(400).json({
+        success: false,
+        message: attemptsRemaining > 0
+          ? `Invalid verification code. ${attemptsRemaining} attempt${attemptsRemaining === 1 ? '' : 's'} remaining.`
+          : 'Too many incorrect attempts. Please request a new verification code.',
+        attemptsRemaining,
+      });
+    }
+
+    // 4. Issue signed verificationToken (valid for 15 minutes)
+    const verificationToken = jwt.sign(
+      { email: normalizedEmail, purpose: 'pwd_reset_verified' },
+      JWT_SECRET,
+      { expiresIn: '15m' }
+    );
+
+    resetRecord.verificationToken = verificationToken;
+    if (typeof resetRecord.save === 'function') {
+      await resetRecord.save();
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Code verified successfully! You may now set your new password.',
+      verificationToken,
+    });
+  } catch (error: any) {
+    console.error('[verifyOtp error]:', error);
+    return res.status(500).json({
+      success: false,
+      message: error.message || 'OTP verification failed.',
+    });
+  }
+};
+
+/**
+ * Reset Password using verified JWT token
+ */
+export const resetPassword = async (req: Request, res: Response) => {
+  try {
+    const { email, newPassword, verificationToken } = req.body;
+
+    if (!email || !newPassword || !verificationToken) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email, new password, and verification token are required.',
+      });
+    }
+
+    const normalizedEmail = String(email).toLowerCase().trim();
+
+    if (typeof newPassword !== 'string' || newPassword.length < 8) {
+      return res.status(400).json({
+        success: false,
+        message: 'New password must be at least 8 characters in length.',
+      });
+    }
+
+    // 1. Verify verificationToken
+    let decoded: any = null;
+    try {
+      decoded = jwt.verify(verificationToken, JWT_SECRET) as any;
+    } catch (_err) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid or expired verification session. Please restart password recovery.',
+      });
+    }
+
+    if (decoded.email !== normalizedEmail || decoded.purpose !== 'pwd_reset_verified') {
+      return res.status(401).json({
+        success: false,
+        message: 'Verification token is invalid or does not match email.',
+      });
+    }
+
+    // 2. Mark reset record as used
+    if (isConnectedToMongo) {
+      try {
+        await PasswordResetModel.updateMany(
+          { email: normalizedEmail, verificationToken },
+          { $set: { isUsed: true } }
+        );
+      } catch (dbErr) {
+        console.warn('[MongoDB PasswordResetModel updateMany failed]:', dbErr);
+      }
+    }
+    const storeRecord = store.passwordResets.find(
+      (r: any) => r.email === normalizedEmail && r.verificationToken === verificationToken
+    );
+    if (storeRecord) {
+      storeRecord.isUsed = true;
+    }
+
+    // 3. Hash new password
+    const salt = await bcrypt.genSalt(10);
+    const passwordHash = await bcrypt.hash(newPassword, salt);
+
+    // 4. Update user in MongoDB & Store
+    let updatedUser: any = null;
+    if (isConnectedToMongo) {
+      try {
+        updatedUser = await UserModel.findOneAndUpdate(
+          { email: normalizedEmail },
+          { $set: { passwordHash, updatedAt: new Date() } },
+          { new: true }
+        );
+      } catch (dbErr) {
+        console.warn('[MongoDB findOneAndUpdate User failed, fallback to store]:', dbErr);
+      }
+    }
+    const userInStore = store.users.find((u) => u.email === normalizedEmail);
+    if (userInStore) {
+      userInStore.passwordHash = passwordHash;
+      userInStore.updatedAt = new Date();
+      if (!updatedUser) updatedUser = userInStore;
+    }
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        success: false,
+        message: 'User account could not be found to update password.',
+      });
+    }
+
+    // 5. Send security alert email asynchronously
+    sendPasswordResetConfirmationEmail(normalizedEmail, updatedUser.name || 'User').catch((err) => {
+      console.warn('[Password Reset Confirmation Email Failed]:', err?.message);
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: 'Your password has been successfully reset! You can now log in with your new credentials.',
+    });
+  } catch (error: any) {
+    console.error('[resetPassword error]:', error);
+    return res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to reset password.',
+    });
+  }
+};
+

@@ -4,7 +4,7 @@ import { store } from '../seed/seedData.js';
 import { UserModel } from '../models/User.js';
 import { isConnectedToMongo } from '../config/db.js';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'devcraft_jwt_super_secret_key_2026';
+export const JWT_SECRET = process.env.JWT_SECRET || 'devcraft_jwt_super_secret_key_2026';
 
 export interface AuthUser {
   id: string;

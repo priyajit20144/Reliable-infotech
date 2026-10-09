@@ -19,6 +19,7 @@ import { CustomRequestPage } from './pages/CustomRequestPage';
 import { ContactPage } from './pages/ContactPage';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
+import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
 
 // Client Dashboard Workspace Pages
 import { DashboardPage } from './pages/DashboardPage';
@@ -48,6 +49,7 @@ export const App: React.FC = () => {
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
             {/* Client Portal (Protected AppShell) */}
             <Route

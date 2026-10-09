@@ -9,6 +9,7 @@ export interface SeedDataStore {
   messages: any[];
   notifications: any[];
   contactMessages: any[];
+  passwordResets: any[];
 }
 
 const salt = bcrypt.genSaltSync(10);
@@ -17,6 +18,7 @@ const clientHash = bcrypt.hashSync('Client@123456', salt);
 const teamHash = bcrypt.hashSync('Team@123456', salt);
 
 export const store: SeedDataStore = {
+  passwordResets: [],
   users: [
     {
       _id: 'usr_admin_1',
