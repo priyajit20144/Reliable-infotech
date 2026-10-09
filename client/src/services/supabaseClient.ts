@@ -1,7 +1,10 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
-const supabasePublishableKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || '';
+const supabaseKey =
+  import.meta.env.VITE_SUPABASE_ANON_KEY ||
+  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+  '';
 
 /**
  * Checks if Supabase client is properly configured with a live project URL
@@ -10,14 +13,14 @@ export const isSupabaseConfigured = (): boolean => {
   return (
     Boolean(supabaseUrl) &&
     !supabaseUrl.includes('your-project-ref') &&
-    Boolean(supabasePublishableKey)
+    Boolean(supabaseKey)
   );
 };
 
 // Singleton Supabase client instance (or null dummy if unconfigured)
 export const supabase: SupabaseClient = createClient(
   isSupabaseConfigured() ? supabaseUrl : 'https://placeholder.supabase.co',
-  isSupabaseConfigured() ? supabasePublishableKey : 'placeholder-key',
+  isSupabaseConfigured() ? supabaseKey : 'placeholder-key',
   {
     auth: {
       persistSession: true,
