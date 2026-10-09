@@ -37,6 +37,11 @@ export const authService = {
       message: string;
       resetToken: string;
       email: string;
+      emailDelivered?: boolean;
+      emailError?: string;
+      devOtp?: string;
+      ipNotice?: string;
+      authorizationUrl?: string;
     }>('/auth/forgot-password', {
       method: 'POST',
       body: JSON.stringify({ email }),

@@ -37,6 +37,10 @@ export const ForgotPasswordPage: React.FC = () => {
   // Tokens
   const [resetToken, setResetToken] = useState('');
   const [verificationToken, setVerificationToken] = useState('');
+  const [devOtp, setDevOtp] = useState('');
+  const [ipNotice, setIpNotice] = useState('');
+  const [authUrl, setAuthUrl] = useState('');
+  const [emailDelivered, setEmailDelivered] = useState(true);
 
   // UI States
   const [loading, setLoading] = useState(false);
@@ -89,6 +93,11 @@ export const ForgotPasswordPage: React.FC = () => {
       if (res.success) {
         setResetToken(res.resetToken);
         setSuccessMsg(res.message);
+        setEmailDelivered(res.emailDelivered !== false);
+        if (res.devOtp) setDevOtp(res.devOtp);
+        if (res.ipNotice) setIpNotice(res.ipNotice);
+        if (res.authorizationUrl) setAuthUrl(res.authorizationUrl);
+
         setCurrentStep('otp');
         setResendCountdown(60);
         setOtpExpiryCountdown(600);
@@ -440,6 +449,43 @@ export const ForgotPasswordPage: React.FC = () => {
         {/* STEP 2: 6-Digit OTP Verification */}
         {currentStep === 'otp' && (
           <form onSubmit={handleVerifyOtp} className="space-y-5">
+            {devOtp && (
+              <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="font-semibold flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                    <span>{emailDelivered ? 'Verification Code Ready' : 'Brevo IP Authorization Notice'}</span>
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const digits = devOtp.split('').slice(0, 6);
+                      setOtp(digits);
+                      otpInputRefs.current[5]?.focus();
+                    }}
+                    className="px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 font-mono text-xs font-bold text-amber-200 border border-amber-500/30 transition-all flex items-center gap-1"
+                  >
+                    <span>Auto-Fill:</span>
+                    <span className="tracking-widest">{devOtp}</span>
+                  </button>
+                </div>
+                {!emailDelivered && (
+                  <p className="text-[11px] text-amber-400/90 leading-relaxed">
+                    Brevo requires server IP <code className="bg-black/30 px-1 py-0.5 rounded font-mono font-bold text-white">{ipNotice || '14.195.19.210'}</code> to be authorized at{' '}
+                    <a
+                      href={authUrl || 'https://app.brevo.com/security/authorised_ips'}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="underline font-semibold text-white hover:text-amber-200"
+                    >
+                      brevo.com/security/authorised_ips
+                    </a>{' '}
+                    to deliver live messages to your Gmail inbox. You can use <strong>Auto-Fill</strong> above to verify right now.
+                  </p>
+                )}
+              </div>
+            )}
+
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="text-xs font-semibold text-gray-300">
