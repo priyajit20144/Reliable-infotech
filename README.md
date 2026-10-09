@@ -1,4 +1,4 @@
-# Horizon / DevCraft — Full-Stack Digital Agency Platform
+# Relivelinfostech (DevCraft) — Full-Stack Digital Agency Platform
 
 A modern, high-performance web agency and custom software commissioning platform built with **React**, **TypeScript**, **Node.js**, **Express**, and **MongoDB**.
 
