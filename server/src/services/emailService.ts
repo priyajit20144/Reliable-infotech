@@ -76,8 +76,71 @@ export const verifySmtpConnection = async (): Promise<{
   }
 };
 
+export const GMAIL_USER = process.env.GMAIL_USER || '';
+export const GMAIL_APP_PASSWORD = process.env.GMAIL_APP_PASSWORD || '';
+
+export const isGmailConfigured = (): boolean => {
+  const user = GMAIL_USER || (SMTP_HOST.includes('gmail') ? SMTP_USER : '');
+  const pass = GMAIL_APP_PASSWORD || (SMTP_HOST.includes('gmail') ? SMTP_KEY : '');
+  return Boolean(user && pass && !pass.includes('your_app_password'));
+};
+
 /**
- * Generic safe mail sender with Brevo SMTP + REST API dual fallback
+ * Direct Google Gmail SMTP Transporter (Port 465 SSL or standard Gmail service)
+ * Direct delivery to any valid Gmail inbox with zero IP whitelisting hurdles
+ */
+export const gmailTransporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: GMAIL_USER || SMTP_USER,
+    pass: GMAIL_APP_PASSWORD || SMTP_KEY,
+  },
+});
+
+/**
+ * Verifies Gmail SMTP connectivity
+ */
+export const verifyGmailConnection = async (): Promise<{
+  configured: boolean;
+  connected: boolean;
+  user: string;
+  message: string;
+  error?: string;
+}> => {
+  if (!isGmailConfigured()) {
+    return {
+      configured: false,
+      connected: false,
+      user: GMAIL_USER || '',
+      message: 'Gmail SMTP is not configured in environment variables (GMAIL_USER, GMAIL_APP_PASSWORD).',
+    };
+  }
+
+  try {
+    await gmailTransporter.verify();
+    return {
+      configured: true,
+      connected: true,
+      user: GMAIL_USER || SMTP_USER,
+      message: 'Connected to Gmail SMTP Relay successfully! Ready to deliver directly to inboxes.',
+    };
+  } catch (err: any) {
+    const errorMsg = err?.message || 'Gmail verification failed';
+    return {
+      configured: true,
+      connected: false,
+      user: GMAIL_USER || SMTP_USER,
+      message: `Gmail SMTP verification error: ${errorMsg}`,
+      error: errorMsg,
+    };
+  }
+};
+
+/**
+ * Generic safe mail sender with Multi-Provider Priority:
+ * Priority 1: Direct Gmail SMTP (delivers straight to valid Gmail inboxes without IP blocks)
+ * Priority 2: Brevo Transactional SMTP Relay (smtp-relay.brevo.com:587)
+ * Priority 3: Brevo REST API v3 (/smtp/email)
  */
 export const sendMail = async (options: {
   to: string;
@@ -86,7 +149,27 @@ export const sendMail = async (options: {
   text?: string;
   replyTo?: string;
 }): Promise<{ success: boolean; messageId?: string; error?: string; via?: string }> => {
-  // Strategy 1: Attempt Brevo SMTP Relay
+  // Strategy 1: Direct Gmail SMTP (Highest reliability for real Gmail inboxes)
+  if (isGmailConfigured()) {
+    try {
+      const fromEmail = GMAIL_USER || (SMTP_USER.includes('@gmail.com') ? SMTP_USER : SMTP_FROM_EMAIL);
+      const info = await gmailTransporter.sendMail({
+        from: `"${SMTP_FROM_NAME}" <${fromEmail}>`,
+        to: options.to,
+        subject: options.subject,
+        html: options.html,
+        text: options.text || options.html.replace(/<[^>]*>?/gm, ''),
+        replyTo: options.replyTo,
+      });
+
+      console.log(`[EmailService] Direct Gmail SMTP dispatched to ${options.to} (MessageId: ${info.messageId})`);
+      return { success: true, messageId: info.messageId, via: 'gmail-smtp' };
+    } catch (gmailErr: any) {
+      console.warn(`[EmailService] Gmail SMTP send failed (${gmailErr?.message}), trying secondary fallbacks...`);
+    }
+  }
+
+  // Strategy 2: Attempt Brevo SMTP Relay
   if (isSmtpConfigured()) {
     try {
       const info = await mailTransporter.sendMail({
@@ -98,14 +181,14 @@ export const sendMail = async (options: {
         replyTo: options.replyTo,
       });
 
-      console.log(`[EmailService] SMTP email dispatched successfully to ${options.to} (MessageId: ${info.messageId})`);
+      console.log(`[EmailService] Brevo SMTP email dispatched to ${options.to} (MessageId: ${info.messageId})`);
       return { success: true, messageId: info.messageId, via: 'brevo-smtp' };
     } catch (smtpErr: any) {
-      console.warn(`[EmailService] SMTP send failed (${smtpErr?.message}), trying Brevo REST API fallback...`);
+      console.warn(`[EmailService] Brevo SMTP send failed (${smtpErr?.message}), trying Brevo REST API fallback...`);
     }
   }
 
-  // Strategy 2: Attempt Brevo REST API v3
+  // Strategy 3: Attempt Brevo REST API v3
   if (isBrevoApiConfigured()) {
     try {
       const restResult = await sendBrevoTransactionalEmail({
@@ -120,12 +203,12 @@ export const sendMail = async (options: {
       console.log(`[EmailService] Brevo REST API email dispatched to ${options.to} (MessageId: ${messageId})`);
       return { success: true, messageId, via: 'brevo-rest-api' };
     } catch (restErr: any) {
-      console.warn(`[EmailService] Brevo REST API also failed for ${options.to}:`, restErr?.message);
+      console.warn(`[EmailService] Brevo REST API failed for ${options.to}:`, restErr?.message);
       return { success: false, error: restErr?.message || 'Email delivery failed across all providers.' };
     }
   }
 
-  console.warn('[EmailService] Neither Brevo SMTP nor REST API is configured. Skipped dispatch to:', options.to);
+  console.warn('[EmailService] No active email provider (Gmail, Brevo SMTP, or Brevo REST API) is configured.');
   return { success: false, error: 'Email service credentials not configured.' };
 };
 

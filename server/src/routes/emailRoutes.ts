@@ -1,12 +1,15 @@
 import { Router, Request, Response } from 'express';
 import {
   verifySmtpConnection,
+  verifyGmailConnection,
   sendMail,
   SMTP_HOST,
   SMTP_PORT,
   SMTP_USER,
   SMTP_FROM_EMAIL,
   isSmtpConfigured,
+  isGmailConfigured,
+  GMAIL_USER,
 } from '../services/emailService.js';
 import {
   getBrevoAccountInfo,
@@ -20,10 +23,11 @@ const router = Router();
 
 /**
  * GET /api/email/status
- * Returns Brevo SMTP and Brevo REST API v3 diagnostic connectivity health
+ * Returns Gmail SMTP, Brevo SMTP, and Brevo REST API v3 diagnostic connectivity health
  */
 router.get('/status', async (_req: Request, res: Response) => {
   try {
+    const gmailHealth = await verifyGmailConnection();
     const smtpHealth = await verifySmtpConnection();
     let brevoApiHealth: any = {
       configured: isBrevoApiConfigured(),
@@ -55,10 +59,15 @@ router.get('/status', async (_req: Request, res: Response) => {
     return res.json({
       success: true,
       data: {
+        gmail: gmailHealth,
         smtp: smtpHealth,
         apiV3: brevoApiHealth,
-        provider: 'Brevo (Sendinblue) Transactional SMTP & REST API v3',
-        fromEmail: SMTP_FROM_EMAIL,
+        activePrimary: isGmailConfigured()
+          ? 'Direct Gmail SMTP'
+          : isSmtpConfigured()
+          ? 'Brevo SMTP Relay'
+          : 'None',
+        fromEmail: GMAIL_USER || SMTP_FROM_EMAIL || SMTP_USER,
       },
     });
   } catch (err: any) {
@@ -66,6 +75,44 @@ router.get('/status', async (_req: Request, res: Response) => {
       success: false,
       error: err?.message || 'Failed to inspect email service health',
     });
+  }
+});
+
+/**
+ * POST /api/email/test-send
+ * Sends a test email directly to any valid Gmail address to verify live inbox delivery
+ */
+router.post('/test-send', async (req: Request, res: Response) => {
+  const { to, subject, message } = req.body;
+  if (!to || typeof to !== 'string') {
+    return res.status(400).json({ success: false, message: 'Recipient email is required.' });
+  }
+
+  try {
+    const result = await sendMail({
+      to: to.trim(),
+      subject: subject || '[DevCraft] Test Email Delivery',
+      html: `
+        <div style="font-family: sans-serif; background-color: #0b0f19; color: #f8fafc; padding: 24px; border-radius: 12px;">
+          <h2 style="color: #6366f1;">DevCraft Direct Email Test</h2>
+          <p style="color: #cbd5e1; font-size: 14px;">This test email confirms direct delivery to <strong>${to}</strong>.</p>
+          <div style="background: rgba(99,102,241,0.1); border: 1px solid #6366f1; padding: 12px; border-radius: 8px; margin: 16px 0;">
+            <p style="margin: 0; color: #818cf8; font-size: 13px;">${message || 'Your email delivery configuration is operational.'}</p>
+          </div>
+          <p style="color: #64748b; font-size: 11px;">Timestamp: ${new Date().toUTCString()}</p>
+        </div>
+      `,
+    });
+
+    return res.json({
+      success: result.success,
+      via: result.via,
+      messageId: result.messageId,
+      error: result.error,
+      message: result.success ? `Test email dispatched to ${to} via ${result.via}` : `Delivery failed: ${result.error}`,
+    });
+  } catch (error: any) {
+    return res.status(500).json({ success: false, message: error.message });
   }
 });
 
