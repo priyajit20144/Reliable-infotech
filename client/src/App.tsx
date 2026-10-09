@@ -9,6 +9,7 @@ import { AdminLayout } from './components/admin/AdminLayout';
 import { ProtectedRoute } from './components/common/ProtectedRoute';
 
 // Public Pages
+import { RootPage } from './pages/RootPage';
 import { LandingPage } from './pages/LandingPage';
 import { IntroAnimationPage } from './pages/IntroAnimationPage';
 import { AboutPage } from './pages/AboutPage';
@@ -39,7 +40,8 @@ export const App: React.FC = () => {
         <NotificationProvider>
           <Routes>
             {/* Public Routes */}
-            <Route path="/" element={<LandingPage />} />
+            <Route path="/" element={<RootPage />} />
+            <Route path="/home" element={<LandingPage />} />
             <Route path="/intro" element={<IntroAnimationPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/services" element={<ServicesPage />} />

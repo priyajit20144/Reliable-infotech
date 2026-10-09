@@ -12,12 +12,39 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 
-export const IntroAnimationPage: React.FC = () => {
+let hasSeenIntroThisSession = false;
+
+export const markIntroSeen = () => {
+  hasSeenIntroThisSession = true;
+};
+
+export const resetIntroSession = () => {
+  hasSeenIntroThisSession = false;
+};
+
+export const getHasSeenIntro = () => {
+  return hasSeenIntroThisSession;
+};
+
+export interface IntroAnimationPageProps {
+  onComplete?: () => void;
+}
+
+export const IntroAnimationPage: React.FC<IntroAnimationPageProps> = ({ onComplete }) => {
   const navigate = useNavigate();
   const [progress, setProgress] = useState<number>(0);
   const [statusText, setStatusText] = useState<string>('Initializing DevCraft Core...');
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
-  const [autoRedirect, setAutoRedirect] = useState<boolean>(true);
+  const [autoRedirect] = useState<boolean>(true);
+
+  const handleExit = () => {
+    markIntroSeen();
+    if (onComplete) {
+      onComplete();
+    } else {
+      navigate('/');
+    }
+  };
 
   // Realistic non-linear progress counter (similar to the 72% checkpoint in reference image)
   useEffect(() => {
@@ -56,11 +83,11 @@ export const IntroAnimationPage: React.FC = () => {
   useEffect(() => {
     if (isCompleted && autoRedirect) {
       const timeout = setTimeout(() => {
-        navigate('/');
+        handleExit();
       }, 3500);
       return () => clearTimeout(timeout);
     }
-  }, [isCompleted, autoRedirect, navigate]);
+  }, [isCompleted, autoRedirect, onComplete]);
 
 
 
@@ -173,7 +200,7 @@ export const IntroAnimationPage: React.FC = () => {
         {/* Right CTA: Skip / Enter Site Button */}
         <div className="w-28 sm:w-32 flex justify-end">
           <button
-            onClick={() => navigate('/')}
+            onClick={handleExit}
             className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/40 hover:border-blue-400 text-xs font-bold text-blue-200 hover:text-white transition-all backdrop-blur-md active:scale-95 shadow-[0_0_15px_rgba(59,130,246,0.2)] whitespace-nowrap"
           >
             <span>Skip Intro</span>
@@ -257,7 +284,7 @@ export const IntroAnimationPage: React.FC = () => {
         {isCompleted && (
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3 animate-in fade-in zoom-in-95 duration-300">
             <button
-              onClick={() => navigate('/')}
+              onClick={handleExit}
               className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-bold text-xs sm:text-sm shadow-[0_0_25px_rgba(6,182,212,0.5)] transition-all active:scale-95"
             >
               <span>Explore DevCraft</span>
@@ -265,7 +292,10 @@ export const IntroAnimationPage: React.FC = () => {
             </button>
 
             <button
-              onClick={() => navigate('/admin')}
+              onClick={() => {
+                markIntroSeen();
+                navigate('/admin');
+              }}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-700 hover:border-slate-600 text-slate-200 hover:text-white font-semibold text-xs sm:text-sm transition-all backdrop-blur-md active:scale-95"
             >
               <span>Admin Console</span>
