@@ -32,6 +32,7 @@ import { Modal } from '../components/common/Modal';
 import { Button } from '../components/common/Button';
 import { projectService } from '../services/projectService';
 import { Project } from '../types';
+import { CatalogFilterSidebar } from '../components/projects/CatalogFilterSidebar';
 
 interface CatalogProject {
   id: string;
@@ -308,6 +309,16 @@ export const ProjectsPage: React.FC = () => {
     setSearchQuery('');
   };
 
+  // Total active filter count
+  const activeFiltersCount = useMemo(() => {
+    return (
+      (selectedCategory !== 'All Projects' ? 1 : 0) +
+      selectedTechs.length +
+      selectedTypes.length +
+      (searchQuery.trim() ? 1 : 0)
+    );
+  }, [selectedCategory, selectedTechs, selectedTypes, searchQuery]);
+
   // Toggle Interested
   const handleToggleInterested = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -486,18 +497,76 @@ export const ProjectsPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Mobile Filter Toggle Button (< lg) */}
-        <div className="lg:hidden flex items-center justify-between p-3 rounded-2xl bg-white/[0.03] border border-white/10">
-          <button
-            onClick={() => setMobileFilterOpen(true)}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-devcraft-primary text-white text-xs font-semibold shadow-sm"
-          >
-            <Filter className="w-4 h-4" />
-            <span>Open Filters ({selectedCategory !== 'All Projects' || selectedTechs.length > 0 ? 'Active' : 'All'})</span>
-          </button>
-          <span className="text-xs text-gray-400 font-mono">
-            {filteredProjects.length} results
-          </span>
+        {/* ========================================================================= */}
+        {/* MOBILE & TABLET FILTERS & HORIZONTAL CATEGORIES CAROUSEL (< lg)           */}
+        {/* ========================================================================= */}
+        <div className="lg:hidden space-y-3">
+          {/* Top Bar: Filter Drawer Trigger + Active Badges + Results Count */}
+          <div className="flex items-center justify-between p-2.5 sm:p-3 rounded-2xl bg-gradient-to-r from-[#0F172A]/95 via-[#0B1222]/90 to-[#0F172A]/95 border border-white/10 backdrop-blur-xl shadow-lg">
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setMobileFilterOpen(true)}
+                className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 text-white text-xs font-bold shadow-[0_0_15px_rgba(99,102,241,0.4)] hover:brightness-110 active:scale-95 transition-all cursor-pointer"
+              >
+                <Filter className="w-3.5 h-3.5" />
+                <span>Filters</span>
+                {activeFiltersCount > 0 && (
+                  <span className="px-1.5 py-0.2 rounded-full bg-white/20 text-white text-[10px] font-mono font-bold animate-pulse">
+                    {activeFiltersCount}
+                  </span>
+                )}
+              </button>
+
+              {activeFiltersCount > 0 && (
+                <button
+                  type="button"
+                  onClick={handleClearFilters}
+                  className="text-[11px] font-semibold text-gray-400 hover:text-white flex items-center gap-1 transition-colors px-2 py-1 rounded-lg hover:bg-white/5 cursor-pointer"
+                  title="Clear all filters"
+                >
+                  <RotateCcw className="w-3 h-3 text-indigo-400" />
+                  <span>Clear</span>
+                </button>
+              )}
+            </div>
+
+            <span className="text-[11px] text-gray-400 font-mono bg-white/5 px-2.5 py-1 rounded-lg border border-white/5">
+              {filteredProjects.length} results
+            </span>
+          </div>
+
+          {/* Horizontal Swipeable Category Chips Bar for Mobile/Tablet */}
+          <div className="relative">
+            <div className="flex items-center gap-2 overflow-x-auto scrollbar-none py-1 -mx-4 px-4 sm:mx-0 sm:px-0">
+              {categoriesList.map((cat) => {
+                const Icon = cat.icon || Layers;
+                const isSelected = selectedCategory === cat.label;
+                return (
+                  <button
+                    key={cat.label}
+                    type="button"
+                    onClick={() => setSelectedCategory(cat.label)}
+                    className={`shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all duration-200 active:scale-95 cursor-pointer ${
+                      isSelected
+                        ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-[0_0_15px_rgba(99,102,241,0.4)] border border-indigo-400/40'
+                        : 'bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 border border-white/5'
+                    }`}
+                  >
+                    <Icon className="w-3.5 h-3.5 shrink-0" />
+                    <span>{cat.label}</span>
+                    <span
+                      className={`text-[10px] font-mono px-1.5 py-0.2 rounded-full ${
+                        isSelected ? 'bg-white/20 text-white' : 'bg-white/5 text-gray-400'
+                      }`}
+                    >
+                      {cat.count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
         </div>
 
         {/* ========================================================================= */}
@@ -508,144 +577,20 @@ export const ProjectsPage: React.FC = () => {
           {/* ========================================================= */}
           {/* LEFT COLUMN: FILTERS SIDEBAR (Desktop)                    */}
           {/* ========================================================= */}
-          <aside className="hidden lg:block lg:col-span-3 rounded-2xl bg-[#0F172A]/80 border border-white/8 p-5 space-y-6 text-left shadow-xl sticky top-24">
-            {/* Filter Header */}
-            <div className="flex items-center justify-between pb-3 border-b border-white/8">
-              <div className="flex items-center gap-2">
-                <Filter className="w-4 h-4 text-indigo-400" />
-                <h3 className="text-sm font-bold text-white uppercase tracking-wider">
-                  Filters
-                </h3>
-              </div>
-              {(selectedCategory !== 'All Projects' ||
-                selectedTechs.length > 0 ||
-                selectedTypes.length > 0 ||
-                searchQuery) && (
-                <button
-                  onClick={handleClearFilters}
-                  className="text-[11px] font-semibold text-gray-400 hover:text-white flex items-center gap-1 transition-colors"
-                  title="Reset all filters"
-                >
-                  <RotateCcw className="w-3 h-3" />
-                  <span>Reset</span>
-                </button>
-              )}
-            </div>
-
-            {/* Filter Group 1: Category */}
-            <div className="space-y-2">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">
-                Category
-              </h4>
-              <div className="space-y-1">
-                {categoriesList.map((cat) => {
-                  const Icon = cat.icon;
-                  const isSelected = selectedCategory === cat.label;
-                  return (
-                    <button
-                      key={cat.label}
-                      type="button"
-                      onClick={() => setSelectedCategory(cat.label)}
-                      className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-all ${
-                        isSelected
-                          ? 'bg-devcraft-primary text-white font-semibold shadow-glow-primary'
-                          : 'text-gray-400 hover:text-white hover:bg-white/5'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <Icon className="w-3.5 h-3.5" />
-                        <span>{cat.label}</span>
-                      </div>
-                      <span
-                        className={`text-[10px] font-mono px-1.5 py-0.5 rounded-full ${
-                          isSelected ? 'bg-white/20 text-white' : 'text-gray-400'
-                        }`}
-                      >
-                        {cat.count}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Filter Group 2: Technology */}
-            <div className="space-y-2.5 pt-3 border-t border-white/8">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">
-                Technology
-              </h4>
-              <div className="space-y-2">
-                {techOptions.map((t) => {
-                  const isChecked = selectedTechs.includes(t.name);
-                  return (
-                    <label
-                      key={t.name}
-                      className="flex items-center justify-between text-xs text-gray-300 hover:text-white cursor-pointer group"
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <input
-                          type="checkbox"
-                          checked={isChecked}
-                          onChange={() => toggleTech(t.name)}
-                          className="w-3.5 h-3.5 rounded bg-[#111827] border-white/20 text-indigo-600 focus:ring-0 focus:ring-offset-0 cursor-pointer"
-                        />
-                        <span className={isChecked ? 'font-semibold text-white' : ''}>
-                          {t.name}
-                        </span>
-                      </div>
-                      <span className="text-[10px] font-mono text-gray-400">
-                        {t.count}
-                      </span>
-                    </label>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Filter Group 3: Project Type */}
-            <div className="space-y-2.5 pt-3 border-t border-white/8">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">
-                Project Type
-              </h4>
-              <div className="space-y-2">
-                {typeOptions.map((type) => {
-                  const isChecked = selectedTypes.includes(type.name);
-                  return (
-                    <label
-                      key={type.name}
-                      className="flex items-center justify-between text-xs text-gray-300 hover:text-white cursor-pointer group"
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <input
-                          type="checkbox"
-                          checked={isChecked}
-                          onChange={() => toggleType(type.name)}
-                          className="w-3.5 h-3.5 rounded bg-[#111827] border-white/20 text-indigo-600 focus:ring-0 cursor-pointer"
-                        />
-                        <span className={isChecked ? 'font-semibold text-white' : ''}>
-                          {type.name}
-                        </span>
-                      </div>
-                      <span className="text-[10px] font-mono text-gray-400">
-                        {type.count}
-                      </span>
-                    </label>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Clear Filters Button at Bottom */}
-            <div className="pt-2">
-              <button
-                type="button"
-                onClick={handleClearFilters}
-                className="w-full py-2.5 px-4 rounded-xl text-xs font-semibold text-gray-300 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 transition-colors flex items-center justify-center gap-2"
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
-                <span>Clear Filters</span>
-              </button>
-            </div>
+          <aside className="hidden lg:block lg:col-span-3 sticky top-24 z-10">
+            <CatalogFilterSidebar
+              categoriesList={categoriesList}
+              techOptions={techOptions}
+              typeOptions={typeOptions}
+              selectedCategory={selectedCategory}
+              selectedTechs={selectedTechs}
+              selectedTypes={selectedTypes}
+              onSelectCategory={setSelectedCategory}
+              onToggleTech={toggleTech}
+              onToggleType={toggleType}
+              onClearFilters={handleClearFilters}
+              totalResultsCount={filteredProjects.length}
+            />
           </aside>
 
           {/* ========================================================= */}
@@ -723,6 +668,85 @@ export const ProjectsPage: React.FC = () => {
               </div>
 
             </div>
+
+            {/* Active Filters Pill Bar (Interactive & Removable Badges) */}
+            {activeFiltersCount > 0 && (
+              <div className="flex flex-wrap items-center gap-2 p-2.5 rounded-2xl bg-white/[0.03] border border-white/10 animate-in fade-in duration-200">
+                <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider pl-1">
+                  Active:
+                </span>
+
+                {selectedCategory !== 'All Projects' && (
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-semibold bg-indigo-500/15 text-indigo-300 border border-indigo-500/30 animate-in zoom-in-95 duration-150">
+                    <span>Category: {selectedCategory}</span>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedCategory('All Projects')}
+                      className="hover:text-white transition-colors cursor-pointer"
+                      title="Reset category"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </span>
+                )}
+
+                {selectedTechs.map((tech) => (
+                  <span
+                    key={tech}
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-semibold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 animate-in zoom-in-95 duration-150"
+                  >
+                    <span>{tech}</span>
+                    <button
+                      type="button"
+                      onClick={() => toggleTech(tech)}
+                      className="hover:text-white transition-colors cursor-pointer"
+                      title={`Remove ${tech}`}
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </span>
+                ))}
+
+                {selectedTypes.map((type) => (
+                  <span
+                    key={type}
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-semibold bg-purple-500/15 text-purple-300 border border-purple-500/30 animate-in zoom-in-95 duration-150"
+                  >
+                    <span>{type}</span>
+                    <button
+                      type="button"
+                      onClick={() => toggleType(type)}
+                      className="hover:text-white transition-colors cursor-pointer"
+                      title={`Remove ${type}`}
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </span>
+                ))}
+
+                {searchQuery.trim() && (
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-semibold bg-amber-500/15 text-amber-300 border border-amber-500/30 animate-in zoom-in-95 duration-150">
+                    <span>Search: "{searchQuery}"</span>
+                    <button
+                      type="button"
+                      onClick={() => setSearchQuery('')}
+                      className="hover:text-white transition-colors cursor-pointer"
+                      title="Clear search"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </span>
+                )}
+
+                <button
+                  type="button"
+                  onClick={handleClearFilters}
+                  className="ml-auto text-[11px] font-bold text-indigo-400 hover:text-indigo-300 hover:underline transition-colors px-1 cursor-pointer"
+                >
+                  Clear all
+                </button>
+              </div>
+            )}
 
             {/* Showing Count Banner */}
             <div className="flex items-center justify-between text-xs text-gray-400 px-1">
@@ -1045,69 +1069,75 @@ export const ProjectsPage: React.FC = () => {
           <div className="fixed inset-0 z-50 lg:hidden flex">
             {/* Backdrop */}
             <div
-              className="fixed inset-0 bg-black/75 backdrop-blur-sm"
+              className="fixed inset-0 bg-black/80 backdrop-blur-md transition-opacity animate-in fade-in duration-200"
               onClick={() => setMobileFilterOpen(false)}
             />
-            {/* Drawer Body */}
-            <div className="relative w-80 max-w-[85vw] h-full bg-[#0F172A] z-10 shadow-2xl p-5 overflow-y-auto space-y-6 text-left animate-in slide-in-from-left duration-200">
-              <div className="flex items-center justify-between pb-3 border-b border-white/10">
-                <h3 className="text-sm font-bold text-white uppercase tracking-wider">
-                  Filters
-                </h3>
+            {/* Drawer Body Slide In */}
+            <div className="relative ml-auto w-full max-w-sm h-full bg-[#0B101D] border-l border-white/10 z-10 shadow-2xl flex flex-col animate-in slide-in-from-right duration-300">
+              {/* Header */}
+              <div className="flex items-center justify-between p-4 border-b border-white/10 bg-[#0F172A]/80">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center">
+                    <Filter className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-xs font-bold text-white uppercase tracking-wider">
+                        Filters
+                      </h3>
+                      {activeFiltersCount > 0 && (
+                        <span className="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-indigo-500/25 text-indigo-300 border border-indigo-500/30">
+                          {activeFiltersCount}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-[10px] text-gray-400">Refine project showcase</p>
+                  </div>
+                </div>
                 <button
+                  type="button"
                   onClick={() => setMobileFilterOpen(false)}
-                  className="p-1 rounded-lg text-gray-400 hover:text-white"
+                  className="p-1.5 rounded-xl text-gray-400 hover:text-white hover:bg-white/10 border border-white/5 transition-colors cursor-pointer"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              {/* Categories */}
-              <div className="space-y-1.5">
-                <p className="text-xs font-bold text-gray-400 uppercase">Category</p>
-                {categoriesList.map((cat) => (
-                  <button
-                    key={cat.label}
-                    onClick={() => {
-                      setSelectedCategory(cat.label);
-                      setMobileFilterOpen(false);
-                    }}
-                    className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs ${
-                      selectedCategory === cat.label
-                        ? 'bg-devcraft-primary text-white font-semibold'
-                        : 'text-gray-400 hover:text-white'
-                    }`}
-                  >
-                    <span>{cat.label}</span>
-                    <span className="text-[10px] font-mono">{cat.count}</span>
-                  </button>
-                ))}
+              {/* Scrollable Filters Content */}
+              <div className="flex-1 overflow-y-auto p-4 scrollbar-thin scrollbar-thumb-white/10">
+                <CatalogFilterSidebar
+                  categoriesList={categoriesList}
+                  techOptions={techOptions}
+                  typeOptions={typeOptions}
+                  selectedCategory={selectedCategory}
+                  selectedTechs={selectedTechs}
+                  selectedTypes={selectedTypes}
+                  onSelectCategory={setSelectedCategory}
+                  onToggleTech={toggleTech}
+                  onToggleType={toggleType}
+                  onClearFilters={handleClearFilters}
+                  totalResultsCount={filteredProjects.length}
+                  isMobile={true}
+                  onCloseMobile={() => setMobileFilterOpen(false)}
+                />
               </div>
 
-              {/* Technologies */}
-              <div className="space-y-2 pt-3 border-t border-white/10">
-                <p className="text-xs font-bold text-gray-400 uppercase">Technology</p>
-                {techOptions.map((t) => (
-                  <label key={t.name} className="flex items-center justify-between text-xs text-gray-300">
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="checkbox"
-                        checked={selectedTechs.includes(t.name)}
-                        onChange={() => toggleTech(t.name)}
-                        className="rounded bg-[#111827] text-indigo-600"
-                      />
-                      <span>{t.name}</span>
-                    </div>
-                    <span className="text-[10px] font-mono text-gray-400">{t.count}</span>
-                  </label>
-                ))}
-              </div>
-
-              {/* Clear button */}
-              <div className="pt-2">
-                <Button variant="secondary" size="sm" className="w-full" onClick={handleClearFilters}>
-                  Clear All Filters
-                </Button>
+              {/* Sticky Bottom Actions */}
+              <div className="p-4 border-t border-white/10 bg-[#080D1A] flex items-center gap-2.5">
+                <button
+                  type="button"
+                  onClick={handleClearFilters}
+                  className="px-4 py-2.5 rounded-xl text-xs font-semibold text-gray-300 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 transition-colors cursor-pointer"
+                >
+                  Reset
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMobileFilterOpen(false)}
+                  className="flex-1 py-2.5 px-4 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:from-indigo-500 hover:to-purple-500 shadow-[0_0_20px_rgba(99,102,241,0.4)] transition-all cursor-pointer"
+                >
+                  Show {filteredProjects.length} Projects
+                </button>
               </div>
             </div>
           </div>
