@@ -66,11 +66,13 @@ router.get('/buckets', async (_req: Request, res: Response) => {
 
 /**
  * GET /api/supabase/jwt-info
- * Returns status of the active JWT Key ID and verifies against the live JWKS endpoint
+ * Returns status of the active JWT Key ID, JWKS endpoint verification, and legacy JWT secret configuration
  */
 router.get('/jwt-info', async (_req: Request, res: Response) => {
   const activeKeyId = process.env.SUPABASE_JWT_KEY_ID || '5175BA28-799C-4933-87A0-C8D07E302B1F';
   const jwksUrl = process.env.SUPABASE_JWKS_URL || 'https://tdsbiknxuvgkqrrhjfmd.supabase.co/auth/v1/.well-known/jwks.json';
+  const hasLegacySecret = Boolean(process.env.SUPABASE_JWT_SECRET);
+  const legacySecret = process.env.SUPABASE_JWT_SECRET || '';
 
   try {
     const response = await fetch(jwksUrl);
@@ -87,6 +89,11 @@ router.get('/jwt-info', async (_req: Request, res: Response) => {
         activeKeyVerifiedOnJwks: activeKeyFound,
         availableKeysCount: jwksData.keys?.length || 0,
         keys: jwksData.keys,
+        legacyJwtSecretConfigured: hasLegacySecret,
+        legacyAlgorithm: 'HS256',
+        legacySecretPreview: hasLegacySecret
+          ? `${legacySecret.substring(0, 10)}...${legacySecret.substring(legacySecret.length - 8)}`
+          : null,
       },
     });
   } catch (err: any) {
@@ -96,10 +103,41 @@ router.get('/jwt-info', async (_req: Request, res: Response) => {
         activeKeyId,
         algorithm: 'ES256',
         jwksUrl,
+        legacyJwtSecretConfigured: hasLegacySecret,
+        legacyAlgorithm: 'HS256',
+        legacySecretPreview: hasLegacySecret
+          ? `${legacySecret.substring(0, 10)}...${legacySecret.substring(legacySecret.length - 8)}`
+          : null,
         warning: `Could not reach JWKS: ${err.message}`,
       },
     });
   }
 });
 
+/**
+ * POST /api/supabase/verify-jwt
+ * Diagnostic endpoint to test verification of any Supabase JWT token (legacy HS256 or ES256)
+ */
+router.post('/verify-jwt', async (req: Request, res: Response) => {
+  const { token } = req.body;
+  if (!token) {
+    return res.status(400).json({ success: false, error: 'Token is required in request body' });
+  }
+
+  try {
+    const { verifySupabaseJWT } = await import('../services/supabaseService.js');
+    const result = await verifySupabaseJWT(token);
+    return res.json({
+      success: true,
+      data: result,
+    });
+  } catch (err: any) {
+    return res.status(400).json({
+      success: false,
+      error: err?.message || 'JWT verification failed',
+    });
+  }
+});
+
 export default router;
+

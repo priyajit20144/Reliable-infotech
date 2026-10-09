@@ -39,15 +39,16 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
     try {
       decoded = jwt.verify(token, JWT_SECRET) as any;
     } catch (_internalErr) {
-      // If internal verification failed, attempt Supabase JWT verification using active key
+      // If internal verification failed, attempt Supabase JWT verification (HS256 legacy or ES256 JWKS)
       try {
         const { verifySupabaseJWT } = await import('../services/supabaseService.js');
         const supaResult = await verifySupabaseJWT(token);
-        if (supaResult && supaResult.claims) {
+        if (supaResult && (supaResult.claims || supaResult.user)) {
           decoded = {
-            id: supaResult.claims.sub,
-            email: supaResult.claims.email || (supaResult.user as any)?.email,
-            role: (supaResult.claims.app_metadata as any)?.role || 'USER',
+            id: supaResult.user?.id || supaResult.claims?.sub,
+            email: supaResult.claims?.email || (supaResult.user as any)?.email,
+            role: (supaResult.claims?.app_metadata as any)?.role || (supaResult.user as any)?.role || 'USER',
+            name: (supaResult.claims?.user_metadata as any)?.full_name || (supaResult.claims?.email?.split('@')[0]) || 'User',
           };
         }
       } catch (_supaErr) {
@@ -62,9 +63,24 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
     let user: any = null;
     if (isConnectedToMongo) {
       user = await UserModel.findById(decoded.id).select('-passwordHash');
+      if (!user && decoded.email) {
+        user = await UserModel.findOne({ email: decoded.email }).select('-passwordHash');
+      }
     }
     if (!user) {
-      user = store.users.find((u) => u._id === decoded.id || u.email === decoded.email);
+      user = store.users.find((u) => u._id === decoded.id || (decoded.email && u.email === decoded.email));
+    }
+
+    // If verified via Supabase but not yet seeded in local DB, create a synthetic session user
+    if (!user && decoded.email) {
+      user = {
+        _id: decoded.id,
+        email: decoded.email,
+        role: decoded.role === 'service_role' || decoded.role === 'ADMIN' ? 'ADMIN' : 'USER',
+        name: decoded.name || decoded.email.split('@')[0],
+        avatar: '',
+        isActive: true,
+      };
     }
 
     if (!user || user.isActive === false) {
@@ -98,7 +114,26 @@ export const optionalAuthenticate = async (req: Request, _res: Response, next: N
       return next();
     }
 
-    const decoded = jwt.verify(token, JWT_SECRET) as any;
+    let decoded: any = null;
+    try {
+      decoded = jwt.verify(token, JWT_SECRET) as any;
+    } catch (_internalErr) {
+      try {
+        const { verifySupabaseJWT } = await import('../services/supabaseService.js');
+        const supaResult = await verifySupabaseJWT(token);
+        if (supaResult && (supaResult.claims || supaResult.user)) {
+          decoded = {
+            id: supaResult.user?.id || supaResult.claims?.sub,
+            email: supaResult.claims?.email || (supaResult.user as any)?.email,
+            role: (supaResult.claims?.app_metadata as any)?.role || (supaResult.user as any)?.role || 'USER',
+            name: (supaResult.claims?.user_metadata as any)?.full_name || (supaResult.claims?.email?.split('@')[0]) || 'User',
+          };
+        }
+      } catch (_supaErr) {
+        return next();
+      }
+    }
+
     if (!decoded || !decoded.id) {
       return next();
     }
@@ -106,9 +141,23 @@ export const optionalAuthenticate = async (req: Request, _res: Response, next: N
     let user: any = null;
     if (isConnectedToMongo) {
       user = await UserModel.findById(decoded.id).select('-passwordHash');
+      if (!user && decoded.email) {
+        user = await UserModel.findOne({ email: decoded.email }).select('-passwordHash');
+      }
     }
     if (!user) {
-      user = store.users.find((u) => u._id === decoded.id || u.email === decoded.email);
+      user = store.users.find((u) => u._id === decoded.id || (decoded.email && u.email === decoded.email));
+    }
+
+    if (!user && decoded.email) {
+      user = {
+        _id: decoded.id,
+        email: decoded.email,
+        role: decoded.role === 'service_role' || decoded.role === 'ADMIN' ? 'ADMIN' : 'USER',
+        name: decoded.name || decoded.email.split('@')[0],
+        avatar: '',
+        isActive: true,
+      };
     }
 
     if (user && user.isActive !== false) {
