@@ -1,7 +1,7 @@
 export const BREVO_API_BASE = 'https://api.brevo.com/v3';
 export const BREVO_API_KEY = process.env.BREVO_API_KEY || '';
 export const BREVO_SENDER_EMAIL = process.env.SMTP_FROM_EMAIL || 'priyajitd218@gmail.com';
-export const BREVO_SENDER_NAME = process.env.SMTP_FROM_NAME || 'DevCraft Platform';
+export const BREVO_SENDER_NAME = process.env.SMTP_FROM_NAME || 'Reliable Info Tech Platform';
 
 export interface BrevoSender {
   name: string;

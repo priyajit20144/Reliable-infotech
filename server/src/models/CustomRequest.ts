@@ -69,7 +69,7 @@ const CustomRequestSchema = new Schema<ICustomRequest>(
       index: true,
     },
     priority: { type: String, enum: ['LOW', 'MEDIUM', 'HIGH', 'URGENT'], default: 'MEDIUM' },
-    assignedTo: { type: String, default: 'DevCraft Core Team' },
+    assignedTo: { type: String, default: 'Reliable Info Tech Core Team' },
   },
   { timestamps: true }
 );

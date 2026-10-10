@@ -27,8 +27,8 @@
         "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?auto=format&fit=crop&w=1200&q=80"
       ],
       "thumbnail": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80",
-      "demoUrl": "https://apexcloud.demo.devcraft.io",
-      "githubUrl": "https://github.com/devcraft-org/apexcloud",
+      "demoUrl": "https://apexcloud.demo.reliableinfotech.io",
+      "githubUrl": "https://github.com/reliable-infotech/apexcloud",
       "price": 4800,
       "status": "PUBLISHED",
       "featured": true,
@@ -61,8 +61,8 @@
         "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=1200&q=80"
       ],
       "thumbnail": "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=800&q=80",
-      "demoUrl": "https://luminapay.demo.devcraft.io",
-      "githubUrl": "https://github.com/devcraft-org/luminapay",
+      "demoUrl": "https://luminapay.demo.reliableinfotech.io",
+      "githubUrl": "https://github.com/reliable-infotech/luminapay",
       "price": 5400,
       "status": "PUBLISHED",
       "featured": true,
@@ -93,8 +93,8 @@
         "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80"
       ],
       "thumbnail": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=800&q=80",
-      "demoUrl": "https://verve.demo.devcraft.io",
-      "githubUrl": "https://github.com/devcraft-org/verve-commerce",
+      "demoUrl": "https://verve.demo.reliableinfotech.io",
+      "githubUrl": "https://github.com/reliable-infotech/verve-commerce",
       "price": 3900,
       "status": "PUBLISHED",
       "featured": false,
@@ -106,5 +106,5 @@
     "proj_3",
     "synapse-ai-copilot"
   ],
-  "updatedAt": "2026-10-10T06:38:45.852Z"
+  "updatedAt": "2026-10-10T06:44:37.720Z"
 }

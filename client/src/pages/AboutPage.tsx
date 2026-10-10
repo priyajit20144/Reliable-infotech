@@ -267,7 +267,7 @@ export const AboutPage: React.FC = () => {
                 </div>
 
                 {/* Central 3D Laptop Mockup */}
-                <div className="relative z-10 w-[270px] sm:w-[320px]">
+                <div className="relative z-10 w-[260px] max-w-[calc(100%-2rem)] sm:w-[320px]">
                   <div className="rounded-t-xl bg-[#0A0E17] border-2 border-slate-700 p-2 shadow-2xl">
                     <div className="rounded-lg bg-[#070A12] p-2.5 font-mono text-[9px] text-gray-300 space-y-1 overflow-hidden">
                       <div className="flex items-center gap-1.5 pb-1 border-b border-white/10 text-gray-400 text-[8px]">
@@ -286,7 +286,7 @@ export const AboutPage: React.FC = () => {
                 </div>
 
                 {/* Smartphone Preview Frame (Floating Right) */}
-                <div className="absolute right-12 bottom-4 z-30 w-20 h-40 rounded-xl bg-[#0A0E17] border-2 border-slate-600 p-1 shadow-2xl animate-float-delayed">
+                <div className="absolute right-2 sm:right-12 bottom-4 z-30 w-20 h-40 rounded-xl bg-[#0A0E17] border-2 border-slate-600 p-1 shadow-2xl animate-float-delayed">
                   <div className="w-full h-full rounded-lg bg-[#0B0F19] p-1 flex flex-col justify-between">
                     <div className="w-6 h-1 rounded-full bg-slate-800 mx-auto" />
                     <div className="space-y-1 my-auto">

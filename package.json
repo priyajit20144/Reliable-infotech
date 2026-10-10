@@ -2,7 +2,7 @@
   "name": "devcraft",
   "version": "1.0.0",
   "private": true,
-  "description": "DevCraft — Professional Project Showcase & Custom Website Platform",
+  "description": "Reliable Info Tech — Professional Project Showcase & Custom Website Platform",
   "scripts": {
     "predev": "node scripts/clean-ports.cjs",
     "dev": "concurrently -k -p \"[{name}]\" -n \"server,client\" -c \"cyan.bold,magenta.bold\" \"npm run dev:server\" \"npm run dev:client\"",

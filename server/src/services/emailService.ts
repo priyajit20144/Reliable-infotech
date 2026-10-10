@@ -6,7 +6,7 @@ export const SMTP_PORT = Number(process.env.SMTP_PORT) || 587;
 export const SMTP_USER = process.env.SMTP_USER || '';
 export const SMTP_KEY = process.env.SMTP_KEY || '';
 export const SMTP_FROM_EMAIL = process.env.SMTP_FROM_EMAIL || process.env.SMTP_USER || '';
-export const SMTP_FROM_NAME = process.env.SMTP_FROM_NAME || 'DevCraft Platform';
+export const SMTP_FROM_NAME = process.env.SMTP_FROM_NAME || 'Reliable Info Tech Platform';
 
 export const isSmtpConfigured = (): boolean => {
   return Boolean(SMTP_HOST && SMTP_USER && SMTP_KEY && !SMTP_KEY.includes('your_brevo'));
@@ -223,12 +223,12 @@ export const sendWelcomeEmail = async (userEmail: string, userName: string) => {
     <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #0b0f19; color: #f8fafc; padding: 24px; margin: 0;">
       <div style="max-width: 580px; margin: 0 auto; background-color: #111827; border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 32px;">
         <div style="margin-bottom: 24px; text-align: center;">
-          <h1 style="color: #6366f1; margin: 0; font-size: 24px; font-weight: 800;">DevCraft</h1>
+          <h1 style="color: #6366f1; margin: 0; font-size: 24px; font-weight: 800;">Reliable Info Tech</h1>
           <p style="color: #94a3b8; font-size: 12px; margin: 4px 0 0 0; text-transform: uppercase; letter-spacing: 1px;">Ideas to Digital Reality</p>
         </div>
         <h2 style="color: #ffffff; font-size: 20px; font-weight: 700; margin-top: 0;">Welcome aboard, ${userName}!</h2>
         <p style="color: #cbd5e1; font-size: 14px; line-height: 1.6;">
-          Your DevCraft Client Workspace has been successfully provisioned. You can now commission custom web applications, track real-time delivery milestones, and communicate directly with lead architects.
+          Your Reliable Info Tech Client Workspace has been successfully provisioned. You can now commission custom web applications, track real-time delivery milestones, and communicate directly with lead architects.
         </p>
         <div style="margin: 28px 0; text-align: center;">
           <a href="http://localhost:5173/dashboard" style="background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #ffffff; padding: 12px 24px; border-radius: 10px; text-decoration: none; font-size: 14px; font-weight: 600; display: inline-block;">
@@ -237,7 +237,7 @@ export const sendWelcomeEmail = async (userEmail: string, userName: string) => {
         </div>
         <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.08); margin: 24px 0;" />
         <p style="color: #64748b; font-size: 11px; margin: 0; text-align: center;">
-          Dispatched via Brevo Transactional SMTP relay &bull; DevCraft Platform
+          Dispatched via Brevo Transactional SMTP relay &bull; Reliable Info Tech Platform
         </p>
       </div>
     </body>
@@ -246,7 +246,7 @@ export const sendWelcomeEmail = async (userEmail: string, userName: string) => {
 
   return sendMail({
     to: userEmail,
-    subject: 'Welcome to DevCraft — Your Client Workspace is Active',
+    subject: 'Welcome to Reliable Info Tech — Your Client Workspace is Active',
     html,
   });
 };
@@ -278,7 +278,7 @@ export const sendContactNotification = async (contact: {
   return sendMail({
     to: SMTP_FROM_EMAIL,
     replyTo: contact.email,
-    subject: `[DevCraft Inquiry] ${contact.subject || 'New Contact'} from ${contact.name}`,
+    subject: `[Reliable Info Tech Inquiry] ${contact.subject || 'New Contact'} from ${contact.name}`,
     html: adminHtml,
   });
 };
@@ -299,7 +299,7 @@ export const sendCustomRequestConfirmation = async (request: {
       <div style="max-width: 580px; margin: 0 auto; background-color: #111827; border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 28px;">
         <h2 style="color: #818cf8; margin-top: 0;">We've received your Custom Website Request!</h2>
         <p style="color: #cbd5e1; font-size: 14px; line-height: 1.5;">
-          Hello ${request.name}, thank you for submitting your custom website specification to DevCraft. Our engineering leads are analyzing your architecture requirements.
+          Hello ${request.name}, thank you for submitting your custom website specification to Reliable Info Tech. Our engineering leads are analyzing your architecture requirements.
         </p>
         <div style="background-color: #0b0f19; border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 16px; margin: 16px 0;">
           <p style="color: #94a3b8; font-size: 12px; margin: 0 0 4px 0;">PROJECT TYPE</p>
@@ -314,7 +314,7 @@ export const sendCustomRequestConfirmation = async (request: {
 
   return sendMail({
     to: request.email,
-    subject: `[DevCraft] We've received your request: ${request.websiteType}`,
+    subject: `[Reliable Info Tech] We've received your request: ${request.websiteType}`,
     html,
   });
 };
@@ -333,7 +333,7 @@ export const sendPasswordResetOtpEmail = async (
     <head>
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>DevCraft Password Reset Verification</title>
+      <title>Reliable Info Tech Password Reset Verification</title>
     </head>
     <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #0b0f19; color: #f8fafc; padding: 24px; margin: 0; -webkit-font-smoothing: antialiased;">
       <div style="max-width: 580px; margin: 0 auto; background-color: #111827; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 36px; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
@@ -343,7 +343,7 @@ export const sendPasswordResetOtpEmail = async (
           <div style="display: inline-block; width: 44px; height: 44px; line-height: 44px; border-radius: 12px; background: linear-gradient(135deg, #06b6d4, #6366f1, #a855f7); color: #ffffff; font-weight: 800; font-size: 20px;">
             &lt;/&gt;
           </div>
-          <h1 style="color: #ffffff; margin: 12px 0 0 0; font-size: 22px; font-weight: 800; letter-spacing: -0.5px;">DevCraft</h1>
+          <h1 style="color: #ffffff; margin: 12px 0 0 0; font-size: 22px; font-weight: 800; letter-spacing: -0.5px;">Reliable Info Tech</h1>
           <p style="color: #94a3b8; font-size: 11px; margin: 4px 0 0 0; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600;">Cloud & Web Engineering</p>
         </div>
 
@@ -353,10 +353,10 @@ export const sendPasswordResetOtpEmail = async (
         </h2>
         
         <p style="color: #cbd5e1; font-size: 14px; line-height: 1.6; margin: 0 0 20px 0;">
-          Hello <strong style="color: #ffffff;">${userName || 'DevCraft User'}</strong>,
+          Hello <strong style="color: #ffffff;">${userName || 'Reliable Info Tech User'}</strong>,
         </p>
         <p style="color: #cbd5e1; font-size: 14px; line-height: 1.6; margin: 0 0 24px 0;">
-          We received a request to reset the password for your DevCraft account (<span style="color: #818cf8; font-family: monospace;">${userEmail}</span>). Please use the 6-digit verification code below to authorize your password update:
+          We received a request to reset the password for your Reliable Info Tech account (<span style="color: #818cf8; font-family: monospace;">${userEmail}</span>). Please use the 6-digit verification code below to authorize your password update:
         </p>
 
         <!-- OTP Code Card -->
@@ -375,7 +375,7 @@ export const sendPasswordResetOtpEmail = async (
         <!-- Security Warning & Instructions -->
         <div style="background-color: rgba(239, 68, 68, 0.08); border-left: 3px solid #ef4444; border-radius: 6px; padding: 12px 16px; margin: 20px 0;">
           <p style="color: #fca5a5; font-size: 12px; line-height: 1.5; margin: 0;">
-            <strong>Security Notice:</strong> Never share this verification code with anyone. DevCraft engineers will never ask for your one-time passwords.
+            <strong>Security Notice:</strong> Never share this verification code with anyone. Reliable Info Tech engineers will never ask for your one-time passwords.
           </p>
         </div>
 
@@ -388,8 +388,8 @@ export const sendPasswordResetOtpEmail = async (
 
         <!-- Footer -->
         <p style="color: #64748b; font-size: 11px; margin: 0; text-align: center; line-height: 1.5;">
-          Dispatched via Brevo Transactional Relay &bull; DevCraft Security Operations<br />
-          &copy; ${new Date().getFullYear()} DevCraft Platform. All rights reserved.
+          Dispatched via Brevo Transactional Relay &bull; Reliable Info Tech Security Operations<br />
+          &copy; ${new Date().getFullYear()} Reliable Info Tech Platform. All rights reserved.
         </p>
       </div>
     </body>
@@ -398,9 +398,9 @@ export const sendPasswordResetOtpEmail = async (
 
   return sendMail({
     to: userEmail,
-    subject: `[DevCraft] ${otpCode} is your Password Reset Verification Code`,
+    subject: `[Reliable Info Tech] ${otpCode} is your Password Reset Verification Code`,
     html,
-    text: `Your DevCraft password reset verification code is: ${otpCode}. This code is valid for 10 minutes. If you did not request this, please ignore this email.`,
+    text: `Your Reliable Info Tech password reset verification code is: ${otpCode}. This code is valid for 10 minutes. If you did not request this, please ignore this email.`,
   });
 };
 
@@ -419,10 +419,10 @@ export const sendPasswordResetConfirmationEmail = async (
       <div style="max-width: 580px; margin: 0 auto; background-color: #111827; border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 32px;">
         <h2 style="color: #10b981; margin-top: 0;">Password Successfully Changed</h2>
         <p style="color: #cbd5e1; font-size: 14px; line-height: 1.6;">
-          Hello ${userName || 'DevCraft User'}, the password for your DevCraft account (${userEmail}) was successfully updated on <strong>${new Date().toUTCString()}</strong>.
+          Hello ${userName || 'Reliable Info Tech User'}, the password for your Reliable Info Tech account (${userEmail}) was successfully updated on <strong>${new Date().toUTCString()}</strong>.
         </p>
         <p style="color: #94a3b8; font-size: 13px; line-height: 1.5;">
-          If you performed this change, no further action is needed. If you did NOT change your password, please contact our security team immediately at support@devcraft.io.
+          If you performed this change, no further action is needed. If you did NOT change your password, please contact our security team immediately at support@reliableinfotech.io.
         </p>
       </div>
     </body>
@@ -431,7 +431,7 @@ export const sendPasswordResetConfirmationEmail = async (
 
   return sendMail({
     to: userEmail,
-    subject: '[DevCraft] Security Alert: Your Password Was Successfully Updated',
+    subject: '[Reliable Info Tech] Security Alert: Your Password Was Successfully Updated',
     html,
   });
 };

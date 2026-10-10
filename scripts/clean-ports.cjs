@@ -83,7 +83,7 @@ function freePort(port) {
   }
 
   if (killed > 0) {
-    console.log(`[DevCraft Port Manager] Cleaned up ${killed} stale process(es) on port ${port}.`);
+    console.log(`[Reliable Info Tech Port Manager] Cleaned up ${killed} stale process(es) on port ${port}.`);
   }
 }
 

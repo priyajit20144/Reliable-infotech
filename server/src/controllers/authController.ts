@@ -133,7 +133,7 @@ export const register = async (req: Request, res: Response) => {
     return res.status(201).json({
 
       success: true,
-      message: 'Account created successfully. Welcome to DevCraft!',
+      message: 'Account created successfully. Welcome to Reliable Info Tech!',
       token,
       user: {
         id: newUser._id.toString(),
@@ -162,15 +162,19 @@ export const login = async (req: Request, res: Response) => {
     const normalizedEmail = String(email).toLowerCase().trim();
 
     let user: any = null;
+    const alternateEmail = normalizedEmail.includes('@reliableinfotech.io')
+      ? normalizedEmail.replace('@reliableinfotech.io', '@devcraft.io')
+      : normalizedEmail.replace('@devcraft.io', '@reliableinfotech.io');
+
     if (isConnectedToMongo) {
       try {
-        user = await UserModel.findOne({ email: normalizedEmail });
+        user = await UserModel.findOne({ $or: [{ email: normalizedEmail }, { email: alternateEmail }] });
       } catch (e) {
         console.warn('[MongoDB findOne user failed, falling back to memory store]:', e);
       }
     }
     if (!user) {
-      user = store.users.find((u) => u.email === normalizedEmail);
+      user = store.users.find((u) => u.email === normalizedEmail || u.email === alternateEmail);
     }
 
     if (!user) {
@@ -183,7 +187,7 @@ export const login = async (req: Request, res: Response) => {
     if (user.isActive === false) {
       return res.status(401).json({
         success: false,
-        message: 'Your account is currently inactive. Please contact DevCraft support.',
+        message: 'Your account is currently inactive. Please contact Reliable Info Tech support.',
       });
     }
 

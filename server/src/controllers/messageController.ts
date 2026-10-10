@@ -30,7 +30,7 @@ export const getConversations = async (req: Request, res: Response) => {
     const isAdmin = req.user.role === 'ADMIN' || req.user.role === 'TEAM_MEMBER';
     const userId = req.user.id;
     const userName = req.user.name || 'Client User';
-    const userEmail = req.user.email || 'client@devcraft.io';
+    const userEmail = req.user.email || 'client@reliableinfotech.io';
 
     // Enrich conversation object with full details
     const enrich = (c: any) => {
@@ -58,7 +58,7 @@ export const getConversations = async (req: Request, res: Response) => {
           c.clientAvatar ||
           client?.avatar ||
           'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80',
-        projectSubject: c.projectSubject || 'DevCraft Support & Architecture Consultation',
+        projectSubject: c.projectSubject || 'Reliable Info Tech Support & Architecture Consultation',
         lastMessage: lastMsgObj ? lastMsgObj.message : c.lastMessage || 'No messages yet.',
         time: formatRelativeTime(c.updatedAt || c.createdAt || Date.now()),
         unreadCount: c.unreadCount !== undefined ? c.unreadCount : unreadCount,
@@ -105,9 +105,9 @@ export const getConversations = async (req: Request, res: Response) => {
         clientAvatar:
           req.user.avatar ||
           'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80',
-        projectSubject: 'DevCraft Support & Architecture Consultation',
+        projectSubject: 'Reliable Info Tech Support & Architecture Consultation',
         participants: [userId, 'usr_admin_1'],
-        lastMessage: `Hello ${userName}! Welcome to DevCraft. Our lead architects and project managers are here to assist you with custom website builds, milestones, and technical inquiries. How can we help you today?`,
+        lastMessage: `Hello ${userName}! Welcome to Reliable Info Tech. Our lead architects and project managers are here to assist you with custom website builds, milestones, and technical inquiries. How can we help you today?`,
         unreadCount: 1,
         online: true,
         createdAt: new Date(),
@@ -121,7 +121,7 @@ export const getConversations = async (req: Request, res: Response) => {
         senderId: 'usr_admin_1',
         senderName: 'Alex Rivera',
         senderRole: 'ADMIN',
-        message: `Hello ${userName}! Welcome to DevCraft. Our lead architects and project managers are here to assist you with custom website builds, milestones, and technical inquiries. How can we help you today?`,
+        message: `Hello ${userName}! Welcome to Reliable Info Tech. Our lead architects and project managers are here to assist you with custom website builds, milestones, and technical inquiries. How can we help you today?`,
         attachments: [],
         isRead: false,
         createdAt: new Date(),
@@ -224,7 +224,7 @@ export const getMessages = async (req: Request, res: Response) => {
 
     // STRICT USER-ADMIN PRIVACY:
     // A client user must NEVER see other clients' messages.
-    // Show strictly messages from the logged-in client or DevCraft Admin / Team Members!
+    // Show strictly messages from the logged-in client or Reliable Info Tech Admin / Team Members!
     if (!isAdmin) {
       messages = messages.filter(
         (m) =>
@@ -243,7 +243,7 @@ export const getMessages = async (req: Request, res: Response) => {
         senderId: 'usr_admin_1',
         senderName: 'Alex Rivera',
         senderRole: 'ADMIN',
-        message: `Hello ${req.user?.name || 'there'}! Welcome to DevCraft. Our lead architects and project managers are here to assist you with custom website builds, milestones, and technical inquiries. How can we help you today?`,
+        message: `Hello ${req.user?.name || 'there'}! Welcome to Reliable Info Tech. Our lead architects and project managers are here to assist you with custom website builds, milestones, and technical inquiries. How can we help you today?`,
         attachments: [],
         isRead: true,
         createdAt: new Date(),
@@ -367,7 +367,7 @@ export const sendMessage = async (req: Request, res: Response) => {
         clientName: currentUserName,
         clientEmail: req.user?.email || '',
         clientAvatar: req.user?.avatar || '',
-        projectSubject: 'DevCraft Support & Architecture Consultation',
+        projectSubject: 'Reliable Info Tech Support & Architecture Consultation',
         participants: [currentUserId, 'usr_admin_1'],
         lastMessage: content,
         unreadCount: 1,
@@ -445,12 +445,12 @@ export const createConversation = async (req: Request, res: Response) => {
     const currentUserName = req.user?.name || clientName || 'Client';
 
     const newConvId = `conv_${Date.now()}`;
-    const initialMessage = (message || 'Hello DevCraft Team!').trim();
+    const initialMessage = (message || 'Hello Reliable Info Tech Team!').trim();
 
     const newConv = {
       _id: newConvId,
       clientName: clientName || currentUserName,
-      clientEmail: clientEmail || req.user?.email || 'client@devcraft.io',
+      clientEmail: clientEmail || req.user?.email || 'client@reliableinfotech.io',
       clientAvatar:
         'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
       projectSubject: projectSubject || 'New Project Inquiry',

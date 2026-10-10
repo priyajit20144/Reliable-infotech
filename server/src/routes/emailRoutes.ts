@@ -91,10 +91,10 @@ router.post('/test-send', async (req: Request, res: Response) => {
   try {
     const result = await sendMail({
       to: to.trim(),
-      subject: subject || '[DevCraft] Test Email Delivery',
+      subject: subject || '[Reliable Info Tech] Test Email Delivery',
       html: `
         <div style="font-family: sans-serif; background-color: #0b0f19; color: #f8fafc; padding: 24px; border-radius: 12px;">
-          <h2 style="color: #6366f1;">DevCraft Direct Email Test</h2>
+          <h2 style="color: #6366f1;">Reliable Info Tech Direct Email Test</h2>
           <p style="color: #cbd5e1; font-size: 14px;">This test email confirms direct delivery to <strong>${to}</strong>.</p>
           <div style="background: rgba(99,102,241,0.1); border: 1px solid #6366f1; padding: 12px; border-radius: 8px; margin: 16px 0;">
             <p style="margin: 0; color: #818cf8; font-size: 13px;">${message || 'Your email delivery configuration is operational.'}</p>
@@ -216,13 +216,13 @@ router.post('/test', async (req: Request, res: Response) => {
   try {
     const result = await sendMail({
       to: targetEmail,
-      subject: 'DevCraft & Brevo Integration Test',
+      subject: 'Reliable Info Tech & Brevo Integration Test',
       html: `
         <div style="font-family: sans-serif; background-color: #0b0f19; color: #f8fafc; padding: 24px;">
           <div style="max-width: 500px; margin: 0 auto; background-color: #111827; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 24px;">
             <h2 style="color: #6366f1; margin: 0 0 12px 0;">Brevo Integration Test Successful</h2>
             <p style="color: #cbd5e1; font-size: 14px; line-height: 1.5;">
-              This email confirms that your DevCraft backend has successfully authenticated with Brevo and dispatched a live message.
+              This email confirms that your Reliable Info Tech backend has successfully authenticated with Brevo and dispatched a live message.
             </p>
             <p style="color: #64748b; font-size: 11px; margin-top: 20px;">
               Timestamp: ${new Date().toISOString()}

@@ -1,4 +1,4 @@
-# Relivelinfostech (DevCraft) — Full-Stack Digital Agency Platform
+# Reliable Info Tech — Full-Stack Digital Agency Platform
 
 A modern, high-performance web agency and custom software commissioning platform built with **React**, **TypeScript**, **Node.js**, **Express**, and **MongoDB**.
 
@@ -94,9 +94,9 @@ When the backend connects to MongoDB, default seed accounts are populated:
 
 | Role | Email | Password |
 |---|---|---|
-| **Admin** | `admin@devcraft.io` | `Admin@123456` |
-| **Client / User** | `client@devcraft.io` | `Client@123456` |
-| **Team Member** | `team@devcraft.io` | `Team@123456` |
+| **Admin** | `admin@reliableinfotech.io` | `Admin@123456` |
+| **Client / User** | `client@reliableinfotech.io` | `Client@123456` |
+| **Team Member** | `team@reliableinfotech.io` | `Team@123456` |
 
 ---
 

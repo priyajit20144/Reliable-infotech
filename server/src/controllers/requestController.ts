@@ -66,7 +66,7 @@ export const createCustomRequest = async (req: Request, res: Response) => {
       contactMethod: contactMethod || 'EMAIL',
       status: 'NEW',
       priority: 'MEDIUM',
-      assignedTo: 'DevCraft Core Team',
+      assignedTo: 'Reliable Info Tech Core Team',
       createdAt: new Date(),
       updatedAt: new Date(),
     };
