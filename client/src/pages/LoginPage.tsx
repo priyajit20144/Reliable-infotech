@@ -12,8 +12,6 @@ import {
   AlertCircle,
   Smartphone,
   Cloud,
-  Sparkles,
-  CheckCircle2,
   Info,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
@@ -94,11 +92,6 @@ export const LoginPage: React.FC = () => {
     }
   };
 
-  const fillCredentials = (fillEmail: string, fillPass: string) => {
-    setEmail(fillEmail);
-    setPassword(fillPass);
-    setError('');
-  };
 
   const handleGoogleSignIn = () => {
     setGoogleNotice(true);
@@ -332,7 +325,7 @@ export const LoginPage: React.FC = () => {
                     >
                       <Info className="w-4 h-4 shrink-0 text-cyan-400 mt-0.5" />
                       <span className="leading-relaxed">
-                        Google SSO is ready for enterprise deployment. For immediate testing, please use the 1-Click Demo buttons below!
+                        Google SSO is ready for enterprise deployment. Please sign in with your email and password.
                       </span>
                     </motion.div>
                   )}
@@ -492,32 +485,6 @@ export const LoginPage: React.FC = () => {
                   >
                     Create one
                   </Link>
-                </div>
-
-                {/* 1-Click Fast Demo Credentials Pill for Evaluators & Testers */}
-                <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-between text-xs text-slate-400">
-                  <span className="flex items-center gap-1.5 text-[11px] font-medium text-slate-400">
-                    <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
-                    <span>Demo 1-Click:</span>
-                  </span>
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => fillCredentials('admin@reliableinfotech.io', 'admin123')}
-                      className="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 transition-all active:scale-95 cursor-pointer"
-                      title="Auto-fill Admin credentials"
-                    >
-                      Admin
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => fillCredentials('client@reliableinfotech.io', 'client123')}
-                      className="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 transition-all active:scale-95 cursor-pointer"
-                      title="Auto-fill Client credentials"
-                    >
-                      Client
-                    </button>
-                  </div>
                 </div>
 
               </div>
