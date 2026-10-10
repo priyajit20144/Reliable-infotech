@@ -49,7 +49,7 @@ export const connectDB = async () => {
     });
 
     const conn = await mongoose.connect(uri, {
-      serverSelectionTimeoutMS: 3000,
+      serverSelectionTimeoutMS: 10000,
     });
 
     // Test a basic query to ensure connection is actually responsive
@@ -57,7 +57,7 @@ export const connectDB = async () => {
       await conn.connection.db.admin().ping();
       isConnectedToMongo = true;
       console.log(`[MongoDB] Connected successfully: ${conn.connection.host} (Database: "${conn.connection.name}")`);
-      // Auto-seed database if empty
+      // Auto-seed database if empty (with deleted-projects protection)
       await seedDatabaseIfEmpty();
     } else {
       isConnectedToMongo = false;

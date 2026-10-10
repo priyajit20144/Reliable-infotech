@@ -47,17 +47,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
           className="flex items-center gap-3 px-2 py-1 group"
           onClick={onCloseMobile}
         >
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-devcraft-primary to-devcraft-secondary flex items-center justify-center shadow-glow-primary group-hover:scale-105 transition-transform">
-            <Code2 className="w-5 h-5 text-white" />
-          </div>
+          <img
+            src="/reliable-symbol.png"
+            alt="Reliable InfoTech Logo"
+            className="w-10 h-10 object-contain drop-shadow-[0_0_12px_rgba(6,182,212,0.6)] group-hover:scale-105 transition-transform"
+          />
           <div>
-            <div className="flex items-center gap-1.5">
-              <span className="font-bold text-base text-white tracking-tight">DevCraft</span>
-              <span className="text-[10px] font-semibold uppercase px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-                Hub
-              </span>
+            <div className="flex items-center">
+              <span className="font-bold text-base text-white tracking-tight">Reliable</span>
+              <span className="text-cyan-400 font-bold text-base ml-1">Info</span>
+              <span className="text-purple-400 font-bold text-base">Tech</span>
             </div>
-            <p className="text-[11px] text-gray-400 font-medium">Ideas to Digital Reality</p>
+            <p className="text-[11px] text-gray-400 font-medium">Your Vision • Our Technology</p>
           </div>
         </Link>
 

@@ -30,11 +30,15 @@ export const Footer: React.FC = () => {
           {/* Column 1: Brand Info (col-span-3) */}
           <div className="lg:col-span-3 space-y-4">
             <Link to="/" className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 via-indigo-600 to-purple-600 flex items-center justify-center text-white shadow-glow-primary">
-                <Code2 className="w-5 h-5" />
-              </div>
-              <span className="text-xl font-extrabold text-white tracking-tight">
-                DevCraft
+              <img
+                src="/reliable-symbol.png"
+                alt="Reliable InfoTech Logo"
+                className="w-9 h-9 object-contain drop-shadow-[0_0_10px_rgba(6,182,212,0.5)]"
+              />
+              <span className="text-xl font-extrabold text-white tracking-tight flex items-center">
+                <span>Reliable</span>
+                <span className="text-cyan-400 ml-1">Info</span>
+                <span className="text-purple-400">Tech</span>
               </span>
             </Link>
             <p className="text-xs text-gray-400 leading-relaxed max-w-xs font-normal">

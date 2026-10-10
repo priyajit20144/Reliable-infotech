@@ -5,10 +5,41 @@ import { ProjectInquiryModel } from '../models/ProjectInquiry.js';
 import { ConversationModel } from '../models/Conversation.js';
 import { MessageModel } from '../models/Message.js';
 import { NotificationModel } from '../models/Notification.js';
-import { store } from './seedData.js';
+import { SystemMetaModel } from '../models/SystemMeta.js';
+import { store, persistStoreState } from './seedData.js';
 
 export const seedDatabaseIfEmpty = async () => {
   try {
+    // 1. Fetch or initialize system metadata to track seeder lifecycle
+    let meta = await SystemMetaModel.findOne({ key: 'devcraft_system_state' });
+    const existingProjectCount = await ProjectModel.countDocuments();
+
+    if (!meta) {
+      meta = await SystemMetaModel.create({
+        key: 'devcraft_system_state',
+        hasSeededProjects: existingProjectCount > 0,
+        deletedProjectIds: Array.from(new Set(store.deletedProjectIds || [])),
+      });
+    }
+
+    // Two-way sync of deletedProjectIds between MongoDB and memory store
+    const mergedDeleted = Array.from(
+      new Set([...(meta.deletedProjectIds || []), ...(store.deletedProjectIds || [])])
+    );
+    meta.deletedProjectIds = mergedDeleted;
+    store.deletedProjectIds = mergedDeleted;
+    persistStoreState();
+
+    // Purge any project from MongoDB that was marked as deleted
+    if (mergedDeleted.length > 0) {
+      await ProjectModel.deleteMany({
+        $or: [
+          { _id: { $in: mergedDeleted } },
+          { slug: { $in: mergedDeleted } },
+        ],
+      });
+    }
+
     const userCount = await UserModel.countDocuments();
     if (userCount === 0) {
       console.log('[MongoDB Seeder] Seeding initial users...');
@@ -16,11 +47,23 @@ export const seedDatabaseIfEmpty = async () => {
       console.log(`[MongoDB Seeder] Successfully seeded ${store.users.length} users.`);
     }
 
-    const projectCount = await ProjectModel.countDocuments();
-    if (projectCount === 0) {
-      console.log('[MongoDB Seeder] Seeding initial projects...');
-      await ProjectModel.insertMany(store.projects);
-      console.log(`[MongoDB Seeder] Successfully seeded ${store.projects.length} showcase projects.`);
+    // Only seed projects if initial seed has NEVER happened before
+    if (!meta.hasSeededProjects && existingProjectCount === 0) {
+      const deletedSet = new Set(mergedDeleted);
+      const eligibleProjects = store.projects.filter(
+        (p) => !deletedSet.has(p._id) && !deletedSet.has(p.slug)
+      );
+
+      if (eligibleProjects.length > 0) {
+        console.log(`[MongoDB Seeder] Seeding ${eligibleProjects.length} initial showcase projects...`);
+        await ProjectModel.insertMany(eligibleProjects);
+        console.log(`[MongoDB Seeder] Successfully seeded initial showcase projects.`);
+      }
+      meta.hasSeededProjects = true;
+      await meta.save();
+    } else if (existingProjectCount > 0 && !meta.hasSeededProjects) {
+      meta.hasSeededProjects = true;
+      await meta.save();
     }
 
     const requestCount = await CustomRequestModel.countDocuments();

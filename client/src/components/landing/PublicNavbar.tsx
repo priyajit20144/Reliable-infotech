@@ -60,11 +60,15 @@ export const PublicNavbar: React.FC = () => {
       <div className="max-w-7xl 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         {/* Brand Logo */}
         <Link to="/" className="flex items-center gap-2.5 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-indigo-600 to-purple-600 flex items-center justify-center text-white shadow-glow-primary group-hover:scale-105 transition-transform">
-            <Code2 className="w-5 h-5 text-white" />
-          </div>
-          <span className="font-extrabold text-xl text-white tracking-tight">
-            DevCraft
+          <img
+            src="/reliable-symbol.png"
+            alt="Reliable InfoTech Logo"
+            className="w-10 h-10 object-contain drop-shadow-[0_0_12px_rgba(6,182,212,0.6)] group-hover:scale-105 transition-transform"
+          />
+          <span className="font-extrabold text-xl text-white tracking-tight flex items-center">
+            <span>Reliable</span>
+            <span className="text-cyan-400 ml-1">Info</span>
+            <span className="text-purple-400">Tech</span>
           </span>
         </Link>
 

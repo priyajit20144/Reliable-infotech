@@ -143,12 +143,16 @@ export const LoginPage: React.FC = () => {
             {/* Brand Logo & Pill */}
             <div className="flex items-center justify-between mb-6">
               <Link to="/" className="inline-flex items-center gap-2.5 group">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-indigo-600 to-purple-600 flex items-center justify-center text-white shadow-glow-primary group-hover:scale-105 transition-transform">
-                  <Code2 className="w-5 h-5" />
-                </div>
+                <img
+                  src="/reliable-symbol.png"
+                  alt="Reliable InfoTech Logo"
+                  className="w-10 h-10 object-contain drop-shadow-[0_0_12px_rgba(6,182,212,0.6)] group-hover:scale-105 transition-transform"
+                />
                 <div className="flex flex-col text-left">
-                  <span className="text-xl font-extrabold text-white tracking-tight leading-none">
-                    DevCraft
+                  <span className="text-xl font-extrabold text-white tracking-tight leading-none flex items-center">
+                    <span>Reliable</span>
+                    <span className="text-cyan-400 ml-1">Info</span>
+                    <span className="text-purple-400">Tech</span>
                   </span>
                   <span className="text-[10px] text-gray-400 font-medium tracking-wider uppercase mt-0.5">
                     Cloud Services

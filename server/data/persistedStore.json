@@ -1,0 +1,110 @@
+{
+  "projects": [
+    {
+      "_id": "proj_1",
+      "title": "ApexCloud — Multi-Cloud DevOps Analytics",
+      "slug": "apexcloud-devops-analytics",
+      "shortDescription": "Enterprise real-time infrastructure monitoring with distributed tracing, latency forecasting, and automatic incident mitigation.",
+      "description": "ApexCloud provides unified observability across AWS, GCP, and Kubernetes clusters. Features microsecond telemetry streaming, automated canary rollouts, and anomaly detection.",
+      "category": "Cloud / DevOps",
+      "technologies": [
+        "React",
+        "TypeScript",
+        "Node.js",
+        "Go",
+        "GraphQL",
+        "Tailwind CSS",
+        "Docker"
+      ],
+      "features": [
+        "Live Kubernetes cluster topology mapping",
+        "Real-time streaming telemetry with WebSocket integration",
+        "Automated rollbacks on anomaly trigger thresholds",
+        "Granular role-based team workspace permissions"
+      ],
+      "images": [
+        "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "thumbnail": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80",
+      "demoUrl": "https://apexcloud.demo.devcraft.io",
+      "githubUrl": "https://github.com/devcraft-org/apexcloud",
+      "price": 4800,
+      "status": "PUBLISHED",
+      "featured": true,
+      "createdBy": "usr_admin_1",
+      "createdAt": "2026-02-01T00:00:00.000Z"
+    },
+    {
+      "_id": "proj_2",
+      "title": "LuminaPay — Global Fintech & Escrow Gateway",
+      "slug": "luminapay-global-fintech",
+      "shortDescription": "Next-generation borderless cross-currency settlement engine with multi-party escrow workflows and compliance telemetry.",
+      "description": "Engineered for international merchant networks, LuminaPay features instant currency conversion, automated KYC/AML verification pipelines, and dual-authorization smart settlement.",
+      "category": "Fintech / Payments",
+      "technologies": [
+        "Next.js",
+        "Node.js",
+        "Express",
+        "MongoDB",
+        "Redis",
+        "Tailwind CSS"
+      ],
+      "features": [
+        "Instant multi-currency exchange with sub-second rates",
+        "Automated escrow milestone releases",
+        "Comprehensive audit log export and tax reporting",
+        "Stripe & crypto on-ramp dual integration"
+      ],
+      "images": [
+        "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "thumbnail": "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=800&q=80",
+      "demoUrl": "https://luminapay.demo.devcraft.io",
+      "githubUrl": "https://github.com/devcraft-org/luminapay",
+      "price": 5400,
+      "status": "PUBLISHED",
+      "featured": true,
+      "createdBy": "usr_admin_1",
+      "createdAt": "2026-02-10T00:00:00.000Z"
+    },
+    {
+      "_id": "proj_4",
+      "title": "VerveCommerce — Headless Luxury Retail Platform",
+      "slug": "verve-commerce-luxury-retail",
+      "shortDescription": "Ultra-fast headless luxury lifestyle e-commerce store with dynamic 3D product previews and localized multi-country checkout.",
+      "description": "VerveCommerce was engineered for sub-second page transitions, dynamic inventory reservation, personalized product configuration, and omnichannel POS synchronization.",
+      "category": "E-Commerce",
+      "technologies": [
+        "React",
+        "Express",
+        "MongoDB",
+        "Framer Motion",
+        "Tailwind CSS"
+      ],
+      "features": [
+        "Lightning-fast catalog navigation with instant instant filtering",
+        "Interactive 360-degree garment and accessory viewers",
+        "Multi-currency checkout with local tax calculations",
+        "Abandoned cart recovery automation"
+      ],
+      "images": [
+        "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "thumbnail": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=800&q=80",
+      "demoUrl": "https://verve.demo.devcraft.io",
+      "githubUrl": "https://github.com/devcraft-org/verve-commerce",
+      "price": 3900,
+      "status": "PUBLISHED",
+      "featured": false,
+      "createdBy": "usr_admin_1",
+      "createdAt": "2026-02-25T00:00:00.000Z"
+    }
+  ],
+  "deletedProjectIds": [
+    "proj_3",
+    "synapse-ai-copilot"
+  ],
+  "updatedAt": "2026-10-10T06:22:16.446Z"
+}

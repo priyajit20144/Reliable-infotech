@@ -21,6 +21,7 @@ export async function apiRequest<T = any>(endpoint: string, options: RequestOpti
   }
 
   const response = await fetch(`${API_BASE}${endpoint}`, {
+    cache: options.cache || 'no-store',
     ...options,
     headers,
     credentials: 'include',

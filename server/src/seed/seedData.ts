@@ -1,3 +1,5 @@
+import fs from 'fs';
+import path from 'path';
 import bcrypt from 'bcryptjs';
 
 export interface SeedDataStore {
@@ -10,7 +12,22 @@ export interface SeedDataStore {
   notifications: any[];
   contactMessages: any[];
   passwordResets: any[];
+  deletedProjectIds: string[];
 }
+
+const PERSISTED_STORE_PATH = path.resolve(process.cwd(), 'server', 'data', 'persistedStore.json');
+const PERSISTED_STORE_FALLBACK_PATH = path.resolve(process.cwd(), 'data', 'persistedStore.json');
+
+const getPersistFilePath = (): string => {
+  if (fs.existsSync(path.dirname(PERSISTED_STORE_PATH))) return PERSISTED_STORE_PATH;
+  const fallbackDir = path.dirname(PERSISTED_STORE_FALLBACK_PATH);
+  if (!fs.existsSync(fallbackDir)) {
+    try {
+      fs.mkdirSync(fallbackDir, { recursive: true });
+    } catch {}
+  }
+  return PERSISTED_STORE_FALLBACK_PATH;
+};
 
 const salt = bcrypt.genSaltSync(10);
 const adminHash = bcrypt.hashSync('Admin@123456', salt);
@@ -19,6 +36,7 @@ const teamHash = bcrypt.hashSync('Team@123456', salt);
 
 export const store: SeedDataStore = {
   passwordResets: [],
+  deletedProjectIds: [],
   users: [
     {
       _id: 'usr_admin_1',
@@ -384,3 +402,48 @@ export const store: SeedDataStore = {
   ],
   contactMessages: [],
 };
+
+// =========================================================================
+// LOCAL STORAGE PERSISTENCE LAYER FOR RESILIENT HYBRID OFFLINE/FALLBACK RUNS
+// =========================================================================
+export const persistStoreState = () => {
+  try {
+    const filePath = getPersistFilePath();
+    const dataToSave = {
+      projects: store.projects,
+      deletedProjectIds: Array.from(new Set(store.deletedProjectIds || [])),
+      updatedAt: new Date().toISOString(),
+    };
+    fs.writeFileSync(filePath, JSON.stringify(dataToSave, null, 2), 'utf-8');
+  } catch (err) {
+    console.warn('[SeedStore] Failed to write persisted store to disk:', (err as Error).message);
+  }
+};
+
+export const initPersistedStore = () => {
+  try {
+    const filePath = getPersistFilePath();
+    if (fs.existsSync(filePath)) {
+      const raw = fs.readFileSync(filePath, 'utf-8');
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed.deletedProjectIds)) {
+        store.deletedProjectIds = Array.from(
+          new Set([...(store.deletedProjectIds || []), ...parsed.deletedProjectIds])
+        );
+      }
+      if (Array.isArray(parsed.projects)) {
+        // Filter out any explicitly deleted projects
+        const deletedSet = new Set(store.deletedProjectIds);
+        store.projects = parsed.projects.filter(
+          (p: any) => !deletedSet.has(p._id) && !deletedSet.has(p.slug)
+        );
+      }
+    }
+  } catch (err) {
+    console.warn('[SeedStore] Failed to load persisted store from disk:', (err as Error).message);
+  }
+};
+
+// Auto-initialize from disk immediately upon module load
+initPersistedStore();
+

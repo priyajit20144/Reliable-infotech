@@ -188,7 +188,7 @@ export const AdminDashboardPage: React.FC = () => {
       if (isManualRefresh) setRefreshing(true);
       else setLoading(true);
 
-      const [statsRes, reqsRes, usersRes, inqsRes, projsRes] = await Promise.all([
+      const results = await Promise.allSettled([
         adminService.getDashboardStats(),
         adminService.getAllRequests(),
         adminService.getAllUsers(),
@@ -196,11 +196,21 @@ export const AdminDashboardPage: React.FC = () => {
         projectService.getProjects(),
       ]);
 
-      if (statsRes.success) setStats(statsRes.stats);
-      if (reqsRes.success) setRequests(reqsRes.data);
-      if (usersRes.success) setUsers(usersRes.data);
-      if (inqsRes.success) setInquiries(inqsRes.data);
-      if (projsRes.success) setProjects(projsRes.data);
+      if (results[0].status === 'fulfilled' && results[0].value?.success) {
+        setStats(results[0].value.stats);
+      }
+      if (results[1].status === 'fulfilled' && results[1].value?.success) {
+        setRequests(results[1].value.data || []);
+      }
+      if (results[2].status === 'fulfilled' && results[2].value?.success) {
+        setUsers(results[2].value.data || []);
+      }
+      if (results[3].status === 'fulfilled' && results[3].value?.success) {
+        setInquiries(results[3].value.data || []);
+      }
+      if (results[4].status === 'fulfilled' && results[4].value?.success) {
+        setProjects(results[4].value.data || []);
+      }
     } catch (err) {
       console.error('Failed to load admin data:', err);
     } finally {
@@ -211,6 +221,15 @@ export const AdminDashboardPage: React.FC = () => {
 
   useEffect(() => {
     fetchAdminData();
+
+    // Listen to real-time showcase project updates across tabs and components
+    const handleSync = () => fetchAdminData(true);
+    window.addEventListener('devcraft_projects_updated', handleSync);
+    window.addEventListener('storage', handleSync);
+    return () => {
+      window.removeEventListener('devcraft_projects_updated', handleSync);
+      window.removeEventListener('storage', handleSync);
+    };
   }, []);
 
   // Filter requests
@@ -1154,95 +1173,120 @@ export const AdminDashboardPage: React.FC = () => {
               )}
             </Card>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {filteredProjects.map((proj) => (
-                <Card key={proj._id} className="p-0 overflow-hidden flex flex-col justify-between group hover:border-slate-700 transition-all duration-300">
-                  <div>
-                    <div className="h-44 w-full bg-slate-800 relative overflow-hidden">
-                      <img
-                        src={proj.thumbnail || proj.images?.[0] || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80'}
-                        alt={proj.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                      <div className="absolute top-3 right-3 flex items-center gap-1.5">
-                        <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-slate-950/80 text-emerald-400 border border-emerald-500/30 backdrop-blur-md font-mono">
-                          ${proj.price?.toLocaleString()}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
+              {filteredProjects.map((proj) => {
+                const isTargetDeleting =
+                  isDeletingProject &&
+                  (projectToDelete?._id === proj._id ||
+                    (proj.slug && projectToDelete?.slug === proj.slug));
+
+                return (
+                  <Card
+                    key={proj._id || proj.slug}
+                    className={`p-0 overflow-hidden flex flex-col justify-between group hover:border-indigo-500/30 hover:shadow-xl hover:shadow-indigo-950/20 transition-all duration-300 relative bg-[#0F172A]/90 ${
+                      isTargetDeleting ? 'opacity-50 pointer-events-none' : ''
+                    }`}
+                  >
+                    <div>
+                      {/* Thumbnail Header */}
+                      <div className="h-44 w-full bg-slate-900 relative overflow-hidden">
+                        <img
+                          src={
+                            proj.thumbnail ||
+                            proj.images?.[0] ||
+                            'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80'
+                          }
+                          alt={proj.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A] via-transparent to-black/30 pointer-events-none" />
+
+                        {/* Top-Right Price & Badges */}
+                        <div className="absolute top-3 right-3 flex items-center gap-1.5">
+                          {proj.featured && (
+                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 backdrop-blur-md">
+                              Featured
+                            </span>
+                          )}
+                          <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-slate-950/85 text-emerald-400 border border-emerald-500/30 backdrop-blur-md font-mono shadow-sm">
+                            ${proj.price?.toLocaleString()}
+                          </span>
+                        </div>
+
+                        {/* Category Badge on Bottom-Left */}
+                        <div className="absolute bottom-3 left-3">
+                          <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-slate-950/80 text-gray-200 border border-white/10 backdrop-blur-md shadow-sm">
+                            {proj.category}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Content Section */}
+                      <div className="p-4 space-y-2">
+                        <h4 className="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors line-clamp-1">
+                          {proj.title}
+                        </h4>
+                        <p className="text-xs text-gray-400 line-clamp-2 leading-relaxed">
+                          {proj.shortDescription || proj.description}
+                        </p>
+
+                        <div className="flex flex-wrap gap-1 pt-1">
+                          {proj.technologies?.slice(0, 4).map((tech, i) => (
+                            <span
+                              key={i}
+                              className="px-2 py-0.5 rounded-md text-[10px] font-medium bg-white/5 text-gray-300 border border-white/5"
+                            >
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Footer Section */}
+                    <div className="p-3.5 sm:p-4 pt-0 flex items-center justify-between border-t border-white/5 mt-2 bg-[#0B1222]/40">
+                      <div className="flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                        <span className="text-[11px] text-gray-400 font-mono">
+                          <strong className="text-emerald-400 font-medium">{proj.status}</strong>
                         </span>
-                        {/* Quick Delete button visible on hover / always visible on mobile */}
+                      </div>
+
+                      <div className="flex items-center gap-1 pt-1">
+                        {proj.demoUrl && (
+                          <a
+                            href={proj.demoUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="p-1.5 sm:p-2 rounded-xl text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
+                            title="View Live Demo"
+                            aria-label={`View live demo of ${proj.title}`}
+                          >
+                            <ExternalLink className="w-4 h-4" />
+                          </a>
+                        )}
+                        <Link
+                          to={`/projects/${proj.slug || proj._id}`}
+                          className="p-1.5 sm:p-2 rounded-xl text-gray-400 hover:text-indigo-400 hover:bg-white/10 transition-colors"
+                          title="Inspect Public View"
+                          aria-label={`Inspect ${proj.title} public page`}
+                        >
+                          <Eye className="w-4 h-4" />
+                        </Link>
                         <button
                           type="button"
                           onClick={() => setProjectToDelete(proj)}
-                          className="w-7 h-7 rounded-full bg-slate-950/80 text-rose-400 hover:text-white hover:bg-rose-600 border border-rose-500/30 backdrop-blur-md flex items-center justify-center transition-all opacity-100 sm:opacity-0 sm:group-hover:opacity-100 shadow-lg"
-                          title={`Delete ${proj.title}`}
+                          className="p-1.5 sm:p-2 rounded-xl text-rose-400/80 hover:text-rose-300 hover:bg-rose-500/15 border border-transparent hover:border-rose-500/30 transition-all group/del"
+                          title="Delete Showcase Project"
                           aria-label={`Delete ${proj.title}`}
                         >
-                          <Trash2 className="w-3.5 h-3.5" />
+                          <Trash2 className="w-4 h-4 text-rose-400 group-hover/del:scale-110 transition-transform" />
                         </button>
                       </div>
-                      <div className="absolute bottom-3 left-3">
-                        <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-slate-950/80 text-white border border-white/10 backdrop-blur-md">
-                          {proj.category}
-                        </span>
-                      </div>
                     </div>
-
-                    <div className="p-4 space-y-2">
-                      <h4 className="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors line-clamp-1">
-                        {proj.title}
-                      </h4>
-                      <p className="text-xs text-gray-400 line-clamp-2 leading-relaxed">
-                        {proj.shortDescription || proj.description}
-                      </p>
-
-                      <div className="flex flex-wrap gap-1 pt-1">
-                        {proj.technologies?.slice(0, 4).map((tech, i) => (
-                          <span
-                            key={i}
-                            className="px-2 py-0.5 rounded-md text-[10px] bg-white/5 text-gray-300 border border-white/5"
-                          >
-                            {tech}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="p-4 pt-0 flex items-center justify-between border-t border-white/5 mt-2">
-                    <span className="text-[11px] text-gray-400 font-mono">
-                      Status: <strong className="text-emerald-400">{proj.status}</strong>
-                    </span>
-                    <div className="flex items-center gap-1.5 pt-2">
-                      {proj.demoUrl && (
-                        <a
-                          href={proj.demoUrl}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
-                          title="View Live Demo"
-                        >
-                          <ExternalLink className="w-3.5 h-3.5" />
-                        </a>
-                      )}
-                      <Link
-                        to={`/projects/${proj.slug || proj._id}`}
-                        className="p-1.5 rounded-lg text-gray-400 hover:text-indigo-400 hover:bg-white/10 transition-colors"
-                        title="Inspect Public View"
-                      >
-                        <Eye className="w-3.5 h-3.5" />
-                      </Link>
-                      <button
-                        type="button"
-                        onClick={() => setProjectToDelete(proj)}
-                        className="p-1.5 rounded-lg text-gray-400 hover:text-rose-400 hover:bg-rose-500/10 border border-transparent hover:border-rose-500/20 transition-all"
-                        title="Delete Showcase Project"
-                        aria-label={`Delete ${proj.title}`}
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  </div>
-                </Card>
-              ))}
+                  </Card>
+                );
+              })}
             </div>
           )}
         </div>

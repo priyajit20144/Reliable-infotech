@@ -110,15 +110,17 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
             className="flex items-center gap-3 group hover:opacity-90 transition-opacity"
             title="Return to Main Website"
           >
-            {/* Diamond Logo Icon */}
-            <div className="relative w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-400 p-[1.5px] shadow-lg shadow-blue-500/25 shrink-0 flex items-center justify-center group-hover:scale-105 transition-transform">
-              <div className="w-full h-full bg-[#0B0F19] rounded-[10px] flex items-center justify-center">
-                <Code2 className="w-5 h-5 text-cyan-400" />
-              </div>
-            </div>
+            {/* Logo Icon */}
+            <img
+              src="/reliable-symbol.png"
+              alt="Reliable InfoTech Logo"
+              className="w-9 h-9 object-contain drop-shadow-[0_0_10px_rgba(6,182,212,0.5)] shrink-0 group-hover:scale-105 transition-transform"
+            />
             <div>
-              <div className="flex items-center gap-1.5">
-                <span className="font-extrabold text-base text-white tracking-tight">DevCraft</span>
+              <div className="flex items-center">
+                <span className="font-extrabold text-base text-white tracking-tight">Reliable</span>
+                <span className="text-cyan-400 font-extrabold text-base ml-1">Info</span>
+                <span className="text-purple-400 font-extrabold text-base">Tech</span>
               </div>
               <p className="text-[11px] text-slate-400 font-medium tracking-wide">Admin Panel</p>
             </div>
