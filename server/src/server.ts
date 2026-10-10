@@ -63,23 +63,27 @@ app.use(morgan('dev'));
 const uploadDir = path.resolve(process.cwd(), 'uploads');
 app.use('/uploads', express.static(uploadDir));
 
-// API Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/projects', projectRoutes);
-app.use('/api/custom-requests', requestRoutes);
-app.use('/api/project-inquiries', inquiryRoutes);
-app.use('/api/conversations', messageRoutes);
-app.use('/api/notifications', notificationRoutes);
-app.use('/api/admin', adminRoutes);
-app.use('/api/contact', contactRoutes);
-app.use('/api/upload', uploadRoutes);
-app.use('/api/ai', aiRoutes);
-app.use('/api/supabase', supabaseRoutes);
-app.use('/api/email', emailRoutes);
+// API Routes (supports both /api/* and /* for full-stack Vercel serverless routing)
+const registerRoute = (basePath: string, router: any) => {
+  app.use(`/api${basePath}`, router);
+  app.use(basePath, router);
+};
 
+registerRoute('/auth', authRoutes);
+registerRoute('/projects', projectRoutes);
+registerRoute('/custom-requests', requestRoutes);
+registerRoute('/project-inquiries', inquiryRoutes);
+registerRoute('/conversations', messageRoutes);
+registerRoute('/notifications', notificationRoutes);
+registerRoute('/admin', adminRoutes);
+registerRoute('/contact', contactRoutes);
+registerRoute('/upload', uploadRoutes);
+registerRoute('/ai', aiRoutes);
+registerRoute('/supabase', supabaseRoutes);
+registerRoute('/email', emailRoutes);
 
 // Health check
-app.get('/api/health', (_req, res) => {
+app.get(['/api/health', '/health'], (_req, res) => {
   res.json({
     status: 'online',
     platform: 'Reliable Info Tech Platform API',
@@ -91,7 +95,7 @@ app.get('/api/health', (_req, res) => {
 // Error handling
 app.use(errorHandler);
 
-// Start server
+// Start standalone HTTP server when executed directly (local dev), but NOT inside Vercel serverless
 const startServer = async () => {
   await connectDB();
   const server = app.listen(PORT, () => {
@@ -127,4 +131,9 @@ const startServer = async () => {
   process.on('SIGTERM', () => handleShutdown('SIGTERM'));
 };
 
-startServer();
+if (process.env.VERCEL !== '1' && !process.env.VERCEL_ENV) {
+  startServer();
+}
+
+export { app, startServer };
+export default app;

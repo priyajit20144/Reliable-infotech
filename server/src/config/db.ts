@@ -29,6 +29,12 @@ export const formatMongoUri = (rawUri?: string): string => {
 };
 
 export const connectDB = async () => {
+  // If already connected in a warm serverless container, reuse existing connection
+  if (mongoose.connection.readyState === 1) {
+    isConnectedToMongo = true;
+    return;
+  }
+
   const uri = formatMongoUri(process.env.MONGODB_URI);
 
   try {

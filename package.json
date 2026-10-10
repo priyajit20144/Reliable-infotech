@@ -1,20 +1,42 @@
 {
-  "name": "devcraft",
+  "name": "reliable-infotech",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "description": "Reliable Info Tech — Professional Project Showcase & Custom Website Platform",
+  "workspaces": [
+    "client",
+    "server"
+  ],
   "scripts": {
     "predev": "node scripts/clean-ports.cjs",
     "dev": "concurrently -k -p \"[{name}]\" -n \"server,client\" -c \"cyan.bold,magenta.bold\" \"npm run dev:server\" \"npm run dev:client\"",
     "clean:ports": "node scripts/clean-ports.cjs",
     "dev:server": "npm --prefix server run dev",
     "dev:client": "npm --prefix client run dev",
-    "build": "npm --prefix client install && npm --prefix client run build",
+    "build": "npm --prefix server run build && npm --prefix client run build",
     "build:all": "npm --prefix server run build && npm --prefix client run build",
-    "vercel-build": "npm --prefix client install && npm --prefix client run build",
+    "vercel-build": "npm --prefix server install && npm --prefix server run build && npm --prefix client install && npm --prefix client run build",
     "install:all": "npm install && npm --prefix client install && npm --prefix server install"
   },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.109.0",
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jose": "^6.2.12",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.6.2",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^10.0.16",
+    "ws": "^8.22.0"
+  },
   "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.16.5",
     "concurrently": "^8.2.2"
   }
 }
