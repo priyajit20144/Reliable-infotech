@@ -60,7 +60,10 @@ app.use(cookieParser());
 app.use(morgan('dev'));
 
 // Static uploads
-const uploadDir = path.resolve(process.cwd(), 'uploads');
+const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+const uploadDir = isServerless
+  ? path.resolve('/tmp', 'uploads')
+  : path.resolve(process.cwd(), 'uploads');
 app.use('/uploads', express.static(uploadDir));
 
 // API Routes (supports both /api/* and /* for full-stack Vercel serverless routing)
@@ -82,8 +85,8 @@ registerRoute('/ai', aiRoutes);
 registerRoute('/supabase', supabaseRoutes);
 registerRoute('/email', emailRoutes);
 
-// Health check
-app.get(['/api/health', '/health'], (_req, res) => {
+// Health and API status check
+app.get(['/api', '/api/', '/api/health', '/health'], (_req, res) => {
   res.json({
     status: 'online',
     platform: 'Reliable Info Tech Platform API',

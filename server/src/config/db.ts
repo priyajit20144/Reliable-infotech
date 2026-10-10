@@ -35,6 +35,12 @@ export const connectDB = async () => {
     return;
   }
 
+  if (!process.env.MONGODB_URI && process.env.VERCEL) {
+    console.warn('[MongoDB] No MONGODB_URI configured in Vercel environment variables. Operating in fallback memory mode.');
+    isConnectedToMongo = false;
+    return;
+  }
+
   const uri = formatMongoUri(process.env.MONGODB_URI);
 
   try {
