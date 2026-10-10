@@ -142,7 +142,7 @@ const startServer = async () => {
   process.on('SIGTERM', () => handleShutdown('SIGTERM'));
 };
 
-if (process.env.VERCEL !== '1' && !process.env.VERCEL_ENV) {
+if (!process.env.VERCEL && !process.env.VERCEL_ENV && !process.env.AWS_LAMBDA_FUNCTION_NAME) {
   startServer();
 }
 

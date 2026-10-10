@@ -15,10 +15,19 @@ export interface SeedDataStore {
   deletedProjectIds: string[];
 }
 
+const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
 const PERSISTED_STORE_PATH = path.resolve(process.cwd(), 'server', 'data', 'persistedStore.json');
+const PERSISTED_STORE_TMP_PATH = path.resolve('/tmp', 'persistedStore.json');
 const PERSISTED_STORE_FALLBACK_PATH = path.resolve(process.cwd(), 'data', 'persistedStore.json');
 
-const getPersistFilePath = (): string => {
+const getPersistFilePath = (forWriting = false): string => {
+  if (isServerless) {
+    if (forWriting) return PERSISTED_STORE_TMP_PATH;
+    if (fs.existsSync(PERSISTED_STORE_TMP_PATH)) return PERSISTED_STORE_TMP_PATH;
+    if (fs.existsSync(PERSISTED_STORE_PATH)) return PERSISTED_STORE_PATH;
+    return PERSISTED_STORE_TMP_PATH;
+  }
+
   if (fs.existsSync(path.dirname(PERSISTED_STORE_PATH))) return PERSISTED_STORE_PATH;
   const fallbackDir = path.dirname(PERSISTED_STORE_FALLBACK_PATH);
   if (!fs.existsSync(fallbackDir)) {
@@ -441,7 +450,7 @@ export const store: SeedDataStore = {
 // =========================================================================
 export const persistStoreState = () => {
   try {
-    const filePath = getPersistFilePath();
+    const filePath = getPersistFilePath(true);
     const dataToSave = {
       projects: store.projects,
       deletedProjectIds: Array.from(new Set(store.deletedProjectIds || [])),
