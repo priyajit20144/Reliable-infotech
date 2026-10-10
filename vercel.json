@@ -3,7 +3,7 @@
   "buildCommand": "npm --prefix server install --include=dev && npm --prefix server run build && npm --prefix client install --include=dev && npm --prefix client run build",
   "outputDirectory": "client/dist",
   "functions": {
-    "api/index.js": {
+    "api/**": {
       "includeFiles": [
         "server/dist/**",
         "server/data/**"
@@ -13,7 +13,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/api"
+      "destination": "/api/[...path]"
     },
     {
       "source": "/api",

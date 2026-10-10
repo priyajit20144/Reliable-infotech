@@ -24,7 +24,7 @@ const hashOtp = (otp: string, email: string): string => {
 
 export const register = async (req: Request, res: Response) => {
   try {
-    const { name, email, password, phone } = req.body;
+    const { name, email, password, phone } = req.body || {};
 
     // 1. Strict Validation
     if (!name || typeof name !== 'string' || name.trim().length < 2) {
@@ -151,7 +151,7 @@ export const register = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = req.body || {};
     if (!email || !password) {
       return res.status(400).json({
         success: false,
@@ -218,7 +218,7 @@ export const login = async (req: Request, res: Response) => {
       message: 'Login successful.',
       token,
       user: {
-        id: user._id.toString(),
+        id: String(user._id || ''),
         name: user.name,
         email: user.email,
         role: user.role,
