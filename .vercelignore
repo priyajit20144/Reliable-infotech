@@ -1,0 +1,24 @@
+# Dependencies (Vercel installs dependencies automatically)
+node_modules
+client/node_modules
+server/node_modules
+
+# Local Environment & Secrets
+.env
+.env.local
+.env.*.local
+server/.env
+client/.env
+
+# Local logs & dynamic uploads
+logs
+*.log
+uploads
+server/uploads
+
+# Editor and temporary files
+.git
+.github
+.vscode
+.idea
+.DS_Store
