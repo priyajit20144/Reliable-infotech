@@ -26,7 +26,7 @@ export const AdminTestimonialsView: React.FC = () => {
       avatar:
         'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80',
       content:
-        'DevCraft delivered our custom studio showcase on time with flawless animations and responsive design. Our client conversion increased by 40% in month one!',
+        'Reliable Info Tech delivered our custom studio showcase on time with flawless animations and responsive design. Our client conversion increased by 40% in month one!',
       rating: 5,
       published: true,
       date: 'March 12, 2026',
@@ -39,7 +39,7 @@ export const AdminTestimonialsView: React.FC = () => {
       avatar:
         'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80',
       content:
-        'The engineering discipline of the DevCraft team is unparalleled. High availability architecture, pristine code, and an intuitive dashboard.',
+        'The engineering discipline of the Reliable Info Tech team is unparalleled. High availability architecture, pristine code, and an intuitive dashboard.',
       rating: 5,
       published: true,
       date: 'February 28, 2026',

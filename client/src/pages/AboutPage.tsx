@@ -150,7 +150,7 @@ export const AboutPage: React.FC = () => {
       <main className="space-y-24 py-10 md:py-16">
         
         {/* ========================================================================= */}
-        {/* 1. HERO SECTION: About DevCraft                                           */}
+        {/* 1. HERO SECTION: About Reliable Info Tech                                */}
         {/* ========================================================================= */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative overflow-hidden">
           {/* Ambient background glows */}
@@ -163,7 +163,7 @@ export const AboutPage: React.FC = () => {
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.03] border border-indigo-500/30 backdrop-blur-md shadow-sm">
                 <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
                 <span className="text-xs font-semibold tracking-wide text-indigo-300">
-                  • About DevCraft
+                  • About Reliable Info Tech
                 </span>
               </div>
 
@@ -178,7 +178,7 @@ export const AboutPage: React.FC = () => {
 
               {/* Subtitle */}
               <p className="text-sm sm:text-base text-gray-300 leading-relaxed max-w-xl font-normal">
-                DevCraft is a modern software development company focused on creating innovative web applications, e-commerce platforms, and custom digital solutions for businesses and individuals.
+                Reliable Info Tech is a modern software development company focused on creating innovative web applications, e-commerce platforms, and custom digital solutions for businesses and individuals.
               </p>
 
               {/* 3 Key Feature / Trust Badges */}
@@ -274,7 +274,7 @@ export const AboutPage: React.FC = () => {
                         <span className="w-1.5 h-1.5 rounded-full bg-red-400" />
                         <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                        <span className="ml-1 text-gray-300">AboutDevCraft.tsx</span>
+                        <span className="ml-1 text-gray-300">AboutReliableInfoTech.tsx</span>
                       </div>
                       <p className="text-cyan-400">const team = [</p>
                       <p className="text-purple-400 pl-2">&#39;Passion&#39;, &#39;Innovation&#39;, &#39;Quality&#39;</p>
@@ -321,7 +321,7 @@ export const AboutPage: React.FC = () => {
               </h2>
 
               <p className="text-xs sm:text-sm text-gray-300 leading-relaxed font-normal">
-                DevCraft started with a passion for technology and a simple belief — that great ideas deserve great digital products. What began as a small team of passionate developers has now grown into a full-service software development company helping businesses turn their ideas into reality.
+                Reliable Info Tech started with a passion for technology and a simple belief — that great ideas deserve great digital products. What began as a small team of passionate developers has now grown into a full-service software development company helping businesses turn their ideas into reality.
               </p>
 
               <p className="text-xs sm:text-sm text-gray-400 leading-relaxed font-normal">
@@ -347,7 +347,7 @@ export const AboutPage: React.FC = () => {
               <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-[#0F172A] aspect-[16/11]">
                 <img
                   src="/images/workstation.jpg"
-                  alt="DevCraft Workstation Setup"
+                  alt="Reliable Info Tech Workstation Setup"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   onError={(e) => {
                     // Fallback to high-res tech workstation if local image fails
@@ -453,7 +453,7 @@ export const AboutPage: React.FC = () => {
               <div>
                 <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
                   Meet the People Behind{' '}
-                  <span className="text-gradient-brand">DevCraft</span>
+                  <span className="text-gradient-brand">Reliable Info Tech</span>
                 </h2>
                 <p className="text-xs sm:text-sm text-gray-400 max-w-xl leading-relaxed mt-1">
                   A passionate team of developers, designers, and problem-solvers working together to build amazing digital experiences.

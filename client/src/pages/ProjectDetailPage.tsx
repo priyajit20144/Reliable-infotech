@@ -52,7 +52,7 @@ export const ProjectDetailPage: React.FC = () => {
         if (res.success && res.data) {
           setProject(res.data);
           setSelectedImg(res.data.thumbnail || res.data.images[0]);
-          setMessage(`Hi DevCraft team, I am interested in acquiring ${res.data.title}. Please provide delivery details.`);
+          setMessage(`Hi Reliable Info Tech team, I am interested in acquiring ${res.data.title}. Please provide delivery details.`);
         }
       } catch (err) {
         console.error(err);
@@ -302,7 +302,7 @@ export const ProjectDetailPage: React.FC = () => {
             <Card className="space-y-3 bg-gradient-to-br from-indigo-950/40 via-purple-950/20 to-slate-900 border-indigo-500/20">
               <div className="flex items-center gap-2 text-indigo-400 font-semibold text-sm">
                 <ShieldCheck className="w-5 h-5" />
-                <span>DevCraft Quality Guarantee</span>
+                <span>Reliable Info Tech Quality Guarantee</span>
               </div>
               <p className="text-xs text-gray-300 leading-relaxed">
                 Every project includes full source code transfer, 30 days of complimentary bug-fix support, documentation, and database setup assistance.

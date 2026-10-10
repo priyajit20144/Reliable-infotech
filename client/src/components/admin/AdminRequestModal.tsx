@@ -85,7 +85,7 @@ export const AdminRequestModal: React.FC<AdminRequestModalProps> = ({
                 Client Contact
               </span>
               <p className="text-xs font-bold text-white mt-1 truncate">
-                {original?.email || 'client@devcraft.io'}
+                {original?.email || 'client@reliableinfotech.io'}
               </p>
               <p className="text-[10px] text-slate-400 mt-0.5">
                 {original?.phone || '+1 (555) 234-5678'}

@@ -99,7 +99,7 @@ export const AuthVisualPanel: React.FC<AuthVisualPanelProps> = ({ mode = 'client
               <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80 inline-block" />
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80 inline-block" />
               <span className="ml-2 font-sans font-medium text-gray-400">
-                devcraft-cloud :: workspace.config.ts
+                reliable-infotech-cloud :: workspace.config.ts
               </span>
             </div>
             <div className="flex items-center gap-1 text-[10px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20 font-sans">
@@ -114,14 +114,14 @@ export const AuthVisualPanel: React.FC<AuthVisualPanelProps> = ({ mode = 'client
               <span className="text-purple-400">import</span> &#123;{' '}
               <span className="text-cyan-300">defineWorkspace</span> &#125;{' '}
               <span className="text-purple-400">from</span>{' '}
-              <span className="text-emerald-300">'@devcraft/core'</span>;
+              <span className="text-emerald-300">'@reliable-infotech/core'</span>;
             </p>
             <p className="text-purple-400">
               export default <span className="text-cyan-300">defineWorkspace</span>(&#123;
             </p>
             <p className="pl-4 text-gray-400">
               <span className="text-indigo-300">platform</span>:{' '}
-              <span className="text-emerald-300">'DevCraft SaaS Portal'</span>,
+              <span className="text-emerald-300">'Reliable Info Tech SaaS Portal'</span>,
             </p>
             <p className="pl-4 text-gray-400">
               <span className="text-indigo-300">database</span>:{' '}

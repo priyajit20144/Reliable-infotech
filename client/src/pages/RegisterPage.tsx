@@ -105,7 +105,7 @@ export const RegisterPage: React.FC = () => {
     }
 
     if (!agreeTerms) {
-      setError('Please agree to the DevCraft Terms of Service to create your workspace.');
+      setError('Please agree to the Reliable Info Tech Terms of Service to create your workspace.');
       return;
     }
 
@@ -138,7 +138,7 @@ export const RegisterPage: React.FC = () => {
           className="inline-flex items-center gap-2 text-xs font-medium text-gray-400 hover:text-white transition-colors group px-3 py-1.5 rounded-full bg-white/[0.03] hover:bg-white/[0.08] border border-white/8"
         >
           <ChevronLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
-          <span>Back to DevCraft Website</span>
+          <span>Back to Reliable Info Tech Website</span>
         </Link>
 
         <div className="flex items-center gap-2 text-xs text-gray-400 font-mono">
@@ -166,7 +166,7 @@ export const RegisterPage: React.FC = () => {
                 </div>
                 <div className="flex flex-col text-left">
                   <span className="text-xl font-extrabold text-white tracking-tight leading-none">
-                    DevCraft
+                    Reliable Info Tech
                   </span>
                   <span className="text-[10px] text-gray-400 font-medium tracking-wider uppercase mt-0.5">
                     Client Onboarding
@@ -185,7 +185,7 @@ export const RegisterPage: React.FC = () => {
                 Create Your Client Workspace
               </h1>
               <p className="text-xs sm:text-sm text-gray-400 leading-relaxed">
-                Join DevCraft to commission custom software builds, track sprints, and communicate with lead developers.
+                Join Reliable Info Tech to commission custom software builds, track sprints, and communicate with lead developers.
               </p>
             </div>
 
@@ -445,7 +445,7 @@ export const RegisterPage: React.FC = () => {
 
           {/* Bottom Switch to Login */}
           <div className="mt-6 pt-4 border-t border-white/8 text-center text-xs text-gray-400">
-            Already have a DevCraft account?{' '}
+            Already have a Reliable Info Tech account?{' '}
             <Link
               to="/login"
               className="text-indigo-400 hover:text-indigo-300 font-semibold transition-colors underline-offset-4 hover:underline"

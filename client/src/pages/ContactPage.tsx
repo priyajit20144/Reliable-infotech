@@ -49,7 +49,7 @@ export const ContactPage: React.FC = () => {
         <div className="text-center max-w-2xl mx-auto space-y-3 mb-12">
           <Badge variant="purple" size="md">Direct Communication</Badge>
           <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
-            Contact DevCraft Team
+            Contact Reliable Info Tech Team
           </h1>
           <p className="text-sm text-gray-400">
             Have a custom inquiry, partnership proposal, or architectural question? We'll reply within 24 hours.
@@ -70,8 +70,8 @@ export const ContactPage: React.FC = () => {
                 </div>
                 <div>
                   <p className="text-xs text-gray-400">Email Address</p>
-                  <a href="mailto:contact@devcraft.io" className="text-sm font-semibold text-white hover:text-indigo-300">
-                    contact@devcraft.io
+                  <a href="mailto:contact@reliableinfotech.io" className="text-sm font-semibold text-white hover:text-indigo-300">
+                    contact@reliableinfotech.io
                   </a>
                 </div>
               </div>
@@ -111,7 +111,7 @@ export const ContactPage: React.FC = () => {
                 <CheckCircle2 className="w-14 h-14 text-emerald-400 mx-auto" />
                 <h3 className="text-xl font-bold text-white">Message Delivered</h3>
                 <p className="text-xs sm:text-sm text-gray-300 max-w-md mx-auto">
-                  Thank you for reaching out to DevCraft. Our lead architect has received your inquiry and will contact you shortly.
+                  Thank you for reaching out to Reliable Info Tech. Our lead architect has received your inquiry and will contact you shortly.
                 </p>
                 <Button variant="outline" size="sm" onClick={() => setSuccess(false)}>
                   Send Another Message

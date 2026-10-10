@@ -629,7 +629,7 @@ export const ServicesPage: React.FC = () => {
               <div className="relative w-44 h-24 flex items-center justify-center">
                 <div className="w-32 h-20 rounded-t-lg bg-[#0F172A] border border-cyan-500/30 p-1 shadow-lg">
                   <div className="w-full h-full bg-[#080B12] rounded p-1 font-mono text-[7px] text-cyan-300 flex items-center justify-center">
-                    &lt;DevCraft /&gt;
+                    &lt;Reliable Info Tech /&gt;
                   </div>
                 </div>
                 <div className="absolute -right-2 bottom-0 w-10 h-18 rounded-lg bg-[#0A0E17] border border-slate-600 p-0.5 shadow-md">

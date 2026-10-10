@@ -150,8 +150,8 @@ export const Footer: React.FC = () => {
             <ul className="space-y-2.5 text-xs">
               <li className="flex items-center gap-2">
                 <Mail className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
-                <a href="mailto:hello@devcraft.com" className="hover:text-white transition-colors">
-                  hello@devcraft.com
+                <a href="mailto:contact@reliableinfotech.io" className="hover:text-white transition-colors">
+                  contact@reliableinfotech.io
                 </a>
               </li>
               <li className="flex items-center gap-2">
@@ -193,7 +193,7 @@ export const Footer: React.FC = () => {
 
         {/* Bottom Bar: Copyright & Legal */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-400">
-          <p>© 2026 DevCraft. All rights reserved.</p>
+          <p>© 2026 Reliable Info Tech. All rights reserved.</p>
           <div className="flex items-center gap-6">
             <a href="#privacy" className="hover:text-white transition-colors">Privacy Policy</a>
             <a href="#terms" className="hover:text-white transition-colors">Terms of Service</a>

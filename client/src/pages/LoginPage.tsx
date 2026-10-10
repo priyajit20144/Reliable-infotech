@@ -120,7 +120,7 @@ export const LoginPage: React.FC = () => {
           className="inline-flex items-center gap-2 text-xs font-medium text-gray-400 hover:text-white transition-colors group px-3 py-1.5 rounded-full bg-white/[0.03] hover:bg-white/[0.08] border border-white/8"
         >
           <ChevronLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
-          <span>Back to DevCraft Website</span>
+          <span>Back to Reliable Info Tech Website</span>
         </Link>
 
         <div className="flex items-center gap-2 text-xs text-gray-400 font-mono">
@@ -249,7 +249,7 @@ export const LoginPage: React.FC = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder={
-                      activeTab === 'admin' ? 'admin@devcraft.io' : 'client@devcraft.io'
+                      activeTab === 'admin' ? 'admin@reliableinfotech.io' : 'client@reliableinfotech.io'
                     }
                     className="w-full bg-[#0B0F19]/90 text-white placeholder-gray-500 text-sm rounded-xl border border-white/10 pl-10 pr-4 py-3 transition-all duration-200 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
                   />
@@ -348,7 +348,7 @@ export const LoginPage: React.FC = () => {
 
           {/* Bottom Switch to Register */}
           <div className="mt-6 pt-4 border-t border-white/8 text-center text-xs text-gray-400">
-            Don't have a DevCraft account?{' '}
+            Don't have a Reliable Info Tech account?{' '}
             <Link
               to="/register"
               className="text-indigo-400 hover:text-indigo-300 font-semibold transition-colors underline-offset-4 hover:underline"

@@ -190,7 +190,7 @@ export const MessagesPage: React.FC = () => {
             </span>
           </div>
           <p className="text-xs text-slate-400 mt-1">
-            Direct 1-on-1 messaging channel with assigned DevCraft lead architects, engineers, and project managers
+            Direct 1-on-1 messaging channel with assigned Reliable Info Tech lead architects, engineers, and project managers
           </p>
         </div>
 
@@ -251,7 +251,7 @@ export const MessagesPage: React.FC = () => {
                     <div className="relative shrink-0">
                       <img
                         src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80"
-                        alt="DevCraft Support"
+                        alt="Reliable Info Tech Support"
                         className="w-11 h-11 rounded-xl object-cover ring-2 ring-blue-500/40"
                       />
                       <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-400 ring-2 ring-[#0B0F1D]" />
@@ -268,7 +268,7 @@ export const MessagesPage: React.FC = () => {
                         </span>
                       </div>
                       <p className="text-[11px] font-semibold text-cyan-400 truncate">
-                        DevCraft Lead Architect
+                        Reliable Info Tech Lead Architect
                       </p>
                       <p className="text-[11px] text-slate-400 truncate mt-1">
                         {currentConv?.lastMessage || 'Hello! How can we assist you today?'}
@@ -287,7 +287,7 @@ export const MessagesPage: React.FC = () => {
                 <div className="w-7 h-7 rounded-lg bg-blue-600/20 text-blue-400 flex items-center justify-center">
                   <Headphones className="w-4 h-4" />
                 </div>
-                <span>DevCraft Client Assurance</span>
+                <span>Reliable Info Tech Client Assurance</span>
               </div>
 
               <div className="space-y-2 text-[11px] text-slate-400 leading-relaxed">
@@ -295,7 +295,7 @@ export const MessagesPage: React.FC = () => {
                   <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                   <div>
                     <span className="font-semibold text-slate-200">Strict Client Privacy: </span>
-                    Messages are strictly confidential between your account and verified DevCraft administrators.
+                    Messages are strictly confidential between your account and verified Reliable Info Tech administrators.
                   </div>
                 </div>
 
@@ -378,7 +378,7 @@ export const MessagesPage: React.FC = () => {
                 <Lock className="w-3 h-3 text-emerald-400" />
                 Direct 1-on-1 Consultation between{' '}
                 <strong className="text-slate-200">{user?.name || 'You'}</strong> and{' '}
-                <strong className="text-slate-200">DevCraft Admin</strong>
+                <strong className="text-slate-200">Reliable Info Tech Admin</strong>
               </span>
             </div>
 
@@ -397,7 +397,7 @@ export const MessagesPage: React.FC = () => {
                 <div className="max-w-md space-y-1">
                   <h4 className="text-sm font-bold text-white">Start your consultation</h4>
                   <p className="text-xs text-slate-400 leading-relaxed">
-                    Have questions about your custom website build, tech stack, or roadmap? Send a message directly to DevCraft Lead Architect Alex Rivera.
+                    Have questions about your custom website build, tech stack, or roadmap? Send a message directly to Reliable Info Tech Lead Architect Alex Rivera.
                   </p>
                 </div>
                 <div className="flex flex-wrap justify-center gap-2 pt-2">
@@ -492,7 +492,7 @@ export const MessagesPage: React.FC = () => {
                   handleSend();
                 }
               }}
-              placeholder={`Type message to Alex Rivera (DevCraft Lead Architect)...`}
+              placeholder={`Type message to Alex Rivera (Reliable Info Tech Lead Architect)...`}
               className="flex-1 bg-[#0F172A] text-xs sm:text-sm text-white placeholder-slate-500 rounded-xl px-4 py-3 border border-slate-800 focus:outline-none focus:border-blue-500 transition-colors"
             />
 

@@ -48,7 +48,7 @@ export const WhyChooseSection: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto space-y-3 mb-16">
           <p className="text-xs font-bold uppercase tracking-wider text-indigo-400">
-            Why Partner With DevCraft
+            Why Partner With Reliable Info Tech
           </p>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
             Engineered For Excellence

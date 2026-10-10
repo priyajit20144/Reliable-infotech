@@ -82,7 +82,7 @@ app.use('/api/email', emailRoutes);
 app.get('/api/health', (_req, res) => {
   res.json({
     status: 'online',
-    platform: 'DevCraft Platform API',
+    platform: 'Reliable Info Tech Platform API',
     mongoConnected: isConnectedToMongo,
     timestamp: new Date().toISOString(),
   });
@@ -95,30 +95,30 @@ app.use(errorHandler);
 const startServer = async () => {
   await connectDB();
   const server = app.listen(PORT, () => {
-    console.log(`[DevCraft Server] Running on http://localhost:${PORT}`);
+    console.log(`[Reliable Info Tech Server] Running on http://localhost:${PORT}`);
   });
 
   server.on('error', (err: any) => {
     if (err.code === 'EADDRINUSE') {
-      console.error(`[DevCraft Server] Error: Port ${PORT} is already in use.`);
-      console.error(`[DevCraft Server] Stale process detected. Run 'npm run clean:ports' or restart via 'npm run dev'.`);
+      console.error(`[Reliable Info Tech Server] Error: Port ${PORT} is already in use.`);
+      console.error(`[Reliable Info Tech Server] Stale process detected. Run 'npm run clean:ports' or restart via 'npm run dev'.`);
     } else {
-      console.error(`[DevCraft Server] Server error:`, err);
+      console.error(`[Reliable Info Tech Server] Server error:`, err);
     }
     process.exit(1);
   });
 
   // Graceful shutdown handling
   const handleShutdown = (signal: string) => {
-    console.log(`\n[DevCraft Server] Received ${signal}. Closing server gracefully...`);
+    console.log(`\n[Reliable Info Tech Server] Received ${signal}. Closing server gracefully...`);
     server.close(() => {
-      console.log('[DevCraft Server] HTTP server closed.');
+      console.log('[Reliable Info Tech Server] HTTP server closed.');
       process.exit(0);
     });
 
     // Timeout safety fallback
     setTimeout(() => {
-      console.warn('[DevCraft Server] Forcing exit after timeout.');
+      console.warn('[Reliable Info Tech Server] Forcing exit after timeout.');
       process.exit(0);
     }, 2000).unref();
   };

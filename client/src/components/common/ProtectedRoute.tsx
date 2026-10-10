@@ -17,7 +17,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   const location = useLocation();
 
   if (loading) {
-    return <BrandLoader message="Verifying your DevCraft session..." />;
+    return <BrandLoader message="Verifying your Reliable Info Tech session..." />;
   }
 
   // Not authenticated: cleanly redirect to login, preserving destination in state.from

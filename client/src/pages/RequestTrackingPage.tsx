@@ -136,7 +136,7 @@ export const RequestTrackingPage: React.FC = () => {
             </div>
             <div className="p-3 rounded-xl bg-white/5 border border-white/5">
               <span className="text-[10px] text-gray-400 block uppercase">Assigned Team</span>
-              <span className="font-bold text-indigo-300">{request.assignedTo || 'DevCraft Core Team'}</span>
+              <span className="font-bold text-indigo-300">{request.assignedTo || 'Reliable Info Tech Core Team'}</span>
             </div>
           </div>
         </div>

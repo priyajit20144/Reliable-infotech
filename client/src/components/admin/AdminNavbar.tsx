@@ -233,7 +233,7 @@ export const AdminNavbar: React.FC<AdminNavbarProps> = ({
             <div className="absolute right-0 mt-2 w-56 rounded-2xl bg-[#0F172A] border border-slate-700/80 shadow-2xl py-1.5 z-50 animate-in fade-in zoom-in-95 duration-150">
               <div className="px-3.5 py-2 border-b border-slate-800">
                 <p className="text-xs font-bold text-white">{user?.name || 'Administrator'}</p>
-                <p className="text-[10px] text-slate-400 truncate">{user?.email || 'admin@devcraft.io'}</p>
+                <p className="text-[10px] text-slate-400 truncate">{user?.email || 'admin@reliableinfotech.io'}</p>
                 <span className="inline-block mt-1 px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
                   SUPER ADMIN
                 </span>

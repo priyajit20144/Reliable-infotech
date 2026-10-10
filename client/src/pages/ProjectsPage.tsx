@@ -528,7 +528,7 @@ export const ProjectsPage: React.FC = () => {
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                         <span className="ml-1 text-[7px]">App.tsx</span>
                       </div>
-                      <p className="text-cyan-400">const devcraft = () =&gt; &#123;</p>
+                      <p className="text-cyan-400">const reliableInfoTech = () =&gt; &#123;</p>
                       <p className="text-purple-400 pl-2">return &lt;Project /&gt;;</p>
                       <p className="text-cyan-400">&#125;;</p>
                     </div>

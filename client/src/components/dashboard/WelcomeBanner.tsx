@@ -29,7 +29,7 @@ export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({
         <div className="space-y-2 max-w-xl">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-xs font-medium text-indigo-300 backdrop-blur-sm border border-white/10">
             <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
-            <span>DevCraft Client Workspace</span>
+            <span>Reliable Info Tech Client Workspace</span>
           </div>
 
           <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">

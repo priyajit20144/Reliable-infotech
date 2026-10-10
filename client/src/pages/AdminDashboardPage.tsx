@@ -844,7 +844,7 @@ export const AdminDashboardPage: React.FC = () => {
                           onClick={() => {
                             setSelectedRequest(r);
                             setNewStatus(r.status);
-                            setAssignedTo(r.assignedTo || 'DevCraft Core Team');
+                            setAssignedTo(r.assignedTo || 'Reliable Info Tech Core Team');
                           }}
                         >
                           <span>Manage</span>
@@ -954,7 +954,7 @@ export const AdminDashboardPage: React.FC = () => {
                                   onClick={() => {
                                     setSelectedRequest(r);
                                     setNewStatus(r.status);
-                                    setAssignedTo(r.assignedTo || 'DevCraft Core Team');
+                                    setAssignedTo(r.assignedTo || 'Reliable Info Tech Core Team');
                                   }}
                                 >
                                   <span>Manage</span>
@@ -1601,7 +1601,7 @@ export const AdminDashboardPage: React.FC = () => {
                   onClick={() => {
                     setSelectedRequest(viewingRequest);
                     setNewStatus(viewingRequest.status);
-                    setAssignedTo(viewingRequest.assignedTo || 'DevCraft Core Team');
+                    setAssignedTo(viewingRequest.assignedTo || 'Reliable Info Tech Core Team');
                   }}
                 >
                   <span>Update Sprint Status</span>
@@ -1647,7 +1647,7 @@ export const AdminDashboardPage: React.FC = () => {
             label="Assigned Lead Engineer / Squad"
             value={assignedTo}
             onChange={(e) => setAssignedTo(e.target.value)}
-            placeholder="e.g. Sarah Chen (Lead Architect) or DevCraft Core Team"
+            placeholder="e.g. Sarah Chen (Lead Architect) or Reliable Info Tech Core Team"
           />
 
           <Textarea
@@ -1731,13 +1731,13 @@ export const AdminDashboardPage: React.FC = () => {
               label="Live Demo URL (Optional)"
               value={projDemoUrl}
               onChange={(e) => setProjDemoUrl(e.target.value)}
-              placeholder="https://demo.devcraft.io/nexus"
+              placeholder="https://demo.reliableinfotech.io/nexus"
             />
             <Input
               label="GitHub Repo URL (Optional)"
               value={projGithubUrl}
               onChange={(e) => setProjGithubUrl(e.target.value)}
-              placeholder="https://github.com/devcraft/nexus"
+              placeholder="https://github.com/reliable-infotech/nexus"
             />
           </div>
 

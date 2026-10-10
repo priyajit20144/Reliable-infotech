@@ -49,7 +49,7 @@ export const AdminClientsView: React.FC<AdminClientsViewProps> = ({ users }) => 
       id: 'cl_1',
       name: 'Rahul Sharma',
       company: 'Horizon Creative Studio',
-      email: 'client@devcraft.io',
+      email: 'client@reliableinfotech.io',
       phone: '+1 (555) 234-5678',
       projectsCount: 3,
       totalSpent: 9800,

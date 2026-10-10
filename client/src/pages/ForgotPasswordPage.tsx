@@ -284,7 +284,7 @@ export const ForgotPasswordPage: React.FC = () => {
             className="hidden sm:inline-flex items-center gap-1.5 text-xs text-gray-400 hover:text-white transition-colors px-3 py-1.5 rounded-full bg-white/[0.03] hover:bg-white/[0.08] border border-white/8"
           >
             <Home className="w-3.5 h-3.5" />
-            <span>DevCraft Website</span>
+            <span>Reliable Info Tech Website</span>
           </Link>
         </div>
 
@@ -313,7 +313,7 @@ export const ForgotPasswordPage: React.FC = () => {
                 </div>
                 <div className="flex flex-col text-left">
                   <span className="text-xl font-extrabold text-white tracking-tight leading-none">
-                    DevCraft
+                    Reliable Info Tech
                   </span>
                   <span className="text-[10px] text-gray-400 font-medium tracking-wider uppercase mt-0.5">
                     Identity Recovery
@@ -349,7 +349,7 @@ export const ForgotPasswordPage: React.FC = () => {
                 {currentStep === 'new_password' &&
                   'Create a strong, unique password to safeguard your custom website projects and client workspace.'}
                 {currentStep === 'success' &&
-                  'Your credentials have been securely updated. You can now access your DevCraft client workspace.'}
+                  'Your credentials have been securely updated. You can now access your Reliable Info Tech client workspace.'}
               </p>
             </div>
 
@@ -432,7 +432,7 @@ export const ForgotPasswordPage: React.FC = () => {
                       autoComplete="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="e.g. client@devcraft.io"
+                      placeholder="e.g. client@reliableinfotech.io"
                       className="w-full bg-[#0B0F19]/90 text-white placeholder-gray-500 text-sm rounded-xl border border-white/10 pl-10 pr-4 py-3 sm:py-3.5 transition-all duration-200 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
                     />
                   </div>
@@ -689,14 +689,14 @@ export const ForgotPasswordPage: React.FC = () => {
 
                 <div className="space-y-2">
                   <p className="text-sm text-gray-300 leading-relaxed">
-                    Your password has been securely updated. You can now access your DevCraft client workspace using your new credentials.
+                    Your password has been securely updated. You can now access your Reliable Info Tech client workspace using your new credentials.
                   </p>
                   <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/8 text-left text-xs text-gray-400 space-y-1">
                     <div className="flex items-center gap-1.5 text-white font-semibold">
                       <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
                       <span>Security Advisory</span>
                     </div>
-                    <p>A confirmation notice was dispatched to {email}. If you suspect unauthorized access, contact DevCraft Security immediately.</p>
+                    <p>A confirmation notice was dispatched to {email}. If you suspect unauthorized access, contact Reliable Info Tech Security immediately.</p>
                   </div>
                 </div>
 

@@ -51,7 +51,7 @@ export const AdminWelcomeBanner: React.FC<AdminWelcomeBannerProps> = ({
           <div className="absolute inset-0 bg-gradient-to-t from-[#0C152E] via-[#0C152E]/70 to-transparent sm:bg-gradient-to-r sm:from-[#0C152E] sm:via-transparent sm:to-transparent z-10" />
           <img
             src="/admin-hero.jpg"
-            alt="DevCraft Admin Workstation"
+            alt="Reliable Info Tech Admin Workstation"
             className="w-full h-full object-cover object-center opacity-30 sm:opacity-95 filter drop-shadow-[0_10px_25px_rgba(37,99,235,0.35)] scale-105 group-hover:scale-110 transition-transform duration-700 ease-out"
           />
         </div>
@@ -61,7 +61,7 @@ export const AdminWelcomeBanner: React.FC<AdminWelcomeBannerProps> = ({
       <div className="relative z-20 max-w-xl py-1 sm:py-2">
         <div className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-[11px] font-semibold text-cyan-300 mb-2">
           <Sparkles className="w-3 h-3 text-cyan-400 animate-pulse" />
-          <span>DevCraft Command Center</span>
+          <span>Reliable Info Tech Command Center</span>
         </div>
 
         <h1 className="text-xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight flex items-center gap-2 flex-wrap">

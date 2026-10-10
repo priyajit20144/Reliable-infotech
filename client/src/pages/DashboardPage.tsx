@@ -18,7 +18,7 @@ const DEFAULT_CLIENT_REQUESTS: CustomRequest[] = [
     _id: 'req_102',
     userId: 'usr_client_1',
     name: 'Rahul Sharma',
-    email: 'client@devcraft.io',
+    email: 'client@reliableinfotech.io',
     phone: '+1 (555) 234-5678',
     businessName: 'NextGen Mobility',
     websiteType: 'E-Commerce Platform',
@@ -32,7 +32,7 @@ const DEFAULT_CLIENT_REQUESTS: CustomRequest[] = [
     contactMethod: 'EMAIL',
     status: 'UNDER_REVIEW',
     priority: 'MEDIUM',
-    assignedTo: 'DevCraft Core Team',
+    assignedTo: 'Reliable Info Tech Core Team',
     createdAt: '2026-03-04T08:15:00.000Z',
     updatedAt: '2026-03-04T08:15:00.000Z',
   },
@@ -40,7 +40,7 @@ const DEFAULT_CLIENT_REQUESTS: CustomRequest[] = [
     _id: 'req_101',
     userId: 'usr_client_1',
     name: 'Rahul Sharma',
-    email: 'client@devcraft.io',
+    email: 'client@reliableinfotech.io',
     phone: '+1 (555) 234-5678',
     businessName: 'Horizon Creative Studio',
     websiteType: 'Custom SaaS Platform',
@@ -62,7 +62,7 @@ const DEFAULT_CLIENT_REQUESTS: CustomRequest[] = [
     _id: 'req_103',
     userId: 'usr_client_1',
     name: 'Rahul Sharma',
-    email: 'client@devcraft.io',
+    email: 'client@reliableinfotech.io',
     phone: '+1 (555) 234-5678',
     businessName: 'Rahul Sharma Portfolio',
     websiteType: 'Personal Portfolio',
@@ -90,7 +90,7 @@ export const DashboardPage: React.FC = () => {
 
   const getUserDefaultRequests = (userName?: string, userEmail?: string): CustomRequest[] => {
     const name = userName || 'Rahul Sharma';
-    const email = userEmail || 'client@devcraft.io';
+    const email = userEmail || 'client@reliableinfotech.io';
     return [
       {
         ...DEFAULT_CLIENT_REQUESTS[0],

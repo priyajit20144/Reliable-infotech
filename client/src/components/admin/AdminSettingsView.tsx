@@ -18,9 +18,9 @@ import {
 
 export const AdminSettingsView: React.FC = () => {
   // General
-  const [platformName, setPlatformName] = useState('DevCraft Admin Panel');
+  const [platformName, setPlatformName] = useState('Reliable Info Tech Admin Panel');
   const [tagline, setTagline] = useState('Ideas to Digital Reality');
-  const [supportEmail, setSupportEmail] = useState('support@devcraft.io');
+  const [supportEmail, setSupportEmail] = useState('support@reliableinfotech.io');
   const [currency, setCurrency] = useState('USD ($)');
   const [maintenanceMode, setMaintenanceMode] = useState(false);
 
@@ -32,7 +32,7 @@ export const AdminSettingsView: React.FC = () => {
   // API
   const [apiKey] = useState('dc_live_9f82a74c10e83b49912bc047812e34fa');
   const [copiedKey, setCopiedKey] = useState(false);
-  const [webhookUrl, setWebhookUrl] = useState('https://hooks.devcraft.io/v1/inbound');
+  const [webhookUrl, setWebhookUrl] = useState('https://hooks.reliableinfotech.io/v1/inbound');
 
   // Notifications
   const [emailAlerts, setEmailAlerts] = useState(true);

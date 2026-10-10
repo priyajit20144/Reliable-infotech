@@ -8,7 +8,7 @@ export const TestimonialsSection: React.FC = () => {
       role: 'CEO, TechSolutions',
       avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80',
       content:
-        'DevCraft delivered an amazing website for our business. The team was professional, responsive and easy to work with. Highly recommended!',
+        'Reliable Info Tech delivered an amazing website for our business. The team was professional, responsive and easy to work with. Highly recommended!',
       rating: 5,
     },
     {
@@ -53,7 +53,7 @@ export const TestimonialsSection: React.FC = () => {
               What Our Clients Say
             </h2>
             <p className="text-xs sm:text-sm text-gray-400 max-w-xl leading-relaxed">
-              Don't just take our word for it. Here's what our clients have to say about working with DevCraft.
+              Don't just take our word for it. Here's what our clients have to say about working with Reliable Info Tech.
             </p>
           </div>
 

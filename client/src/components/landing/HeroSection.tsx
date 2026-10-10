@@ -215,7 +215,7 @@ export const HeroSection: React.FC = () => {
                         <span className="w-2 h-2 rounded-full bg-red-500/80" />
                         <span className="w-2 h-2 rounded-full bg-amber-500/80" />
                         <span className="w-2 h-2 rounded-full bg-emerald-500/80" />
-                        <span className="ml-2 font-mono text-[9px] text-gray-300">DevCraft Studio Workspace</span>
+                        <span className="ml-2 font-mono text-[9px] text-gray-300">Reliable Info Tech Studio Workspace</span>
                       </div>
                       <div className="flex items-center gap-2 font-mono text-[9px] text-indigo-400">
                         <span>TypeScript</span>
@@ -241,7 +241,7 @@ export const HeroSection: React.FC = () => {
                           <strong className="text-purple-400 font-normal">import</strong>{' '}
                           <span className="text-cyan-300">{'{ DigitalReality }'}</span>{' '}
                           <strong className="text-purple-400 font-normal">from</strong>{' '}
-                          <span className="text-emerald-300">'@devcraft/core'</span>;
+                          <span className="text-emerald-300">'@reliable-infotech/core'</span>;
                         </span>
                       </div>
                       <div className="flex items-center gap-3">
@@ -311,7 +311,7 @@ export const HeroSection: React.FC = () => {
                   
                   {/* App UI inside phone */}
                   <div className="space-y-1.5 text-left my-auto">
-                    <span className="text-[8px] font-bold text-cyan-400 block">DevCraft Mobile</span>
+                    <span className="text-[8px] font-bold text-cyan-400 block">Reliable Info Tech Mobile</span>
                     <div className="p-1 rounded-lg bg-white/5 border border-white/5 space-y-1">
                       <div className="flex items-center justify-between text-[7px] text-gray-300">
                         <span>Speed</span>

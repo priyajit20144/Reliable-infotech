@@ -246,7 +246,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
         </div>
 
         <p className="text-[10px] text-gray-400 text-center">
-          © 2026 DevCraft. All rights reserved.
+          © 2026 Reliable Info Tech. All rights reserved.
         </p>
       </div>
     </aside>

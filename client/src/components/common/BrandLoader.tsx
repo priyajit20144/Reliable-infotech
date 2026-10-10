@@ -30,7 +30,7 @@ export const BrandLoader: React.FC<BrandLoaderProps> = ({
 
       {/* Brand Name */}
       <h2 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
-        <span>DevCraft</span>
+        <span>Reliable Info Tech</span>
         <span className="text-xs px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 font-normal border border-indigo-500/30">
           PRO
         </span>

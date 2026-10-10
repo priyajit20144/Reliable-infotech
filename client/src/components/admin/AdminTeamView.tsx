@@ -56,7 +56,7 @@ export const AdminTeamView: React.FC = () => {
       name: 'Alex Rivera',
       role: 'Platform Architect & Lead Admin',
       department: 'Full Stack',
-      email: 'admin@devcraft.io',
+      email: 'admin@reliableinfotech.io',
       phone: '+1 (555) 019-2834',
       avatar:
         'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
@@ -69,7 +69,7 @@ export const AdminTeamView: React.FC = () => {
       name: 'Sarah Chen',
       role: 'Lead Cloud & Systems Engineer',
       department: 'DevOps',
-      email: 'team@devcraft.io',
+      email: 'team@reliableinfotech.io',
       phone: '+1 (555) 876-5432',
       avatar:
         'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80',
@@ -82,7 +82,7 @@ export const AdminTeamView: React.FC = () => {
       name: 'Rahul Sharma',
       role: 'Senior Frontend Developer',
       department: 'Frontend',
-      email: 'rahul.dev@devcraft.io',
+      email: 'rahul.dev@reliableinfotech.io',
       phone: '+1 (555) 234-5678',
       avatar:
         'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80',
@@ -95,7 +95,7 @@ export const AdminTeamView: React.FC = () => {
       name: 'Priya Mehta',
       role: 'Senior Backend Engineer',
       department: 'Backend',
-      email: 'priya.backend@devcraft.io',
+      email: 'priya.backend@reliableinfotech.io',
       phone: '+1 (555) 987-6543',
       avatar:
         'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=150&q=80',
@@ -108,7 +108,7 @@ export const AdminTeamView: React.FC = () => {
       name: 'Amit Verma',
       role: 'Principal UI/UX Designer',
       department: 'UI/UX',
-      email: 'amit.design@devcraft.io',
+      email: 'amit.design@reliableinfotech.io',
       phone: '+1 (555) 456-7890',
       avatar:
         'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80',
@@ -121,7 +121,7 @@ export const AdminTeamView: React.FC = () => {
       name: 'Neha Singh',
       role: 'Full Stack Engineer',
       department: 'Full Stack',
-      email: 'neha.fullstack@devcraft.io',
+      email: 'neha.fullstack@reliableinfotech.io',
       phone: '+1 (555) 321-7654',
       avatar:
         'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
@@ -163,7 +163,7 @@ export const AdminTeamView: React.FC = () => {
         'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80',
       status: 'online',
       activeProjects: 1,
-      skills: ['TypeScript', 'Modern Web', 'DevCraft Stack'],
+      skills: ['TypeScript', 'Modern Web', 'Reliable Info Tech Stack'],
     };
 
     setMembers([...members, newM]);
@@ -207,7 +207,7 @@ export const AdminTeamView: React.FC = () => {
           </div>
           <div>
             <h2 className="text-xl font-extrabold text-white tracking-tight">
-              DevCraft Core Engineering & Product Team
+              Reliable Info Tech Core Engineering & Product Team
             </h2>
             <p className="text-xs text-slate-400 mt-0.5">
               Engineers, designers, sprint allocations, and technical capabilities
@@ -293,7 +293,7 @@ export const AdminTeamView: React.FC = () => {
           <h3 className="text-base font-bold text-white">No team members found</h3>
           <p className="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
             {filterDept === 'ALL'
-              ? 'There are currently no active team members in DevCraft Core.'
+              ? 'There are currently no active team members in Reliable Info Tech Core.'
               : `No team members found in the "${filterDept}" department.`}
           </p>
           <div className="mt-5 flex items-center justify-center gap-3">
@@ -566,7 +566,7 @@ export const AdminTeamView: React.FC = () => {
               ) : (
                 <p className="text-slate-400 leading-relaxed">
                   Are you sure you want to remove <strong>{memberToRemove.name}</strong> from
-                  the DevCraft core organization? This will revoke their team member
+                  the Reliable Info Tech core organization? This will revoke their team member
                   privileges.
                 </p>
               )}
@@ -678,7 +678,7 @@ export const AdminTeamView: React.FC = () => {
                   required
                   value={newMemberEmail}
                   onChange={(e) => setNewMemberEmail(e.target.value)}
-                  placeholder="vikram@devcraft.io"
+                  placeholder="vikram@reliableinfotech.io"
                   className="w-full bg-[#111827] text-xs text-white rounded-xl px-3 py-2 border border-slate-700"
                 />
               </div>

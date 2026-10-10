@@ -44,7 +44,7 @@ export const AdminMessagesView: React.FC = () => {
     {
       id: 'conv_1',
       clientName: 'Rahul Sharma',
-      clientEmail: 'client@devcraft.io',
+      clientEmail: 'client@reliableinfotech.io',
       clientAvatar:
         'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80',
       projectSubject: 'Horizon Creative Studio Showcase',
@@ -86,7 +86,7 @@ export const AdminMessagesView: React.FC = () => {
       senderId: 'usr_client_1',
       senderName: 'Rahul Sharma',
       senderRole: 'USER',
-      text: 'Hi DevCraft Team! We just reviewed the first sprint milestone for our portfolio platform.',
+      text: 'Hi Reliable Info Tech Team! We just reviewed the first sprint milestone for our portfolio platform.',
       time: '10:15 AM',
       isMe: false,
     },
@@ -137,7 +137,7 @@ export const AdminMessagesView: React.FC = () => {
           res.data.map((c: any) => ({
             id: c.id || c._id,
             clientName: c.clientName || 'Client',
-            clientEmail: c.clientEmail || 'client@devcraft.io',
+            clientEmail: c.clientEmail || 'client@reliableinfotech.io',
             clientAvatar:
               c.clientAvatar ||
               'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80',
@@ -213,7 +213,7 @@ export const AdminMessagesView: React.FC = () => {
     conversations.find((c) => c.id === selectedConvId) || conversations[0] || {
       id: 'conv_1',
       clientName: 'Rahul Sharma',
-      clientEmail: 'client@devcraft.io',
+      clientEmail: 'client@reliableinfotech.io',
       clientAvatar:
         'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80',
       projectSubject: 'Horizon Creative Studio Showcase',

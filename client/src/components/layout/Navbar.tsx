@@ -68,7 +68,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenMobileSidebar }) => {
         <div className="hidden lg:flex items-center gap-2.5 text-xs">
           <div className="flex items-center gap-1.5 text-gray-400 font-medium">
             <LayoutDashboard className="w-3.5 h-3.5 text-indigo-400" />
-            <span>DevCraft Workspace</span>
+            <span>Reliable Info Tech Workspace</span>
           </div>
           <ChevronRight className="w-3.5 h-3.5 text-gray-600" />
           <span className="text-white font-semibold">{pageInfo.title}</span>

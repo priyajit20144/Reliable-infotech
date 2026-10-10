@@ -36,8 +36,8 @@ export const AdminCreateProjectModal: React.FC<AdminCreateProjectModalProps> = (
         shortDescription: shortDesc || 'High-performance bespoke digital experience',
         description: desc || shortDesc || 'Engineered with modern full-stack best practices.',
         technologies: tech.split(',').map((t) => t.trim()).filter(Boolean),
-        demoUrl: demoUrl || 'https://demo.devcraft.io',
-        githubUrl: githubUrl || 'https://github.com/devcraft-org',
+        demoUrl: demoUrl || 'https://demo.reliableinfotech.io',
+        githubUrl: githubUrl || 'https://github.com/reliable-infotech',
         images: [
           'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80',
         ],

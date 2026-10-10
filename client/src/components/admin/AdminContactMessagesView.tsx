@@ -34,7 +34,7 @@ export const AdminContactMessagesView: React.FC = () => {
       email: 'claire@dupontluxury.fr',
       subject: 'Custom 3D Product Configurator inquiry',
       message:
-        'Hello team DevCraft! We were blown away by VerveCommerce. Can you build a customized 3D jewelry configurator for our Parisian retail store?',
+        'Hello team Reliable Info Tech! We were blown away by VerveCommerce. Can you build a customized 3D jewelry configurator for our Parisian retail store?',
       date: '5 hours ago',
       status: 'UNREAD',
     },
