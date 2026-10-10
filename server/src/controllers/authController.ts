@@ -426,38 +426,25 @@ export const forgotPassword = async (req: Request, res: Response) => {
       store.passwordResets.push(storeRecord);
     }
 
-    // 4. Dispatch Email via Brevo
+    // 4. Dispatch Email via Brevo REST API
     const emailResult = await sendPasswordResetOtpEmail(normalizedEmail, user.name || 'User', rawOtp);
     const isEmailDelivered = emailResult.success;
-    const isIpBlocked = emailResult.error?.includes('unrecognised IP address') ||
-                        emailResult.error?.includes('authorised_ips') ||
-                        emailResult.error?.includes('Unauthorized IP address');
 
     if (!isEmailDelivered) {
-      console.warn(`[ForgotPassword] Brevo delivery notification for ${normalizedEmail}:`, emailResult.error);
+      console.warn(`[ForgotPassword] Email delivery failed for ${normalizedEmail}:`, emailResult.error);
+      return res.status(502).json({
+        success: false,
+        message: 'Unable to deliver the verification code to your email inbox right now. Please try again in a moment.',
+      });
     }
 
-    const responsePayload: any = {
+    return res.status(200).json({
       success: true,
-      message: isEmailDelivered
-        ? `A 6-digit verification code has been dispatched to ${normalizedEmail}. It will expire in ${OTP_EXPIRY_MINUTES} minutes.`
-        : `Brevo SMTP pending IP authorization. Use the test verification code below or authorize IP 14.195.19.210 in Brevo.`,
+      message: `A 6-digit verification code has been sent directly to your email (${normalizedEmail}). Please check your inbox or spam folder.`,
       resetToken,
       email: normalizedEmail,
-      emailDelivered: isEmailDelivered,
-    };
-
-    if (!isEmailDelivered) {
-      responsePayload.emailError = emailResult.error;
-      // In development or when Brevo IP is pending authorization, supply devOtp for smooth workflow
-      responsePayload.devOtp = rawOtp;
-      if (isIpBlocked) {
-        responsePayload.ipNotice = '14.195.19.210';
-        responsePayload.authorizationUrl = 'https://app.brevo.com/security/authorised_ips';
-      }
-    }
-
-    return res.status(200).json(responsePayload);
+      emailDelivered: true,
+    });
   } catch (error: any) {
     console.error('[forgotPassword error]:', error);
     return res.status(500).json({

@@ -40,9 +40,6 @@ export const ForgotPasswordPage: React.FC = () => {
   // Tokens & Status
   const [resetToken, setResetToken] = useState('');
   const [verificationToken, setVerificationToken] = useState('');
-  const [devOtp, setDevOtp] = useState('');
-  const [ipNotice, setIpNotice] = useState('');
-  const [authUrl, setAuthUrl] = useState('');
   const [emailDelivered, setEmailDelivered] = useState(true);
 
   // UI States
@@ -97,9 +94,6 @@ export const ForgotPasswordPage: React.FC = () => {
         setResetToken(res.resetToken);
         setSuccessMsg(res.message);
         setEmailDelivered(res.emailDelivered !== false);
-        if (res.devOtp) setDevOtp(res.devOtp);
-        if (res.ipNotice) setIpNotice(res.ipNotice);
-        if (res.authorizationUrl) setAuthUrl(res.authorizationUrl);
 
         setCurrentStep('otp');
         setResendCountdown(60);
@@ -464,43 +458,16 @@ export const ForgotPasswordPage: React.FC = () => {
             {/* STEP 2: 6-Digit OTP Form */}
             {currentStep === 'otp' && (
               <form onSubmit={handleVerifyOtp} className="space-y-5">
-                {/* Visual Assistance Banner (If dev OTP or IP whitelist notice is active) */}
-                {devOtp && (
-                  <div className="p-3.5 sm:p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs space-y-2">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <span className="font-semibold flex items-center gap-1.5">
-                        <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                        <span>{emailDelivered ? 'Verification Code Ready' : 'Brevo IP Whitelist Notice'}</span>
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const digits = devOtp.split('').slice(0, 6);
-                          setOtp(digits);
-                          otpInputRefs.current[5]?.focus();
-                        }}
-                        className="px-3 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 font-mono text-xs font-bold text-amber-200 border border-amber-500/30 transition-all flex items-center gap-1.5"
-                      >
-                        <span>Auto-Fill:</span>
-                        <span className="tracking-widest">{devOtp}</span>
-                      </button>
-                    </div>
-                    {!emailDelivered && (
-                      <p className="text-[11px] text-amber-400/90 leading-relaxed">
-                        Brevo requires server IP <code className="bg-black/30 px-1 py-0.5 rounded font-mono font-bold text-white">{ipNotice || '14.195.19.210'}</code> to be authorized at{' '}
-                        <a
-                          href={authUrl || 'https://app.brevo.com/security/authorised_ips'}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="underline font-semibold text-white hover:text-amber-200"
-                        >
-                          brevo.com/security/authorised_ips
-                        </a>{' '}
-                        for live Gmail delivery. You can click <strong>Auto-Fill</strong> above to verify immediately.
-                      </p>
-                    )}
+                {/* Direct Gmail Delivery Instruction Card */}
+                <div className="p-3.5 sm:p-4 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-200 text-xs flex items-start gap-3">
+                  <Mail className="w-4 h-4 text-indigo-400 shrink-0 mt-0.5" />
+                  <div className="leading-relaxed">
+                    <p className="font-semibold text-white">Verification Code Dispatched to Gmail</p>
+                    <p className="text-gray-300 text-[11px] mt-0.5">
+                      We have sent your confidential 6-digit verification code to <span className="font-mono text-indigo-300 font-medium">{email}</span>. Please check your inbox or spam folder.
+                    </p>
                   </div>
-                )}
+                </div>
 
                 <div>
                   <div className="flex items-center justify-between mb-2.5">

@@ -149,7 +149,26 @@ export const sendMail = async (options: {
   text?: string;
   replyTo?: string;
 }): Promise<{ success: boolean; messageId?: string; error?: string; via?: string }> => {
-  // Strategy 1: Direct Gmail SMTP (Highest reliability for real Gmail inboxes)
+  // Strategy 1: Brevo REST API v3 (Fastest, zero port blocks, zero IP whitelisting restrictions)
+  if (isBrevoApiConfigured()) {
+    try {
+      const restResult = await sendBrevoTransactionalEmail({
+        to: [{ email: options.to }],
+        subject: options.subject,
+        htmlContent: options.html,
+        textContent: options.text,
+        replyTo: options.replyTo ? { email: options.replyTo, name: 'Reliable Info Tech' } : undefined,
+      });
+
+      const messageId = restResult?.messageId || `brevo_api_${Date.now()}`;
+      console.log(`[EmailService] Brevo REST API email dispatched to ${options.to} (MessageId: ${messageId})`);
+      return { success: true, messageId, via: 'brevo-rest-api' };
+    } catch (restErr: any) {
+      console.warn(`[EmailService] Brevo REST API failed for ${options.to}:`, restErr?.message);
+    }
+  }
+
+  // Strategy 2: Direct Gmail SMTP (if valid App Password is provided)
   if (isGmailConfigured()) {
     try {
       const fromEmail = GMAIL_USER || (SMTP_USER.includes('@gmail.com') ? SMTP_USER : SMTP_FROM_EMAIL);
@@ -169,7 +188,7 @@ export const sendMail = async (options: {
     }
   }
 
-  // Strategy 2: Attempt Brevo SMTP Relay
+  // Strategy 3: Attempt Brevo SMTP Relay
   if (isSmtpConfigured()) {
     try {
       const info = await mailTransporter.sendMail({
@@ -184,27 +203,8 @@ export const sendMail = async (options: {
       console.log(`[EmailService] Brevo SMTP email dispatched to ${options.to} (MessageId: ${info.messageId})`);
       return { success: true, messageId: info.messageId, via: 'brevo-smtp' };
     } catch (smtpErr: any) {
-      console.warn(`[EmailService] Brevo SMTP send failed (${smtpErr?.message}), trying Brevo REST API fallback...`);
-    }
-  }
-
-  // Strategy 3: Attempt Brevo REST API v3
-  if (isBrevoApiConfigured()) {
-    try {
-      const restResult = await sendBrevoTransactionalEmail({
-        to: [{ email: options.to }],
-        subject: options.subject,
-        htmlContent: options.html,
-        textContent: options.text,
-        replyTo: options.replyTo ? { email: options.replyTo, name: 'Client' } : undefined,
-      });
-
-      const messageId = restResult?.messageId || `brevo_api_${Date.now()}`;
-      console.log(`[EmailService] Brevo REST API email dispatched to ${options.to} (MessageId: ${messageId})`);
-      return { success: true, messageId, via: 'brevo-rest-api' };
-    } catch (restErr: any) {
-      console.warn(`[EmailService] Brevo REST API failed for ${options.to}:`, restErr?.message);
-      return { success: false, error: restErr?.message || 'Email delivery failed across all providers.' };
+      console.warn(`[EmailService] Brevo SMTP send failed (${smtpErr?.message})`);
+      return { success: false, error: smtpErr?.message || 'Email delivery failed.' };
     }
   }
 
