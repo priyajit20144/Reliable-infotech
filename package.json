@@ -14,8 +14,8 @@
     "clean:ports": "node scripts/clean-ports.cjs",
     "dev:server": "npm --prefix server run dev",
     "dev:client": "npm --prefix client run dev",
-    "build": "npm --prefix server run build && npm --prefix client run build",
-    "build:all": "npm --prefix server run build && npm --prefix client run build",
+    "build": "npm --prefix server install && npm --prefix server run build && npm --prefix client install && npm --prefix client run build",
+    "build:all": "npm --prefix server install && npm --prefix server run build && npm --prefix client install && npm --prefix client run build",
     "vercel-build": "npm --prefix server install && npm --prefix server run build && npm --prefix client install && npm --prefix client run build",
     "install:all": "npm install && npm --prefix client install && npm --prefix server install"
   },
@@ -37,6 +37,7 @@
   "devDependencies": {
     "@types/express": "^4.17.21",
     "@types/node": "^20.16.5",
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "typescript": "^5.5.4"
   }
 }
