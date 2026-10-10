@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useNotifications } from '../../context/NotificationContext';
+import { Avatar } from '../common/Avatar';
 
 interface SidebarProps {
   onCloseMobile?: () => void;
@@ -223,13 +224,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
         {/* User Card & Logout */}
         <div className="pt-2 border-t border-white/8 flex items-center justify-between px-2">
           <div className="flex items-center gap-2.5 overflow-hidden">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-500 to-indigo-500 flex items-center justify-center text-xs font-bold text-white shrink-0 overflow-hidden">
-              {user?.avatar ? (
-                <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
-              ) : (
-                user?.name?.charAt(0) || 'U'
-              )}
-            </div>
+            <Avatar
+              src={user?.avatar}
+              name={user?.name}
+              size="sm"
+            />
             <div className="truncate">
               <p className="text-xs font-medium text-white truncate">{user?.name || 'User'}</p>
               <p className="text-[10px] text-gray-400 truncate">{user?.role || 'CLIENT'}</p>

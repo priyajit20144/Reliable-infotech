@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useNotifications } from '../../context/NotificationContext';
+import { Avatar } from '../common/Avatar';
 
 export const PublicNavbar: React.FC = () => {
   const { user, logout, isTeamMember } = useAuth();
@@ -261,13 +262,12 @@ export const PublicNavbar: React.FC = () => {
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
                 className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 transition-colors focus:outline-none"
               >
-                <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-xs font-bold text-white overflow-hidden ring-1 ring-white/20">
-                  {user.avatar ? (
-                    <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
-                  ) : (
-                    <span>{user.name?.charAt(0) || 'U'}</span>
-                  )}
-                </div>
+                <Avatar
+                  src={user.avatar}
+                  name={user.name}
+                  size="xs"
+                  className="!w-7 !h-7 ring-1 ring-white/20"
+                />
                 <div className="text-left text-xs leading-none pr-1">
                   <span className="font-semibold text-white block truncate max-w-[90px]">
                     {user.name}
