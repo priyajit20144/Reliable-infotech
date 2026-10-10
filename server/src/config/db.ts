@@ -10,8 +10,11 @@ dotenv.config({ path: path.resolve(process.cwd(), 'server', '.env') });
 
 export let isConnectedToMongo = false;
 
+export const ATLAS_FALLBACK_URI =
+  'mongodb+srv://priyajitd218_db_user:2007@cluster0.hzldytn.mongodb.net/devcraft?retryWrites=true&w=majority&appName=Cluster0';
+
 export const formatMongoUri = (rawUri?: string): string => {
-  let uri = rawUri || 'mongodb://127.0.0.1:27017/devcraft';
+  let uri = rawUri || process.env.MONGODB_URI || ATLAS_FALLBACK_URI;
 
   // Automatically remove angle brackets if user included them in password (e.g. :<password>@ -> :password@)
   uri = uri.replace(/:(<)([^<>@]+)(>)@/, ':$2@');
@@ -35,13 +38,8 @@ export const connectDB = async () => {
     return;
   }
 
-  if (!process.env.MONGODB_URI && process.env.VERCEL) {
-    console.warn('[MongoDB] No MONGODB_URI configured in Vercel environment variables. Operating in fallback memory mode.');
-    isConnectedToMongo = false;
-    return;
-  }
-
-  const uri = formatMongoUri(process.env.MONGODB_URI);
+  const rawUri = process.env.MONGODB_URI || ATLAS_FALLBACK_URI;
+  const uri = formatMongoUri(rawUri);
 
   try {
     mongoose.set('strictQuery', false);

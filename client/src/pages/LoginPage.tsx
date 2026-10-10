@@ -13,8 +13,20 @@ import {
   Smartphone,
   Cloud,
   Info,
+  UserCheck,
+  X,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { Avatar } from '../components/common/Avatar';
+import { Badge } from '../components/common/Badge';
+
+interface SavedAccount {
+  id?: string;
+  name: string;
+  email: string;
+  role: string;
+  avatar?: string;
+}
 
 export const LoginPage: React.FC = () => {
   const { login, user } = useAuth();
@@ -39,6 +51,23 @@ export const LoginPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [googleNotice, setGoogleNotice] = useState(false);
+
+  // Saved Account State for instant 1-click continuation
+  const [savedAccount, setSavedAccount] = useState<SavedAccount | null>(() => {
+    try {
+      const raw = localStorage.getItem('reliable_saved_account');
+      if (raw) return JSON.parse(raw);
+    } catch {}
+    return null;
+  });
+  const [useDifferentAccount, setUseDifferentAccount] = useState(false);
+
+  // Auto-fill from savedAccount if available
+  useEffect(() => {
+    if (savedAccount && !useDifferentAccount) {
+      setEmail(savedAccount.email);
+    }
+  }, [savedAccount, useDifferentAccount]);
 
   // If already authenticated, redirect
   useEffect(() => {
@@ -333,30 +362,90 @@ export const LoginPage: React.FC = () => {
 
                 {/* Login Form */}
                 <form onSubmit={handleLogin} className="space-y-4" noValidate>
-                  {/* Email Field */}
-                  <div className="space-y-1.5">
-                    <label
-                      htmlFor="login-email"
-                      className="block text-xs font-semibold text-slate-300"
-                    >
-                      Email Address
-                    </label>
-                    <div className="relative rounded-xl group">
-                      <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#00D2FF] transition-colors">
-                        <Mail className="w-4 h-4" />
+                  {/* Saved Account Recognition Card */}
+                  {savedAccount && !useDifferentAccount ? (
+                    <div className="p-3.5 rounded-2xl bg-gradient-to-r from-blue-950/70 via-indigo-950/50 to-[#0A122E] border border-[#00D2FF]/30 space-y-2.5 shadow-lg">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] font-bold uppercase tracking-wider text-[#00D2FF] flex items-center gap-1.5">
+                          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                          Previous Active Account
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setUseDifferentAccount(true);
+                            setEmail('');
+                          }}
+                          className="text-[11px] text-slate-400 hover:text-white transition-colors underline-offset-2 hover:underline"
+                        >
+                          Switch Account
+                        </button>
                       </div>
-                      <input
-                        id="login-email"
-                        type="email"
-                        required
-                        autoComplete="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="you@example.com"
-                        className="w-full bg-[#070E22]/90 hover:bg-[#0B1536]/90 focus:bg-[#070E22] text-white placeholder-slate-500 text-sm rounded-xl border border-blue-950/80 hover:border-cyan-800/60 focus:border-[#00D2FF] focus:ring-2 focus:ring-[#00D2FF]/20 pl-10 pr-4 py-3.5 transition-all duration-200 outline-none"
-                      />
+
+                      <div className="flex items-center gap-3">
+                        <Avatar
+                          src={savedAccount.avatar}
+                          name={savedAccount.name}
+                          size="lg"
+                          glow
+                          border
+                          ringColor="ring-[#00D2FF]/40"
+                        />
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2">
+                            <h3 className="text-sm font-bold text-white truncate">
+                              {savedAccount.name}
+                            </h3>
+                            <Badge variant="purple" size="sm">
+                              {savedAccount.role}
+                            </Badge>
+                          </div>
+                          <p className="text-xs text-slate-300 font-mono truncate">
+                            {savedAccount.email}
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  ) : (
+                    /* Email Field */
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <label
+                          htmlFor="login-email"
+                          className="block text-xs font-semibold text-slate-300"
+                        >
+                          Email Address
+                        </label>
+                        {savedAccount && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setUseDifferentAccount(false);
+                              setEmail(savedAccount.email);
+                            }}
+                            className="text-[11px] text-[#00D2FF] hover:underline font-medium"
+                          >
+                            Use {savedAccount.name.split(' ')[0]}'s Account
+                          </button>
+                        )}
+                      </div>
+                      <div className="relative rounded-xl group">
+                        <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#00D2FF] transition-colors">
+                          <Mail className="w-4 h-4" />
+                        </div>
+                        <input
+                          id="login-email"
+                          type="email"
+                          required
+                          autoComplete="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          placeholder="you@example.com"
+                          className="w-full bg-[#070E22]/90 hover:bg-[#0B1536]/90 focus:bg-[#070E22] text-white placeholder-slate-500 text-sm rounded-xl border border-blue-950/80 hover:border-cyan-800/60 focus:border-[#00D2FF] focus:ring-2 focus:ring-[#00D2FF]/20 pl-10 pr-4 py-3.5 transition-all duration-200 outline-none"
+                        />
+                      </div>
+                    </div>
+                  )}
 
                   {/* Password Field */}
                   <div className="space-y-1.5">

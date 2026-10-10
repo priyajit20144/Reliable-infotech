@@ -49,12 +49,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     fetchMe();
   }, []);
 
+  const saveAccountProfile = (accountUser: User) => {
+    try {
+      localStorage.setItem(
+        'reliable_saved_account',
+        JSON.stringify({
+          id: accountUser.id,
+          name: accountUser.name,
+          email: accountUser.email,
+          role: accountUser.role,
+          avatar: accountUser.avatar || '',
+          lastActive: new Date().toISOString(),
+        })
+      );
+      localStorage.setItem('reliable_remembered_email', accountUser.email);
+    } catch {}
+  };
+
   const login = async (data: { email: string; password: string }): Promise<User> => {
     const res = await authService.login(data);
     if (res.success && res.token && res.user) {
       localStorage.setItem('devcraft_token', res.token);
       setToken(res.token);
       setUser(res.user);
+      saveAccountProfile(res.user);
       return res.user;
     }
     throw new Error(res.message || 'Login failed. Please check your credentials.');
@@ -71,6 +89,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       localStorage.setItem('devcraft_token', res.token);
       setToken(res.token);
       setUser(res.user);
+      saveAccountProfile(res.user);
       return res.user;
     }
     throw new Error(res.message || 'Registration failed.');
@@ -90,6 +109,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const updateUser = (updatedUser: User) => {
     setUser(updatedUser);
+    saveAccountProfile(updatedUser);
   };
 
   const isAdmin = user?.role === 'ADMIN';

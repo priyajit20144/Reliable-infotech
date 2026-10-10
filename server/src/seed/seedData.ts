@@ -48,6 +48,28 @@ export const store: SeedDataStore = {
   deletedProjectIds: [],
   users: [
     {
+      _id: 'usr_1791338343006',
+      name: 'Priyajit Das',
+      email: 'priyajitd80@gmail.com',
+      passwordHash: adminHash,
+      phone: '8768508264',
+      avatar: '',
+      role: 'ADMIN',
+      isActive: true,
+      createdAt: new Date('2026-10-07T01:59:03.008Z'),
+    },
+    {
+      _id: 'usr_1791410113609',
+      name: 'Priyajit Das',
+      email: 'priyajitd218@gmail.com',
+      passwordHash: adminHash,
+      phone: '+1 (555) 019-2834',
+      avatar: '',
+      role: 'ADMIN',
+      isActive: true,
+      createdAt: new Date('2026-10-07T01:59:03.008Z'),
+    },
+    {
       _id: 'usr_admin_1',
       name: 'Alex Rivera',
       email: 'admin@reliableinfotech.io',
