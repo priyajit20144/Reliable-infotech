@@ -368,38 +368,38 @@ export const Footer: React.FC = () => {
         {/* ========================================================================= */}
         {/* 2. EXCLUSIVE ANIMATED DEVELOPER SHOWCASE & SIGNATURE SECTION              */}
         {/* ========================================================================= */}
-        <div className="my-10 relative">
-          <div className="rounded-3xl bg-gradient-to-br from-[#0B1120]/95 via-[#0E172E]/90 to-[#0A0F1D]/95 border border-indigo-500/25 p-6 sm:p-8 backdrop-blur-xl shadow-2xl relative overflow-hidden">
+        <div className="my-6 sm:my-7 relative">
+          <div className="rounded-2xl bg-gradient-to-br from-[#0B1120]/95 via-[#0E172E]/90 to-[#0A0F1D]/95 border border-indigo-500/20 p-4 sm:p-5 lg:p-5.5 backdrop-blur-xl shadow-xl relative overflow-hidden">
             
             {/* Ambient Multi-Hue Lighting */}
-            <div className="absolute -top-24 -left-24 w-72 h-72 bg-cyan-500/10 rounded-full blur-[100px] pointer-events-none" />
-            <div className="absolute -bottom-24 -right-24 w-72 h-72 bg-purple-500/10 rounded-full blur-[100px] pointer-events-none" />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-48 bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none" />
+            <div className="absolute -top-20 -left-20 w-56 h-56 bg-cyan-500/10 rounded-full blur-[90px] pointer-events-none" />
+            <div className="absolute -bottom-20 -right-20 w-56 h-56 bg-purple-500/10 rounded-full blur-[90px] pointer-events-none" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-36 bg-indigo-500/5 rounded-full blur-[100px] pointer-events-none" />
 
             {/* Showcase Header */}
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 border-b border-white/8 relative z-10 text-left">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 sm:pb-3.5 border-b border-white/8 relative z-10 text-left">
               <div>
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.04] border border-white/10 text-xs font-semibold text-gray-300">
-                  <Sparkles className="w-3.5 h-3.5 text-cyan-400 animate-spin-slow" />
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/[0.04] border border-white/10 text-[10px] font-semibold text-gray-300">
+                  <Sparkles className="w-3 h-3 text-cyan-400 animate-spin-slow" />
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-300 to-purple-400 font-bold uppercase tracking-wider">
                     Core Engineering Leadership
                   </span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse ml-1" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse ml-0.5" />
                 </div>
-                <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight mt-2 flex items-center gap-2 flex-wrap">
+                <h3 className="text-base sm:text-lg font-bold text-white tracking-tight mt-1 flex items-center gap-1.5 flex-wrap">
                   <span>Architected &amp; Engineered by</span>
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-400 to-purple-400">
                     Senior Full-Stack Specialists
                   </span>
                 </h3>
-                <p className="text-xs sm:text-sm text-gray-400 mt-1 max-w-2xl font-normal">
+                <p className="text-[11px] sm:text-xs text-gray-400 mt-0.5 max-w-xl font-normal leading-relaxed">
                   Handcrafted with performance, security, and responsive elegance by the core creator trio. Click any developer to view technical dossier.
                 </p>
               </div>
 
               {/* Live Terminal / Git Build Badge */}
-              <div className="flex items-center gap-2 bg-[#050811]/90 border border-white/10 rounded-xl px-3.5 py-2 text-xs font-mono text-gray-300 shadow-inner shrink-0">
-                <Terminal className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+              <div className="flex items-center gap-2 bg-[#050811]/90 border border-white/10 rounded-lg px-2.5 py-1.5 text-[11px] font-mono text-gray-300 shadow-inner shrink-0 self-start sm:self-center">
+                <Terminal className="w-3 h-3 text-cyan-400 shrink-0" />
                 <span className="text-gray-400">git:</span>
                 <span className="text-emerald-400 font-semibold">prod/v2.4.0</span>
                 <span className="text-gray-600">|</span>
@@ -411,21 +411,21 @@ export const Footer: React.FC = () => {
             </div>
 
             {/* 3 Developer Cards Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 pt-6 relative z-10">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 pt-3.5 sm:pt-4 relative z-10">
               {CREATORS.map((creator) => (
                 <div
                   key={creator.id}
                   onClick={() => setSelectedCreator(creator)}
-                  className={`group relative rounded-2xl bg-[#090E1A]/80 hover:bg-[#0E1528]/95 border border-white/8 ${creator.accent.border} ${creator.accent.glow} p-5 transition-all duration-300 hover:-translate-y-2 cursor-pointer text-left shadow-lg flex flex-col justify-between`}
+                  className={`group relative rounded-xl sm:rounded-2xl bg-[#090E1A]/85 hover:bg-[#0E1528]/95 border border-white/8 ${creator.accent.border} ${creator.accent.glow} p-3.5 sm:p-4 transition-all duration-300 hover:-translate-y-1 cursor-pointer text-left shadow-md flex flex-col justify-between`}
                 >
                   {/* Subtle Top Card Gradient Aura */}
-                  <div className={`absolute inset-0 rounded-2xl bg-gradient-to-b ${creator.accent.gradient} opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none`} />
+                  <div className={`absolute inset-0 rounded-xl sm:rounded-2xl bg-gradient-to-b ${creator.accent.gradient} opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none`} />
 
-                  <div className="relative z-10 space-y-4">
+                  <div className="relative z-10 space-y-2.5">
                     {/* Top Row: Avatar & Status + Micro Badge */}
-                    <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center justify-between gap-2">
                       <div className="relative">
-                        <div className={`w-14 h-14 rounded-2xl overflow-hidden ring-2 ${creator.accent.ring} bg-slate-800 shadow-md group-hover:scale-105 transition-transform duration-300`}>
+                        <div className={`w-10 h-10 rounded-xl overflow-hidden ring-1.5 ${creator.accent.ring} bg-slate-800 shadow-sm group-hover:scale-105 transition-transform duration-300`}>
                           <img
                             src={creator.avatar}
                             alt={creator.name}
@@ -435,43 +435,43 @@ export const Footer: React.FC = () => {
                               const target = e.target as HTMLImageElement;
                               target.style.display = 'none';
                               if (target.parentElement) {
-                                target.parentElement.innerHTML = `<div class="w-full h-full flex items-center justify-center font-bold text-base text-white bg-indigo-600/50">${creator.initials}</div>`;
+                                target.parentElement.innerHTML = `<div class="w-full h-full flex items-center justify-center font-bold text-xs text-white bg-indigo-600/50">${creator.initials}</div>`;
                               }
                             }}
                           />
                         </div>
                         {/* Active Beacon Dot */}
-                        <span className="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#090E1A] ring-1 ring-white/10">
-                          <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+                        <span className="absolute -bottom-0.5 -right-0.5 flex h-3 w-3 items-center justify-center rounded-full bg-[#090E1A] ring-1 ring-white/10">
+                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_6px_rgba(52,211,153,0.8)]" />
                         </span>
                       </div>
 
                       {/* Role Pill */}
-                      <span className={`text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded-full border ${creator.accent.badgeBg}`}>
+                      <span className={`text-[9px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full border ${creator.accent.badgeBg}`}>
                         {creator.badge}
                       </span>
                     </div>
 
                     {/* Developer Name & Role */}
                     <div>
-                      <h4 className={`text-base font-extrabold text-white group-hover:${creator.accent.text} transition-colors flex items-center gap-1.5`}>
+                      <h4 className={`text-sm font-bold text-white group-hover:${creator.accent.text} transition-colors flex items-center gap-1.5`}>
                         <span>{creator.name}</span>
                         <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
                       </h4>
-                      <p className="text-xs font-medium text-gray-300 mt-0.5">
+                      <p className="text-[11px] font-medium text-gray-300 mt-0.5">
                         {creator.role}
                       </p>
-                      <p className="text-[11px] text-gray-400 leading-relaxed mt-2 line-clamp-2">
+                      <p className="text-[11px] text-gray-400 leading-relaxed mt-1.5 line-clamp-2">
                         {creator.shortBio}
                       </p>
                     </div>
 
                     {/* Tech Badges */}
-                    <div className="flex flex-wrap gap-1.5 pt-1">
+                    <div className="flex flex-wrap gap-1 pt-0.5">
                       {creator.specialties.map((spec, sIdx) => (
                         <span
                           key={sIdx}
-                          className="text-[10px] px-2 py-0.5 rounded-md bg-white/[0.03] text-gray-300 border border-white/5 font-mono"
+                          className="text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded-md bg-white/[0.03] text-gray-300 border border-white/5 font-mono"
                         >
                           {spec}
                         </span>
@@ -481,44 +481,44 @@ export const Footer: React.FC = () => {
 
                   {/* Card Footer: Interactive Links & View Profile CTA */}
                   <div
-                    className="relative z-10 pt-4 mt-4 border-t border-white/5 flex items-center justify-between gap-2"
+                    className="relative z-10 pt-2.5 mt-2.5 border-t border-white/5 flex items-center justify-between gap-2"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex items-center gap-1">
                       <a
                         href={creator.github}
                         target="_blank"
                         rel="noreferrer"
-                        className="w-7 h-7 rounded-lg bg-white/5 hover:bg-white/15 flex items-center justify-center text-gray-400 hover:text-white transition-all text-xs"
+                        className="w-6 h-6 rounded-md bg-white/5 hover:bg-white/15 flex items-center justify-center text-gray-400 hover:text-white transition-all text-xs"
                         title="GitHub Profile"
                       >
-                        <Github className="w-3.5 h-3.5" />
+                        <Github className="w-3 h-3" />
                       </a>
                       <a
                         href={creator.linkedin}
                         target="_blank"
                         rel="noreferrer"
-                        className="w-7 h-7 rounded-lg bg-white/5 hover:bg-white/15 flex items-center justify-center text-gray-400 hover:text-white transition-all text-xs"
+                        className="w-6 h-6 rounded-md bg-white/5 hover:bg-white/15 flex items-center justify-center text-gray-400 hover:text-white transition-all text-xs"
                         title="LinkedIn Profile"
                       >
-                        <Linkedin className="w-3.5 h-3.5" />
+                        <Linkedin className="w-3 h-3" />
                       </a>
                       <a
                         href={`mailto:${creator.email}`}
-                        className="w-7 h-7 rounded-lg bg-white/5 hover:bg-white/15 flex items-center justify-center text-gray-400 hover:text-white transition-all text-xs"
+                        className="w-6 h-6 rounded-md bg-white/5 hover:bg-white/15 flex items-center justify-center text-gray-400 hover:text-white transition-all text-xs"
                         title={`Email ${creator.name}`}
                       >
-                        <Mail className="w-3.5 h-3.5" />
+                        <Mail className="w-3 h-3" />
                       </a>
                     </div>
 
                     <button
                       type="button"
                       onClick={() => setSelectedCreator(creator)}
-                      className={`text-[11px] font-semibold text-gray-400 group-hover:${creator.accent.text} flex items-center gap-1 transition-colors`}
+                      className={`text-[10px] sm:text-[11px] font-semibold text-gray-400 group-hover:${creator.accent.text} flex items-center gap-1 transition-colors`}
                     >
                       <span>Spotlight</span>
-                      <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                      <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
                     </button>
                   </div>
                 </div>
@@ -526,22 +526,22 @@ export const Footer: React.FC = () => {
             </div>
 
             {/* Bottom Interactive Command Bar */}
-            <div className="mt-6 pt-4 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-gray-400 font-mono relative z-10">
-              <div className="flex items-center gap-2 overflow-x-auto max-w-full">
+            <div className="mt-3.5 pt-2.5 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-2 text-[10px] sm:text-[11px] text-gray-400 font-mono relative z-10">
+              <div className="flex items-center gap-1.5 overflow-x-auto max-w-full">
                 <span className="text-cyan-400 font-bold">$</span>
-                <span className="text-gray-300">
+                <span className="text-gray-300 truncate">
                   reliable-infotech --authors &quot;Sahil Sekh, Diganta Chakraborty, Priyajit Das&quot;
                 </span>
-                <span className="text-emerald-400 font-bold">[100% PRODUCTION READY]</span>
+                <span className="text-emerald-400 font-bold shrink-0">[100% PRODUCTION READY]</span>
               </div>
-              <div className="flex items-center gap-3 shrink-0">
+              <div className="flex items-center gap-2.5 shrink-0">
                 <span className="flex items-center gap-1 text-gray-400">
-                  <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
+                  <ShieldCheck className="w-3 h-3 text-cyan-400" />
                   Enterprise Grade
                 </span>
                 <span className="text-gray-600">•</span>
                 <span className="flex items-center gap-1 text-gray-400">
-                  <Zap className="w-3.5 h-3.5 text-amber-400" />
+                  <Zap className="w-3 h-3 text-amber-400" />
                   Ultra Fast Vite Engine
                 </span>
               </div>
