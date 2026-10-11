@@ -62,25 +62,31 @@ export const AdminTeamView: React.FC = () => {
   const [newMemberAvatar, setNewMemberAvatar] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Persistent team members from localStorage (strictly real, non-demo members)
+  // Persistent team members from localStorage (strictly real, manually added members)
   const [members, setMembers] = useState<TeamMember[]>(() => {
     try {
-      const saved = localStorage.getItem('reliable_admin_team_members');
+      localStorage.removeItem('reliable_admin_team_members');
+      localStorage.removeItem('devcraft_team_members');
+      const saved = localStorage.getItem('reliable_foundation_team_members');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) {
-          const demoIds = ['tm_1', 'tm_2', 'tm_3', 'tm_4', 'tm_5', 'tm_6'];
-          const demoEmails = [
-            'team@reliableinfotech.io',
-            'rahul.dev@reliableinfotech.io',
-            'priya.backend@reliableinfotech.io',
-            'amit.design@reliableinfotech.io',
-            'neha.fullstack@reliableinfotech.io',
+          const fakeNames = [
+            'sarah chen',
+            'rahul sharma',
+            'priya mehta',
+            'amit verma',
+            'neha singh',
+            'alex rivera',
           ];
-          const validReal = parsed.filter(
-            (m: any) => !demoIds.includes(m.id) && !demoEmails.includes(m.email)
+          const demoIds = ['tm_1', 'tm_2', 'tm_3', 'tm_4', 'tm_5', 'tm_6'];
+          return parsed.filter(
+            (m: any) =>
+              m &&
+              m.name &&
+              !demoIds.includes(m.id) &&
+              !fakeNames.includes(m.name.toLowerCase().trim())
           );
-          return validReal;
         }
       }
     } catch (e) {}
@@ -89,9 +95,33 @@ export const AdminTeamView: React.FC = () => {
 
   useEffect(() => {
     try {
-      localStorage.setItem('reliable_admin_team_members', JSON.stringify(members));
+      localStorage.removeItem('reliable_admin_team_members');
+      localStorage.removeItem('devcraft_team_members');
+      localStorage.setItem('reliable_foundation_team_members', JSON.stringify(members));
     } catch (e) {}
   }, [members]);
+
+  useEffect(() => {
+    // Sanitize state on mount to ensure no ghost demo members remain
+    setMembers((prev) => {
+      const demoIds = ['tm_1', 'tm_2', 'tm_3', 'tm_4', 'tm_5', 'tm_6'];
+      const fakeNames = [
+        'sarah chen',
+        'rahul sharma',
+        'priya mehta',
+        'amit verma',
+        'neha singh',
+        'alex rivera',
+      ];
+      return prev.filter(
+        (m) =>
+          m &&
+          m.name &&
+          !demoIds.includes(m.id) &&
+          !fakeNames.includes(m.name.toLowerCase().trim())
+      );
+    });
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {

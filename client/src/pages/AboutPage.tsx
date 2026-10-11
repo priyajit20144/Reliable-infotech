@@ -44,12 +44,28 @@ export const AboutPage: React.FC = () => {
 
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>(() => {
     try {
-      const saved = localStorage.getItem('reliable_admin_team_members');
+      localStorage.removeItem('reliable_admin_team_members');
+      localStorage.removeItem('devcraft_team_members');
+      const saved = localStorage.getItem('reliable_foundation_team_members');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
+          const fakeNames = [
+            'sarah chen',
+            'rahul sharma',
+            'priya mehta',
+            'amit verma',
+            'neha singh',
+            'alex rivera',
+          ];
           const demoIds = ['tm_1', 'tm_2', 'tm_3', 'tm_4', 'tm_5', 'tm_6'];
-          const valid = parsed.filter((m: any) => !demoIds.includes(m.id));
+          const valid = parsed.filter(
+            (m: any) =>
+              m &&
+              m.name &&
+              !demoIds.includes(m.id) &&
+              !fakeNames.includes(m.name.toLowerCase().trim())
+          );
           if (valid.length > 0) {
             return valid.map((m: any) => ({
               id: m.id,
