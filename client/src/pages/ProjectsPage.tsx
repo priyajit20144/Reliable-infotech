@@ -25,6 +25,7 @@ import {
   Palette,
   Cpu,
   TrendingUp,
+  FolderGit2,
 } from 'lucide-react';
 import { PublicNavbar } from '../components/landing/PublicNavbar';
 import { Footer } from '../components/layout/Footer';
@@ -33,6 +34,7 @@ import { Button } from '../components/common/Button';
 import { projectService } from '../services/projectService';
 import { Project } from '../types';
 import { CatalogFilterSidebar } from '../components/projects/CatalogFilterSidebar';
+import { useAuth } from '../context/AuthContext';
 
 interface CatalogProject {
   id: string;
@@ -54,198 +56,9 @@ interface CatalogProject {
 }
 
 export const ProjectsPage: React.FC = () => {
-  // Pre-populated catalog matching the reference image
-  const initialProjects: CatalogProject[] = [
-    {
-      id: 'proj_management',
-      title: 'Project Management System',
-      category: 'Web Application',
-      categoryBadge: 'Web Application',
-      badgeColor: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30',
-      isFeatured: true,
-      projectType: 'Featured',
-      description:
-        'A complete project management solution with tasks, team collaboration and real-time updates.',
-      technologies: ['React', 'Node.js', 'MongoDB', 'Tailwind'],
-      image:
-        'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80',
-      features: [
-        'Real-time WebSocket Kanban boards',
-        'Multi-member role permissions',
-        'Sprint milestone burndown charts',
-      ],
-      rating: 4.9,
-      likesCount: 38,
-    },
-    {
-      id: 'online_store',
-      title: 'Online Store Platform',
-      category: 'E-Commerce',
-      categoryBadge: 'E-Commerce',
-      badgeColor: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
-      isFeatured: true,
-      projectType: 'Featured',
-      description:
-        'A modern e-commerce platform with secure payments, inventory management and admin panel.',
-      technologies: ['Next.js', 'Node.js', 'MongoDB', 'Stripe'],
-      image:
-        'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80',
-      features: [
-        'Stripe Checkout & localized currencies',
-        'Instant stock reservation lock',
-        'Live order fulfillment telemetry',
-      ],
-      rating: 5.0,
-      likesCount: 52,
-    },
-    {
-      id: 'fitness_tracking',
-      title: 'Fitness Tracking App',
-      category: 'Mobile App',
-      categoryBadge: 'Mobile App',
-      badgeColor: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
-      isFeatured: false,
-      projectType: 'Recent',
-      description:
-        'A feature-rich fitness app with workout plans, progress tracking and health analytics.',
-      technologies: ['React Native', 'Firebase', 'Expo'],
-      image:
-        'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=800&q=80',
-      features: [
-        'Live biometric data telemetry',
-        'Automated workout scheduler',
-        'Offline caching with cloud sync',
-      ],
-      rating: 4.8,
-      likesCount: 41,
-    },
-    {
-      id: 'travel_booking',
-      title: 'Travel Booking Website',
-      category: 'Website Development',
-      categoryBadge: 'Website',
-      badgeColor: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
-      isFeatured: false,
-      projectType: 'Popular',
-      description:
-        'A responsive travel booking platform with search, booking and review system.',
-      technologies: ['React', 'Node.js', 'MongoDB', 'Tailwind'],
-      image:
-        'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=800&q=80',
-      features: [
-        'Interactive map destination finder',
-        'Real-time hotel availability query',
-        'Automated PDF invoice generation',
-      ],
-      rating: 4.7,
-      likesCount: 29,
-    },
-    {
-      id: 'analytics_dashboard',
-      title: 'Business Analytics Dashboard',
-      category: 'Web Application',
-      categoryBadge: 'SaaS Platform',
-      badgeColor: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30',
-      isFeatured: false,
-      projectType: 'Popular',
-      description:
-        'Gain insights with powerful analytics and real-time data visualization.',
-      technologies: ['React', 'Node.js', 'Express', 'Chart.js'],
-      image:
-        'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80',
-      features: [
-        'Multi-tenant telemetry streaming',
-        'Exportable CSV and PDF reports',
-        'Role-based access matrix',
-      ],
-      rating: 4.9,
-      likesCount: 64,
-    },
-    {
-      id: 'food_delivery',
-      title: 'Food Delivery App',
-      category: 'Mobile App',
-      categoryBadge: 'Food & Restaurant',
-      badgeColor: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
-      isFeatured: false,
-      projectType: 'Recent',
-      description:
-        'A complete food delivery solution with live tracking and multiple payment options.',
-      technologies: ['React Native', 'Firebase', 'Stripe'],
-      image:
-        'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80',
-      features: [
-        'Driver GPS tracking on interactive map',
-        'Instant kitchen order webhook',
-        'One-click tip & review system',
-      ],
-      rating: 4.8,
-      likesCount: 33,
-    },
-    {
-      id: 'creative_portfolio',
-      title: 'Creative Portfolio',
-      category: 'Website Development',
-      categoryBadge: 'Personal Website',
-      badgeColor: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
-      isFeatured: false,
-      projectType: 'Popular',
-      description:
-        'A modern portfolio website for creative professionals and freelancers.',
-      technologies: ['Next.js', 'Tailwind', 'Framer'],
-      image:
-        'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80',
-      features: [
-        '60fps WebGL transition shaders',
-        'Interactive light/dark theme switch',
-        'Contact form with anti-spam protection',
-      ],
-      rating: 4.9,
-      likesCount: 45,
-    },
-    {
-      id: 'hr_management',
-      title: 'HR Management System',
-      category: 'Web Application',
-      categoryBadge: 'Web Application',
-      badgeColor: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
-      isFeatured: false,
-      projectType: 'Recent',
-      description:
-        'Streamline your HR processes with employee management and attendance tracking.',
-      technologies: ['React', 'Node.js', 'MongoDB', 'Material UI'],
-      image:
-        'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80',
-      features: [
-        'Automated leave approval pipelines',
-        'Timesheet and biometric integration',
-        'Employee performance evaluations',
-      ],
-      rating: 4.7,
-      likesCount: 27,
-    },
-    {
-      id: 'real_estate',
-      title: 'Real Estate Platform',
-      category: 'Website Development',
-      categoryBadge: 'Website',
-      badgeColor: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
-      isFeatured: false,
-      projectType: 'Recent',
-      description:
-        'Find your dream home with our modern real estate listing platform.',
-      technologies: ['React', 'Node.js', 'MongoDB', 'Tailwind'],
-      image:
-        'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
-      features: [
-        'Virtual 3D property walkthroughs',
-        'Mortgage calculator widget',
-        'Direct realtor messaging portal',
-      ],
-      rating: 4.8,
-      likesCount: 39,
-    },
-  ];
+  const { user } = useAuth();
+  // Clean showcase portfolio (dynamically fetched from database)
+  const initialProjects: CatalogProject[] = [];
 
   // State Management
   const [searchQuery, setSearchQuery] = useState('');
@@ -319,34 +132,32 @@ export const ProjectsPage: React.FC = () => {
 
   const currentCatalog = isLiveLoaded ? liveProjects : initialProjects;
 
-  // Categories config matching reference image sidebar
-  const categoriesList = [
-    { label: 'All Projects', count: 50, icon: Layers },
-    { label: 'Website Development', count: 18, icon: Monitor },
-    { label: 'E-Commerce', count: 12, icon: ShoppingCart },
-    { label: 'Web Application', count: 8, icon: Code2 },
-    { label: 'UI/UX Design', count: 6, icon: Palette },
-    { label: 'Mobile App', count: 4, icon: Smartphone },
-    { label: 'Custom Software', count: 2, icon: Cpu },
-  ];
+  // Categories config dynamically derived from live database catalog
+  const categoriesList = useMemo(() => [
+    { label: 'All Projects', count: currentCatalog.length, icon: Layers },
+    { label: 'Website Development', count: currentCatalog.filter(p => (p.category || '').toLowerCase().includes('website')).length, icon: Monitor },
+    { label: 'E-Commerce', count: currentCatalog.filter(p => (p.category || '').toLowerCase().includes('commerce')).length, icon: ShoppingCart },
+    { label: 'Web Application', count: currentCatalog.filter(p => (p.category || '').toLowerCase().includes('application')).length, icon: Code2 },
+    { label: 'UI/UX Design', count: currentCatalog.filter(p => (p.category || '').toLowerCase().includes('design') || (p.category || '').toLowerCase().includes('ui')).length, icon: Palette },
+    { label: 'Mobile App', count: currentCatalog.filter(p => (p.category || '').toLowerCase().includes('mobile')).length, icon: Smartphone },
+    { label: 'Custom Software', count: currentCatalog.filter(p => (p.category || '').toLowerCase().includes('software') || (p.category || '').toLowerCase().includes('cloud')).length, icon: Cpu },
+  ], [currentCatalog]);
 
-  // Tech items config matching reference image
-  const techOptions = [
-    { name: 'React', count: 32 },
-    { name: 'Node.js', count: 28 },
-    { name: 'Next.js', count: 18 },
-    { name: 'Tailwind CSS', count: 24 },
-    { name: 'MongoDB', count: 16 },
-    { name: 'Firebase', count: 8 },
-    { name: 'Express.js', count: 12 },
-  ];
+  // Tech items config dynamically derived
+  const techOptions = useMemo(() => {
+    const defaultTechs = ['React', 'Node.js', 'Next.js', 'Tailwind CSS', 'MongoDB', 'Express.js', 'TypeScript'];
+    return defaultTechs.map(name => ({
+      name,
+      count: currentCatalog.filter(p => p.technologies?.some(t => t.toLowerCase() === name.toLowerCase())).length,
+    }));
+  }, [currentCatalog]);
 
-  // Project Type config
-  const typeOptions = [
-    { name: 'Featured', count: 10 },
-    { name: 'Popular', count: 20 },
-    { name: 'Recent', count: 30 },
-  ];
+  // Project Type config dynamically derived
+  const typeOptions = useMemo(() => [
+    { name: 'Featured', count: currentCatalog.filter(p => p.isFeatured).length },
+    { name: 'Popular', count: currentCatalog.filter(p => p.projectType === 'Popular').length },
+    { name: 'Recent', count: currentCatalog.filter(p => p.projectType === 'Recent').length },
+  ], [currentCatalog]);
 
   // Handle tech single option toggle
   const toggleTech = (tech: string) => {
@@ -808,7 +619,7 @@ export const ProjectsPage: React.FC = () => {
             {/* Showing Count Banner */}
             <div className="flex items-center justify-between text-xs text-gray-400 px-1">
               <span>
-                Showing <strong>{filteredProjects.length}</strong> of 50 projects
+                Showing <strong>{filteredProjects.length}</strong> of {currentCatalog.length} projects
               </span>
               {selectedCategory !== 'All Projects' && (
                 <span className="text-indigo-400 font-medium">
@@ -819,14 +630,50 @@ export const ProjectsPage: React.FC = () => {
 
             {/* Empty Search / Filter Feedback */}
             {filteredProjects.length === 0 ? (
-              <div className="rounded-2xl bg-[#0F172A]/70 border border-white/10 p-12 text-center space-y-3">
-                <p className="text-base font-bold text-white">No projects found</p>
-                <p className="text-xs text-gray-400 max-w-sm mx-auto">
-                  We could not find any projects matching your current filter criteria.
-                </p>
-                <Button variant="secondary" size="sm" onClick={handleClearFilters}>
-                  Reset All Filters
-                </Button>
+              <div className="rounded-2xl bg-[#0F172A]/70 border border-white/10 p-10 text-center space-y-4 max-w-lg mx-auto my-6">
+                <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center mx-auto mb-2">
+                  <FolderGit2 className="w-7 h-7" />
+                </div>
+                {currentCatalog.length === 0 ? (
+                  <>
+                    <h3 className="text-lg font-bold text-white">No Showcase Projects Published Yet</h3>
+                    <p className="text-xs text-gray-400 leading-relaxed max-w-md mx-auto">
+                      {user?.role === 'ADMIN'
+                        ? 'The live showcase catalog is currently empty. As an administrator, you can add and publish workable, valid projects directly from the Admin Dashboard.'
+                        : 'Our engineering team is actively crafting and publishing verified showcase systems. Check back soon or submit a custom project request.'}
+                    </p>
+                    <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+                      {user?.role === 'ADMIN' ? (
+                        <Link to="/admin">
+                          <Button variant="primary" size="sm" icon={<Sparkles className="w-4 h-4" />}>
+                            Go to Admin Dashboard
+                          </Button>
+                        </Link>
+                      ) : (
+                        <Link to="/request">
+                          <Button variant="primary" size="sm" icon={<ArrowRight className="w-4 h-4" />}>
+                            Request Custom Build
+                          </Button>
+                        </Link>
+                      )}
+                      <Link to="/contact">
+                        <Button variant="secondary" size="sm">
+                          Contact Engineering Team
+                        </Button>
+                      </Link>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <h3 className="text-base font-bold text-white">No Projects Match Your Filter</h3>
+                    <p className="text-xs text-gray-400 max-w-sm mx-auto">
+                      We could not find any projects matching your current filter criteria.
+                    </p>
+                    <Button variant="secondary" size="sm" onClick={handleClearFilters}>
+                      Reset All Filters
+                    </Button>
+                  </>
+                )}
               </div>
             ) : viewMode === 'grid' ? (
               /* ========================================================= */
