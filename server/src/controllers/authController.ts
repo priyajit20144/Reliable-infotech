@@ -159,7 +159,10 @@ export const login = async (req: Request, res: Response) => {
       });
     }
 
-    const normalizedEmail = String(email).toLowerCase().trim();
+    let normalizedEmail = String(email).toLowerCase().trim();
+    if (normalizedEmail.endsWith('@gmail')) {
+      normalizedEmail = normalizedEmail + '.com';
+    }
 
     let user: any = null;
     const alternateEmail = normalizedEmail.includes('@reliableinfotech.io')

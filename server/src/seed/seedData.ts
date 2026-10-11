@@ -39,7 +39,7 @@ const getPersistFilePath = (forWriting = false): string => {
 };
 
 const salt = bcrypt.genSaltSync(10);
-const adminHash = bcrypt.hashSync('Admin@123456', salt);
+const adminHash = bcrypt.hashSync('Pass@1234', salt);
 const clientHash = bcrypt.hashSync('Client@123456', salt);
 const teamHash = bcrypt.hashSync('Team@123456', salt);
 
@@ -62,10 +62,10 @@ export const store: SeedDataStore = {
       _id: 'usr_1791410113609',
       name: 'Priyajit Das',
       email: 'priyajitd218@gmail.com',
-      passwordHash: adminHash,
+      passwordHash: clientHash,
       phone: '+1 (555) 019-2834',
       avatar: '',
-      role: 'ADMIN',
+      role: 'USER',
       isActive: true,
       createdAt: new Date('2026-10-07T01:59:03.008Z'),
     },
@@ -73,10 +73,10 @@ export const store: SeedDataStore = {
       _id: 'usr_admin_1',
       name: 'Alex Rivera',
       email: 'admin@reliableinfotech.io',
-      passwordHash: adminHash,
+      passwordHash: clientHash,
       phone: '+1 (555) 019-2834',
       avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80',
-      role: 'ADMIN',
+      role: 'USER',
       isActive: true,
       createdAt: new Date('2026-01-01T00:00:00.000Z'),
     },
@@ -84,10 +84,10 @@ export const store: SeedDataStore = {
       _id: 'usr_admin_legacy',
       name: 'Alex Rivera',
       email: 'admin@devcraft.io',
-      passwordHash: adminHash,
+      passwordHash: clientHash,
       phone: '+1 (555) 019-2834',
       avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80',
-      role: 'ADMIN',
+      role: 'USER',
       isActive: true,
       createdAt: new Date('2026-01-01T00:00:00.000Z'),
     },
