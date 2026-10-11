@@ -51,8 +51,9 @@ export const RequestTrackingPage: React.FC = () => {
         const res = await requestService.getRequestById(id);
         if (res.success && res.data) {
           setRequest(res.data);
-          // Fetch messages for conv_1 or mock conv
-          const msgRes = await messageService.getMessages('conv_1');
+          // Fetch messages for user conversation
+          const convId = user?.id ? `conv_${user.id}` : (res.data.userId ? `conv_${res.data.userId}` : `conv_${id}`);
+          const msgRes = await messageService.getMessages(convId);
           if (msgRes.success && msgRes.data) {
             setMessages(msgRes.data);
           }
@@ -65,15 +66,16 @@ export const RequestTrackingPage: React.FC = () => {
     };
 
     fetchRequestDetails();
-  }, [id]);
+  }, [id, user?.id]);
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newMessage.trim()) return;
 
+    const convId = user?.id ? `conv_${user.id}` : (request?.userId ? `conv_${request.userId}` : `conv_${id}`);
     try {
       setSendingMsg(true);
-      const res = await messageService.sendMessage('conv_1', newMessage.trim());
+      const res = await messageService.sendMessage(convId, newMessage.trim());
       if (res.success && res.data) {
         setMessages((prev) => [...prev, res.data]);
         setNewMessage('');

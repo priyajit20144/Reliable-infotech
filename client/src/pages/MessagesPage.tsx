@@ -260,7 +260,7 @@ export const MessagesPage: React.FC = () => {
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center justify-between mb-0.5">
                         <span className="text-xs font-bold text-white flex items-center gap-1.5 truncate">
-                          <span>Alex Rivera</span>
+                          <span>Priyajit Das</span>
                           <ShieldCheck className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
                         </span>
                         <span className="text-[10px] text-slate-400 shrink-0">
@@ -268,7 +268,7 @@ export const MessagesPage: React.FC = () => {
                         </span>
                       </div>
                       <p className="text-[11px] font-semibold text-cyan-400 truncate">
-                        Reliable Info Tech Lead Architect
+                        Reliable Info Tech Administrator
                       </p>
                       <p className="text-[11px] text-slate-400 truncate mt-1">
                         {currentConv?.lastMessage || 'Hello! How can we assist you today?'}
@@ -339,7 +339,7 @@ export const MessagesPage: React.FC = () => {
               <div className="relative shrink-0">
                 <img
                   src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80"
-                  alt="Alex Rivera"
+                  alt="Priyajit Das"
                   className="w-11 h-11 rounded-xl object-cover ring-2 ring-slate-700"
                 />
                 <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-400 ring-2 ring-[#080E20]" />
@@ -348,11 +348,11 @@ export const MessagesPage: React.FC = () => {
               <div className="min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
                   <h3 className="text-sm font-bold text-white tracking-tight">
-                    Alex Rivera
+                    Priyajit Das
                   </h3>
                   <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30">
                     <ShieldCheck className="w-3 h-3 text-blue-400" />
-                    Lead Architect & Admin
+                    Administrator & Lead
                   </span>
                 </div>
                 <p className="text-[11px] text-cyan-400 font-medium truncate mt-0.5">
@@ -397,7 +397,7 @@ export const MessagesPage: React.FC = () => {
                 <div className="max-w-md space-y-1">
                   <h4 className="text-sm font-bold text-white">Start your consultation</h4>
                   <p className="text-xs text-slate-400 leading-relaxed">
-                    Have questions about your custom website build, tech stack, or roadmap? Send a message directly to Reliable Info Tech Lead Architect Alex Rivera.
+                    Have questions about your custom website build, tech stack, or roadmap? Send a message directly to Reliable Info Tech Administrator Priyajit Das.
                   </p>
                 </div>
                 <div className="flex flex-wrap justify-center gap-2 pt-2">
@@ -428,7 +428,7 @@ export const MessagesPage: React.FC = () => {
                       }`}
                     >
                       <span className="font-bold text-slate-300 flex items-center gap-1">
-                        {isMe ? 'You' : m.senderName || 'Alex Rivera'}
+                        {isMe ? 'You' : m.senderName || 'Priyajit Das'}
                         {!isMe && (
                           <span className="text-[10px] font-semibold text-blue-400 px-1.5 py-0.2 rounded bg-blue-500/15">
                             ADMIN
@@ -492,7 +492,7 @@ export const MessagesPage: React.FC = () => {
                   handleSend();
                 }
               }}
-              placeholder={`Type message to Alex Rivera (Reliable Info Tech Lead Architect)...`}
+              placeholder={`Type message to Priyajit Das (Reliable Info Tech Administrator)...`}
               className="flex-1 bg-[#0F172A] text-xs sm:text-sm text-white placeholder-slate-500 rounded-xl px-4 py-3 border border-slate-800 focus:outline-none focus:border-blue-500 transition-colors"
             />
 

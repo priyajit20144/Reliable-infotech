@@ -125,7 +125,39 @@ export const AdminClientsView: React.FC<AdminClientsViewProps> = ({ users }) => 
     },
   ];
 
-  const [clients, setClients] = useState<ClientItem[]>(defaultClients);
+  const [clients, setClients] = useState<ClientItem[]>([]);
+
+  React.useEffect(() => {
+    if (users && users.length > 0) {
+      const realUsers = users.filter(
+        (u) => u.role === 'USER' && !u.email.toLowerCase().includes('@devcraft.io')
+      );
+      if (realUsers.length > 0) {
+        const mapped: ClientItem[] = realUsers.map((u) => ({
+          id: u.id || (u as any)._id,
+          name: u.name,
+          company: (u as any).company || 'Client Organization',
+          email: u.email,
+          phone: (u as any).phone || '+91 98765 43210',
+          projectsCount: 1,
+          totalSpent: 4500,
+          status: 'ACTIVE',
+          avatar:
+            u.avatar && u.avatar.startsWith('http')
+              ? u.avatar
+              : `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                  u.name
+                )}&background=2563eb&color=fff&bold=true`,
+          joinedDate: new Date((u as any).createdAt || Date.now()).toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+          }),
+        }));
+        setClients(mapped);
+      }
+    }
+  }, [users]);
 
   const filteredClients = clients.filter((c) => {
     const q = searchQuery.toLowerCase().trim();

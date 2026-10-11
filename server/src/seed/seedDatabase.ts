@@ -63,29 +63,7 @@ export const seedDatabaseIfEmpty = async () => {
       console.log(`[MongoDB Seeder] Seeded ${store.projectInquiries.length} project inquiries.`);
     }
 
-    // Ensure all seed conversations exist in MongoDB
-    for (const conv of store.conversations) {
-      const exists = await ConversationModel.findById(conv._id);
-      if (!exists) {
-        await ConversationModel.create(conv);
-      } else {
-        await ConversationModel.findByIdAndUpdate(conv._id, {
-          clientName: conv.clientName,
-          clientEmail: conv.clientEmail,
-          clientAvatar: conv.clientAvatar,
-          projectSubject: conv.projectSubject,
-          time: conv.time,
-        });
-      }
-    }
 
-    // Ensure initial showcase seed messages exist in MongoDB
-    for (const msg of store.messages) {
-      const exists = await MessageModel.findById(msg._id);
-      if (!exists) {
-        await MessageModel.create(msg);
-      }
-    }
 
     const notifCount = await NotificationModel.countDocuments();
     if (notifCount === 0 && store.notifications.length > 0) {
