@@ -47,21 +47,9 @@ export const seedDatabaseIfEmpty = async () => {
       console.log(`[MongoDB Seeder] Successfully seeded ${store.users.length} users.`);
     }
 
-    // Only seed projects if table is empty of active projects
-    if (existingProjectCount === 0) {
-      const deletedSet = new Set(mergedDeleted);
-      const eligibleProjects = store.projects.filter(
-        (p) => !deletedSet.has(p._id) && !deletedSet.has(p.slug)
-      );
-
-      if (eligibleProjects.length > 0) {
-        console.log(`[MongoDB Seeder] Seeding ${eligibleProjects.length} initial showcase projects...`);
-        await ProjectModel.insertMany(eligibleProjects);
-        console.log(`[MongoDB Seeder] Successfully seeded initial showcase projects.`);
-      }
-      meta.hasSeededProjects = true;
-      await meta.save();
-    }
+    // Showcase projects are strictly and exclusively managed by administrators through the dashboard
+    meta.hasSeededProjects = true;
+    await meta.save();
 
     const requestCount = await CustomRequestModel.countDocuments();
     if (requestCount === 0 && store.customRequests.length > 0) {
