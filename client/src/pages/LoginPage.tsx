@@ -72,13 +72,20 @@ export const LoginPage: React.FC = () => {
   // If already authenticated, redirect
   useEffect(() => {
     if (user) {
-      const fromPath = (location.state as any)?.from?.pathname;
-      if (fromPath && fromPath !== '/login') {
-        navigate(fromPath, { replace: true });
+      if (user.role === 'ADMIN' || user.role === 'TEAM_MEMBER') {
+        const fromPath = (location.state as any)?.from?.pathname;
+        if (fromPath && fromPath.startsWith('/admin')) {
+          const fromSearch = (location.state as any)?.from?.search || '';
+          navigate(`${fromPath}${fromSearch}`, { replace: true });
+        } else {
+          navigate('/admin', { replace: true });
+        }
         return;
       }
-      if (user.role === 'ADMIN' || user.role === 'TEAM_MEMBER') {
-        navigate('/admin', { replace: true });
+      const fromPath = (location.state as any)?.from?.pathname;
+      if (fromPath && fromPath !== '/login' && !fromPath.startsWith('/admin')) {
+        const fromSearch = (location.state as any)?.from?.search || '';
+        navigate(`${fromPath}${fromSearch}`, { replace: true });
       } else {
         navigate('/dashboard', { replace: true });
       }
@@ -106,13 +113,22 @@ export const LoginPage: React.FC = () => {
         localStorage.removeItem('devcraft_remembered_email');
       }
 
-      const fromPath = (location.state as any)?.from?.pathname;
-      if (fromPath && fromPath !== '/login') {
-        navigate(fromPath, { replace: true });
-      } else if (loggedUser.role === 'ADMIN' || loggedUser.role === 'TEAM_MEMBER') {
-        navigate('/admin', { replace: true });
+      if (loggedUser.role === 'ADMIN' || loggedUser.role === 'TEAM_MEMBER') {
+        const fromPath = (location.state as any)?.from?.pathname;
+        if (fromPath && fromPath.startsWith('/admin')) {
+          const fromSearch = (location.state as any)?.from?.search || '';
+          navigate(`${fromPath}${fromSearch}`, { replace: true });
+        } else {
+          navigate('/admin', { replace: true });
+        }
       } else {
-        navigate('/dashboard', { replace: true });
+        const fromPath = (location.state as any)?.from?.pathname;
+        if (fromPath && fromPath !== '/login' && !fromPath.startsWith('/admin')) {
+          const fromSearch = (location.state as any)?.from?.search || '';
+          navigate(`${fromPath}${fromSearch}`, { replace: true });
+        } else {
+          navigate('/dashboard', { replace: true });
+        }
       }
     } catch (err: any) {
       setError(err.message || 'Invalid email or password. Please verify your credentials and try again.');

@@ -181,17 +181,6 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
           {/* Quick Exit Links */}
           <div className="pt-3 mt-3 border-t border-slate-800/80 space-y-1">
             <Link
-              to="/dashboard"
-              className="w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/50 transition-all group"
-            >
-              <div className="flex items-center gap-2.5">
-                <LayoutDashboard className="w-4 h-4 text-indigo-400 group-hover:scale-110 transition-transform" />
-                <span>Client Workspace</span>
-              </div>
-              <ExternalLink className="w-3 h-3 text-slate-500" />
-            </Link>
-
-            <Link
               to="/"
               className="w-full flex items-center gap-2.5 px-3.5 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all group"
             >

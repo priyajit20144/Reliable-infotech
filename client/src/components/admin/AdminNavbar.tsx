@@ -11,6 +11,7 @@ import {
   Shield,
   Layers,
   Sparkles,
+  Settings,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
@@ -240,28 +241,27 @@ export const AdminNavbar: React.FC<AdminNavbarProps> = ({
               </div>
 
               <div className="py-1">
+                <button
+                  onClick={() => {
+                    setShowUserMenu(false);
+                    navigate('/admin?tab=settings');
+                  }}
+                  className="w-full flex items-center gap-2 px-3.5 py-2 text-xs text-slate-300 hover:text-white hover:bg-slate-800/60 transition-colors text-left"
+                >
+                  <Settings className="w-3.5 h-3.5 text-blue-400" />
+                  <span>Platform Settings</span>
+                </button>
+
                 <Link
-                  to="/dashboard"
+                  to="/"
                   onClick={() => setShowUserMenu(false)}
                   className="w-full flex items-center justify-between px-3.5 py-2 text-xs text-slate-300 hover:text-white hover:bg-slate-800/60 transition-colors"
                 >
                   <div className="flex items-center gap-2">
-                    <Layers className="w-3.5 h-3.5 text-indigo-400" />
-                    <span>Client Workspace View</span>
+                    <ExternalLink className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>View Live Website</span>
                   </div>
-                  <ExternalLink className="w-3 h-3 text-slate-500" />
                 </Link>
-
-                <button
-                  onClick={() => {
-                    setShowUserMenu(false);
-                    navigate('/dashboard/profile');
-                  }}
-                  className="w-full flex items-center gap-2 px-3.5 py-2 text-xs text-slate-300 hover:text-white hover:bg-slate-800/60 transition-colors text-left"
-                >
-                  <UserIcon className="w-3.5 h-3.5 text-blue-400" />
-                  <span>Account Profile</span>
-                </button>
               </div>
 
               <div className="pt-1 border-t border-slate-800">

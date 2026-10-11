@@ -7,11 +7,13 @@ import { UserRole } from '../../types';
 interface ProtectedRouteProps {
   children: React.ReactNode;
   allowedRoles?: UserRole[];
+  disallowRoles?: UserRole[];
 }
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
   allowedRoles,
+  disallowRoles,
 }) => {
   const { user, loading } = useAuth();
   const location = useLocation();
@@ -28,8 +30,28 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     return <Navigate to={loginPath} state={{ from: location }} replace />;
   }
 
+  // Role disallowed on this route (e.g. ADMIN on client /dashboard)
+  if (disallowRoles && disallowRoles.includes(user.role)) {
+    if (user.role === 'ADMIN' || user.role === 'TEAM_MEMBER') {
+      if (location.pathname.includes('/messages')) {
+        return <Navigate to="/admin?tab=messages" replace />;
+      }
+      if (location.pathname.includes('/requests')) {
+        return <Navigate to="/admin?tab=requests" replace />;
+      }
+      if (location.pathname.includes('/profile')) {
+        return <Navigate to="/admin?tab=settings" replace />;
+      }
+      return <Navigate to="/admin" replace />;
+    }
+    return <Navigate to="/" replace />;
+  }
+
   // Role authorization check: user lacks required permissions
   if (allowedRoles && !allowedRoles.includes(user.role)) {
+    if (user.role === 'ADMIN' || user.role === 'TEAM_MEMBER') {
+      return <Navigate to="/admin" replace />;
+    }
     return <Navigate to="/dashboard" replace />;
   }
 

@@ -57,7 +57,7 @@ export const App: React.FC = () => {
             <Route
               path="/dashboard"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute disallowRoles={['ADMIN', 'TEAM_MEMBER']}>
                   <AppShell />
                 </ProtectedRoute>
               }
