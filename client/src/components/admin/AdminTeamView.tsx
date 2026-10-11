@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Users2,
   Plus,
@@ -14,6 +14,9 @@ import {
   UserMinus,
   AlertTriangle,
   Check,
+  Upload,
+  Camera,
+  Image as ImageIcon,
 } from 'lucide-react';
 
 interface TeamMember {
@@ -29,6 +32,96 @@ interface TeamMember {
   skills: string[];
 }
 
+const PRESET_AVATARS = [
+  'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
+  'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80',
+  'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80',
+  'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80',
+  'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80',
+  'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
+];
+
+const INITIAL_MEMBERS: TeamMember[] = [
+  {
+    id: 'tm_1',
+    name: 'Priyajit Das',
+    role: 'Founder & Principal Systems Architect',
+    department: 'Full Stack',
+    email: 'priyajitd80@gmail.com',
+    phone: '+91 98765 43210',
+    avatar:
+      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
+    status: 'online',
+    activeProjects: 4,
+    skills: ['Architecture', 'Kubernetes', 'TypeScript', 'React', 'Security'],
+  },
+  {
+    id: 'tm_2',
+    name: 'Sarah Chen',
+    role: 'Lead Cloud & Systems Engineer',
+    department: 'DevOps',
+    email: 'team@reliableinfotech.io',
+    phone: '+1 (555) 876-5432',
+    avatar:
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80',
+    status: 'online',
+    activeProjects: 3,
+    skills: ['AWS', 'Docker', 'PostgreSQL', 'Terraform', 'Node.js'],
+  },
+  {
+    id: 'tm_3',
+    name: 'Rahul Sharma',
+    role: 'Senior Frontend Developer',
+    department: 'Frontend',
+    email: 'rahul.dev@reliableinfotech.io',
+    phone: '+1 (555) 234-5678',
+    avatar:
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80',
+    status: 'online',
+    activeProjects: 3,
+    skills: ['React', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
+  },
+  {
+    id: 'tm_4',
+    name: 'Priya Mehta',
+    role: 'Senior Backend Engineer',
+    department: 'Backend',
+    email: 'priya.backend@reliableinfotech.io',
+    phone: '+1 (555) 987-6543',
+    avatar:
+      'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=150&q=80',
+    status: 'online',
+    activeProjects: 2,
+    skills: ['Express', 'MongoDB', 'Redis', 'GraphQL', 'Python'],
+  },
+  {
+    id: 'tm_5',
+    name: 'Amit Verma',
+    role: 'Principal UI/UX Designer',
+    department: 'UI/UX',
+    email: 'amit.design@reliableinfotech.io',
+    phone: '+1 (555) 456-7890',
+    avatar:
+      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80',
+    status: 'away',
+    activeProjects: 2,
+    skills: ['Figma', 'Design Systems', 'Micro-interactions', 'Prototyping'],
+  },
+  {
+    id: 'tm_6',
+    name: 'Neha Singh',
+    role: 'Full Stack Engineer',
+    department: 'Full Stack',
+    email: 'neha.fullstack@reliableinfotech.io',
+    phone: '+1 (555) 321-7654',
+    avatar:
+      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
+    status: 'online',
+    activeProjects: 3,
+    skills: ['Next.js', 'PostgreSQL', 'Stripe', 'Docker'],
+  },
+];
+
 export const AdminTeamView: React.FC = () => {
   const [filterDept, setFilterDept] = useState<string>('ALL');
   const [addModal, setAddModal] = useState(false);
@@ -37,6 +130,34 @@ export const AdminTeamView: React.FC = () => {
   const [selectedHeaderMemberId, setSelectedHeaderMemberId] = useState<string>('');
   const [reassignTo, setReassignTo] = useState<string>('Sarah Chen (Lead Cloud)');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  // New member form state
+  const [newMemberName, setNewMemberName] = useState('');
+  const [newMemberRole, setNewMemberRole] = useState('Frontend Developer');
+  const [newMemberDept, setNewMemberDept] = useState<
+    'Frontend' | 'Backend' | 'Full Stack' | 'UI/UX' | 'DevOps'
+  >('Frontend');
+  const [newMemberEmail, setNewMemberEmail] = useState('');
+  const [newMemberAvatar, setNewMemberAvatar] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Persistent team members from localStorage
+  const [members, setMembers] = useState<TeamMember[]>(() => {
+    try {
+      const saved = localStorage.getItem('reliable_admin_team_members');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (e) {}
+    return INITIAL_MEMBERS;
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('reliable_admin_team_members', JSON.stringify(members));
+    } catch (e) {}
+  }, [members]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -50,95 +171,6 @@ export const AdminTeamView: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const [members, setMembers] = useState<TeamMember[]>([
-    {
-      id: 'tm_1',
-      name: 'Alex Rivera',
-      role: 'Platform Architect & Lead Admin',
-      department: 'Full Stack',
-      email: 'admin@reliableinfotech.io',
-      phone: '+1 (555) 019-2834',
-      avatar:
-        'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
-      status: 'online',
-      activeProjects: 4,
-      skills: ['Architecture', 'Kubernetes', 'Go', 'React', 'Security'],
-    },
-    {
-      id: 'tm_2',
-      name: 'Sarah Chen',
-      role: 'Lead Cloud & Systems Engineer',
-      department: 'DevOps',
-      email: 'team@reliableinfotech.io',
-      phone: '+1 (555) 876-5432',
-      avatar:
-        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80',
-      status: 'online',
-      activeProjects: 3,
-      skills: ['AWS', 'Docker', 'PostgreSQL', 'Terraform', 'Node.js'],
-    },
-    {
-      id: 'tm_3',
-      name: 'Rahul Sharma',
-      role: 'Senior Frontend Developer',
-      department: 'Frontend',
-      email: 'rahul.dev@reliableinfotech.io',
-      phone: '+1 (555) 234-5678',
-      avatar:
-        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80',
-      status: 'online',
-      activeProjects: 3,
-      skills: ['React', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
-    },
-    {
-      id: 'tm_4',
-      name: 'Priya Mehta',
-      role: 'Senior Backend Engineer',
-      department: 'Backend',
-      email: 'priya.backend@reliableinfotech.io',
-      phone: '+1 (555) 987-6543',
-      avatar:
-        'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=150&q=80',
-      status: 'online',
-      activeProjects: 2,
-      skills: ['Express', 'MongoDB', 'Redis', 'GraphQL', 'Python'],
-    },
-    {
-      id: 'tm_5',
-      name: 'Amit Verma',
-      role: 'Principal UI/UX Designer',
-      department: 'UI/UX',
-      email: 'amit.design@reliableinfotech.io',
-      phone: '+1 (555) 456-7890',
-      avatar:
-        'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80',
-      status: 'away',
-      activeProjects: 2,
-      skills: ['Figma', 'Design Systems', 'Micro-interactions', 'Prototyping'],
-    },
-    {
-      id: 'tm_6',
-      name: 'Neha Singh',
-      role: 'Full Stack Engineer',
-      department: 'Full Stack',
-      email: 'neha.fullstack@reliableinfotech.io',
-      phone: '+1 (555) 321-7654',
-      avatar:
-        'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
-      status: 'online',
-      activeProjects: 3,
-      skills: ['Next.js', 'PostgreSQL', 'Stripe', 'Docker'],
-    },
-  ]);
-
-  // New member form state
-  const [newMemberName, setNewMemberName] = useState('');
-  const [newMemberRole, setNewMemberRole] = useState('Frontend Developer');
-  const [newMemberDept, setNewMemberDept] = useState<
-    'Frontend' | 'Backend' | 'Full Stack' | 'UI/UX' | 'DevOps'
-  >('Frontend');
-  const [newMemberEmail, setNewMemberEmail] = useState('');
-
   const filteredMembers = members.filter(
     (m) => filterDept === 'ALL' || m.department === filterDept
   );
@@ -148,29 +180,63 @@ export const AdminTeamView: React.FC = () => {
     setTimeout(() => setToastMessage(null), 3500);
   };
 
+  // Handle local photo file upload
+  const handlePhotoFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      showToast('Please select a valid image file (PNG, JPG, WebP).');
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      showToast('Photo file size should be less than 5MB.');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      if (event.target?.result) {
+        setNewMemberAvatar(event.target.result as string);
+        showToast('Photo loaded successfully!');
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleAddMember = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newMemberName || !newMemberEmail) return;
+    if (!newMemberName.trim() || !newMemberEmail.trim()) return;
+
+    const avatarUrl =
+      newMemberAvatar.trim() ||
+      `https://ui-avatars.com/api/?name=${encodeURIComponent(
+        newMemberName.trim()
+      )}&background=2563eb&color=fff&bold=true`;
 
     const newM: TeamMember = {
       id: `tm_${Date.now()}`,
-      name: newMemberName,
-      role: newMemberRole,
+      name: newMemberName.trim(),
+      role: newMemberRole.trim() || 'Frontend Developer',
       department: newMemberDept,
-      email: newMemberEmail,
+      email: newMemberEmail.trim(),
       phone: '+1 (555) 000-0000',
-      avatar:
-        'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80',
+      avatar: avatarUrl,
       status: 'online',
       activeProjects: 1,
       skills: ['TypeScript', 'Modern Web', 'Reliable Info Tech Stack'],
     };
 
-    setMembers([...members, newM]);
+    setMembers((prev) => [...prev, newM]);
     setNewMemberName('');
+    setNewMemberRole('Frontend Developer');
+    setNewMemberDept('Frontend');
     setNewMemberEmail('');
+    setNewMemberAvatar('');
+    if (fileInputRef.current) fileInputRef.current.value = '';
     setAddModal(false);
-    showToast(`Team member "${newM.name}" added successfully!`);
+    showToast(`Team member "${newM.name}" added successfully with photo!`);
   };
 
   const handleConfirmRemove = () => {
@@ -256,7 +322,7 @@ export const AdminTeamView: React.FC = () => {
           </p>
         </div>
         <div className="p-3.5 sm:p-4 rounded-2xl bg-[#0D1527] border border-slate-800">
-          <span className="text-[11px] font-medium text-slate-400">Assigned Sprints</span>
+          <span className="text-[11px] font-medium text-slate-400">Active Sprint Builds</span>
           <p className="text-xl sm:text-2xl font-black text-cyan-400 mt-1">
             {members.reduce((acc, m) => acc + m.activeProjects, 0)}
           </p>
@@ -328,7 +394,12 @@ export const AdminTeamView: React.FC = () => {
                       <img
                         src={member.avatar}
                         alt={member.name}
-                        className="w-12 h-12 rounded-xl object-cover ring-2 ring-slate-700"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                            member.name
+                          )}&background=2563eb&color=fff&bold=true`;
+                        }}
+                        className="w-12 h-12 rounded-xl object-cover ring-2 ring-slate-700 bg-slate-800"
                       />
                       <span
                         className={`absolute bottom-0 right-0 w-3 h-3 rounded-full ring-2 ring-[#0D1527] ${
@@ -365,16 +436,16 @@ export const AdminTeamView: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Skills */}
+                {/* Skills tags */}
                 <div className="pt-2">
-                  <span className="text-[10px] text-slate-400 font-medium block mb-1.5">
-                    Core Technologies
+                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5">
+                    Core Capabilities
                   </span>
                   <div className="flex flex-wrap gap-1.5">
-                    {member.skills.map((skill) => (
+                    {member.skills.map((skill, i) => (
                       <span
-                        key={skill}
-                        className="px-2 py-0.5 rounded-lg text-[10px] font-medium bg-[#111827] text-slate-300 border border-slate-800"
+                        key={i}
+                        className="px-2 py-0.5 rounded-lg bg-[#111C35] text-[10px] text-cyan-300 border border-slate-700/60"
                       >
                         {skill}
                       </span>
@@ -383,39 +454,28 @@ export const AdminTeamView: React.FC = () => {
                 </div>
               </div>
 
-              {/* Bottom Row: Workload + Direct Ping + Remove Team Member */}
-              <div className="pt-4 mt-3 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
-                <span className="text-[11px] text-slate-400">
-                  <strong className="text-white font-bold">{member.activeProjects}</strong> Active Builds
+              {/* Footer */}
+              <div className="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between text-xs">
+                <span className="text-[11px] font-medium text-slate-400 flex items-center gap-1.5">
+                  <Code2 className="w-3.5 h-3.5 text-blue-400" />
+                  {member.activeProjects} Active Sprint{member.activeProjects !== 1 ? 's' : ''}
                 </span>
 
-                <div className="flex items-center gap-2">
-                  {/* Direct Ping */}
-                  <a
-                    href={`mailto:${member.email}`}
-                    className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 transition-colors"
-                  >
-                    Direct Ping
-                  </a>
-
-                  {/* Remove Team Member Option on each card */}
-                  <button
-                    type="button"
-                    onClick={() => setMemberToRemove(member)}
-                    className="px-2.5 py-1.5 rounded-lg bg-red-950/40 hover:bg-red-600 text-red-400 hover:text-white border border-red-800/60 hover:border-red-500 text-xs font-semibold flex items-center gap-1.5 transition-all shadow-sm active:scale-95"
-                    title={`Remove ${member.name}`}
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                    <span>Remove</span>
-                  </button>
-                </div>
+                <button
+                  onClick={() => setMemberToRemove(member)}
+                  className="px-2.5 py-1 rounded-lg text-slate-500 hover:text-red-400 hover:bg-red-500/10 text-xs font-semibold transition-colors flex items-center gap-1"
+                  title="Remove this team member"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span>Remove</span>
+                </button>
               </div>
             </div>
           ))}
         </div>
       )}
 
-      {/* Modal 1: Quick Header "Remove Team Member" Selection Modal */}
+      {/* Modal 1: Select Member from Header Button */}
       {headerRemoveModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div
@@ -424,9 +484,11 @@ export const AdminTeamView: React.FC = () => {
           />
           <div className="relative w-full max-w-md max-h-[90vh] overflow-y-auto rounded-3xl bg-[#0F172A] border border-slate-700 shadow-2xl p-6 z-10 animate-in zoom-in-95">
             <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
-              <div className="flex items-center gap-2 text-red-400">
-                <UserMinus className="w-5 h-5" />
-                <h3 className="font-bold text-base text-white">Select Member to Remove</h3>
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-xl bg-red-500/20 text-red-400 flex items-center justify-center shrink-0">
+                  <UserMinus className="w-4 h-4" />
+                </div>
+                <h3 className="font-bold text-base text-white">Remove Team Member</h3>
               </div>
               <button
                 onClick={() => setHeaderRemoveModal(false)}
@@ -463,7 +525,12 @@ export const AdminTeamView: React.FC = () => {
                     <img
                       src={target.avatar}
                       alt={target.name}
-                      className="w-10 h-10 rounded-lg object-cover ring-1 ring-slate-700"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                          target.name
+                        )}&background=2563eb&color=fff&bold=true`;
+                      }}
+                      className="w-10 h-10 rounded-lg object-cover ring-1 ring-slate-700 bg-slate-800"
                     />
                     <div className="min-w-0 flex-1 text-xs">
                       <p className="font-bold text-white truncate">{target.name}</p>
@@ -532,7 +599,12 @@ export const AdminTeamView: React.FC = () => {
               <img
                 src={memberToRemove.avatar}
                 alt={memberToRemove.name}
-                className="w-12 h-12 rounded-xl object-cover ring-2 ring-red-500/40"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                    memberToRemove.name
+                  )}&background=2563eb&color=fff&bold=true`;
+                }}
+                className="w-12 h-12 rounded-xl object-cover ring-2 ring-red-500/40 bg-slate-800"
               />
               <div className="min-w-0 flex-1">
                 <h4 className="text-sm font-bold text-white truncate">
@@ -617,51 +689,189 @@ export const AdminTeamView: React.FC = () => {
         </div>
       )}
 
-      {/* Modal 3: Add Team Member */}
+      {/* Modal 3: Add Team Member with Photo Upload / Selection */}
       {addModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm"
+            className="fixed inset-0 bg-black/85 backdrop-blur-sm"
             onClick={() => setAddModal(false)}
           />
-          <div className="relative w-full max-w-md max-h-[90vh] overflow-y-auto rounded-3xl bg-[#0F172A] border border-slate-700 shadow-2xl p-6 z-10 animate-in zoom-in-95">
+          <div className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-3xl bg-[#0F172A] border border-slate-700 shadow-2xl p-6 sm:p-7 z-10 animate-in zoom-in-95">
             <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
-              <h3 className="font-bold text-base text-white">Add Engineering Team Member</h3>
-              <button onClick={() => setAddModal(false)} className="text-slate-400 hover:text-white">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-blue-600/20 text-blue-400 flex items-center justify-center">
+                  <Users2 className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-base text-white">Add Engineering Team Member</h3>
+                  <p className="text-[11px] text-slate-400">Add a new specialist to the engineering directory</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setAddModal(false)}
+                className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors"
+              >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <form onSubmit={handleAddMember} className="space-y-3.5">
+            <form onSubmit={handleAddMember} className="space-y-4">
+              {/* Photo Upload & Preview Section */}
+              <div className="p-3.5 sm:p-4 rounded-2xl bg-[#0B1120] border border-slate-800/90 space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold text-white flex items-center gap-1.5">
+                    <Camera className="w-3.5 h-3.5 text-blue-400" />
+                    <span>Team Member Photo</span>
+                  </label>
+                  <span className="text-[10px] text-slate-400 font-medium">PNG, JPG, WebP up to 5MB</span>
+                </div>
+
+                <div className="flex flex-col sm:flex-row items-center sm:items-start gap-3.5">
+                  {/* Photo Preview Thumbnail */}
+                  <div className="relative shrink-0 group">
+                    <img
+                      src={
+                        newMemberAvatar ||
+                        `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                          newMemberName || 'Team Member'
+                        )}&background=2563eb&color=fff&bold=true`
+                      }
+                      alt="Avatar Preview"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                          newMemberName || 'Team Member'
+                        )}&background=2563eb&color=fff&bold=true`;
+                      }}
+                      className="w-18 h-18 sm:w-20 sm:h-20 rounded-2xl object-cover ring-2 ring-blue-500/40 bg-slate-800 shadow-md transition-all group-hover:ring-blue-400"
+                    />
+                    {newMemberAvatar && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setNewMemberAvatar('');
+                          if (fileInputRef.current) fileInputRef.current.value = '';
+                        }}
+                        className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-red-600 hover:bg-red-500 text-white flex items-center justify-center text-[10px] shadow-md transition-transform hover:scale-110"
+                        title="Remove photo"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Actions & URL Input */}
+                  <div className="flex-1 min-w-0 w-full space-y-2">
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={handlePhotoFileUpload}
+                      className="hidden"
+                      id="team-member-photo-upload"
+                    />
+
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <label
+                        htmlFor="team-member-photo-upload"
+                        className="cursor-pointer inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 active:scale-95 text-white text-xs font-bold shadow-md shadow-blue-600/30 transition-all shrink-0"
+                      >
+                        <Upload className="w-3.5 h-3.5" />
+                        <span>Upload Photo</span>
+                      </label>
+
+                      {newMemberAvatar && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setNewMemberAvatar('');
+                            if (fileInputRef.current) fileInputRef.current.value = '';
+                          }}
+                          className="px-2.5 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 transition-colors"
+                        >
+                          Reset
+                        </button>
+                      )}
+                    </div>
+
+                    <div className="relative">
+                      <input
+                        type="url"
+                        value={newMemberAvatar}
+                        onChange={(e) => setNewMemberAvatar(e.target.value)}
+                        placeholder="Or paste direct image URL (https://...)"
+                        className="w-full bg-[#111827] text-xs text-white placeholder-slate-500 rounded-xl px-3 py-2 border border-slate-700 focus:outline-none focus:border-blue-500 transition-colors"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Quick Presets */}
+                <div className="pt-2 border-t border-slate-800/80">
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-[10px] text-slate-400 font-medium">Or pick from sample avatars:</span>
+                    <span className="text-[10px] text-cyan-400 font-semibold">1-Click Select</span>
+                  </div>
+                  <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+                    {PRESET_AVATARS.map((avUrl, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => setNewMemberAvatar(avUrl)}
+                        className={`relative rounded-xl p-0.5 border-2 transition-transform hover:scale-105 shrink-0 ${
+                          newMemberAvatar === avUrl
+                            ? 'border-blue-500 ring-2 ring-blue-500/50'
+                            : 'border-transparent hover:border-slate-600'
+                        }`}
+                      >
+                        <img
+                          src={avUrl}
+                          alt={`Preset ${idx + 1}`}
+                          className="w-8 h-8 rounded-lg object-cover bg-slate-800"
+                        />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Full Name */}
               <div>
-                <label className="text-xs text-slate-400 block mb-1">Full Name</label>
+                <label className="text-xs font-medium text-slate-300 block mb-1">
+                  Full Name <span className="text-red-400">*</span>
+                </label>
                 <input
                   type="text"
                   required
                   value={newMemberName}
                   onChange={(e) => setNewMemberName(e.target.value)}
                   placeholder="e.g. Vikram Malhotra"
-                  className="w-full bg-[#111827] text-xs text-white rounded-xl px-3 py-2 border border-slate-700"
+                  className="w-full bg-[#111827] text-xs text-white placeholder-slate-500 rounded-xl px-3.5 py-2.5 border border-slate-700 focus:outline-none focus:border-blue-500 transition-colors"
                 />
               </div>
 
+              {/* Engineering Role */}
               <div>
-                <label className="text-xs text-slate-400 block mb-1">Engineering Role</label>
+                <label className="text-xs font-medium text-slate-300 block mb-1">
+                  Engineering Role
+                </label>
                 <input
                   type="text"
                   value={newMemberRole}
                   onChange={(e) => setNewMemberRole(e.target.value)}
-                  placeholder="e.g. Senior Backend Engineer"
-                  className="w-full bg-[#111827] text-xs text-white rounded-xl px-3 py-2 border border-slate-700"
+                  placeholder="e.g. Senior Frontend Developer"
+                  className="w-full bg-[#111827] text-xs text-white placeholder-slate-500 rounded-xl px-3.5 py-2.5 border border-slate-700 focus:outline-none focus:border-blue-500 transition-colors"
                 />
               </div>
 
+              {/* Department */}
               <div>
-                <label className="text-xs text-slate-400 block mb-1">Department</label>
+                <label className="text-xs font-medium text-slate-300 block mb-1">
+                  Department
+                </label>
                 <select
                   value={newMemberDept}
                   onChange={(e) => setNewMemberDept(e.target.value as any)}
-                  className="w-full bg-[#111827] text-xs text-white rounded-xl px-3 py-2 border border-slate-700"
+                  className="w-full bg-[#111827] text-xs text-white rounded-xl px-3.5 py-2.5 border border-slate-700 focus:outline-none focus:border-blue-500 transition-colors"
                 >
                   <option value="Frontend">Frontend</option>
                   <option value="Backend">Backend</option>
@@ -671,31 +881,36 @@ export const AdminTeamView: React.FC = () => {
                 </select>
               </div>
 
+              {/* Email Address */}
               <div>
-                <label className="text-xs text-slate-400 block mb-1">Email Address</label>
+                <label className="text-xs font-medium text-slate-300 block mb-1">
+                  Email Address <span className="text-red-400">*</span>
+                </label>
                 <input
                   type="email"
                   required
                   value={newMemberEmail}
                   onChange={(e) => setNewMemberEmail(e.target.value)}
                   placeholder="vikram@reliableinfotech.io"
-                  className="w-full bg-[#111827] text-xs text-white rounded-xl px-3 py-2 border border-slate-700"
+                  className="w-full bg-[#111827] text-xs text-white placeholder-slate-500 rounded-xl px-3.5 py-2.5 border border-slate-700 focus:outline-none focus:border-blue-500 transition-colors"
                 />
               </div>
 
-              <div className="pt-3 border-t border-slate-800 flex justify-end gap-2">
+              {/* Modal Buttons */}
+              <div className="pt-3 border-t border-slate-800 flex items-center justify-end gap-2.5">
                 <button
                   type="button"
                   onClick={() => setAddModal(false)}
-                  className="px-4 py-2 rounded-xl text-xs text-slate-400 hover:text-white"
+                  className="px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-lg"
+                  className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 active:scale-95 text-white text-xs font-bold shadow-lg shadow-blue-600/30 flex items-center gap-1.5 transition-all"
                 >
-                  Confirm & Add
+                  <Plus className="w-4 h-4" />
+                  <span>Confirm & Add</span>
                 </button>
               </div>
             </form>
@@ -705,3 +920,5 @@ export const AdminTeamView: React.FC = () => {
     </div>
   );
 };
+
+export default AdminTeamView;
