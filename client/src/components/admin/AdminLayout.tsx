@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { AdminSidebar, AdminNavTab } from './AdminSidebar';
 import { AdminNavbar } from './AdminNavbar';
+import { adminService } from '../../services/adminService';
 import { X } from 'lucide-react';
 
 export const AdminLayout: React.FC = () => {
@@ -24,6 +25,30 @@ export const AdminLayout: React.FC = () => {
 
   const activeTab = getActiveTab();
   const [searchQuery, setSearchQuery] = useState('');
+  const [counts, setCounts] = useState<{
+    requests?: number;
+    inquiries?: number;
+    messages?: number;
+    contactMessages?: number;
+    notifications?: number;
+  }>({
+    requests: 3,
+    inquiries: 1,
+    messages: 3,
+    contactMessages: 4,
+    notifications: 5,
+  });
+
+  useEffect(() => {
+    adminService
+      .getAllRequests()
+      .then((res) => {
+        if (res.success && Array.isArray(res.data)) {
+          setCounts((prev) => ({ ...prev, requests: res.data.length }));
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const handleSelectTab = (tab: AdminNavTab) => {
     if (tab === 'dashboard') {
@@ -51,19 +76,20 @@ export const AdminLayout: React.FC = () => {
               activeTab={activeTab}
               onSelectTab={handleSelectTab}
               onCloseMobile={() => setMobileSidebarOpen(false)}
+              counts={counts}
             />
           </div>
         </div>
       )}
 
       {/* Responsive Grid Layout
-          - Desktop (lg: >= 1024px): 260px Sidebar + flexible main content
+          - Desktop (lg: >= 1024px): 250px-265px Sidebar + flexible main content
           - Mobile / Tablet (< 1024px): 1-column layout with mobile sliding drawer
       */}
       <div className="lg:grid lg:grid-cols-[250px_minmax(0,1fr)] xl:grid-cols-[265px_minmax(0,1fr)] min-h-screen w-full">
         {/* Desktop Sidebar Column */}
         <div className="hidden lg:block h-screen sticky top-0 overflow-y-auto z-40">
-          <AdminSidebar activeTab={activeTab} onSelectTab={handleSelectTab} />
+          <AdminSidebar activeTab={activeTab} onSelectTab={handleSelectTab} counts={counts} />
         </div>
 
         {/* Main Content Area */}

@@ -246,8 +246,8 @@ export const AdminRecentRequestsTable: React.FC<AdminRecentRequestsTableProps> =
           </div>
 
           {/* Desktop / Tablet Responsive Table (hidden sm:block) */}
-          <div className="hidden sm:block overflow-x-auto -mx-5 px-5 pt-2 pb-1 scrollbar-thin scrollbar-thumb-slate-800">
-        <table className="w-full text-left border-collapse min-w-[620px]">
+          <div className="hidden sm:block overflow-x-auto -mx-4 sm:-mx-5 px-4 sm:px-5 pt-2 pb-1 scrollbar-thin scrollbar-thumb-slate-800">
+            <table className="w-full text-left border-collapse min-w-[660px]">
           <thead>
             <tr className="border-b border-slate-800/60 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
               <th className="py-2.5 pr-3">ID</th>

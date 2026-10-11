@@ -86,7 +86,7 @@ export const AdminSettingsView: React.FC = () => {
         <button
           onClick={handleSave}
           disabled={saving}
-          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 active:scale-95 text-white text-xs font-bold shadow-lg shadow-blue-600/30 transition-all shrink-0"
+          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 active:scale-95 text-white text-xs font-bold shadow-lg shadow-blue-600/30 transition-all w-full sm:w-auto shrink-0"
         >
           {saving ? (
             <RefreshCw className="w-4 h-4 animate-spin" />
@@ -314,14 +314,14 @@ export const AdminSettingsView: React.FC = () => {
                   ai.mongodb.com
                 </span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2">
                 <input
                   type="password"
                   readOnly
                   value="ai-zYNdkjNOzf6tUB48MbcgvmqBclTJXpwcXVMbqRX1JW_"
                   className="flex-1 bg-[#111827] text-xs font-mono text-slate-300 rounded-xl px-3 py-2 border border-slate-700/80"
                 />
-                <span className="px-2.5 py-1.5 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-300 text-[11px] font-semibold">
+                <span className="self-start sm:self-auto px-2.5 py-1.5 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-300 text-[11px] font-semibold shrink-0">
                   Embeddings Ready
                 </span>
               </div>

@@ -116,27 +116,27 @@ export const AdminContactMessagesView: React.FC = () => {
       </div>
 
       {/* KPI Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-        <div className="p-4 rounded-2xl bg-[#0D1527] border border-slate-800">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-[#0D1527] border border-slate-800">
           <span className="text-[11px] font-medium text-slate-400">Total Form Inquiries</span>
-          <p className="text-2xl font-black text-white mt-1">{messages.length}</p>
+          <p className="text-xl sm:text-2xl font-black text-white mt-1">{messages.length}</p>
         </div>
-        <div className="p-4 rounded-2xl bg-[#0D1527] border border-slate-800">
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-[#0D1527] border border-slate-800">
           <span className="text-[11px] font-medium text-slate-400">Unread Submissions</span>
-          <p className="text-2xl font-black text-blue-400 mt-1">
+          <p className="text-xl sm:text-2xl font-black text-blue-400 mt-1">
             {messages.filter((m) => m.status === 'UNREAD').length}
           </p>
         </div>
-        <div className="p-4 rounded-2xl bg-[#0D1527] border border-slate-800">
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-[#0D1527] border border-slate-800">
           <span className="text-[11px] font-medium text-slate-400">Resolved / Answered</span>
-          <p className="text-2xl font-black text-emerald-400 mt-1">
+          <p className="text-xl sm:text-2xl font-black text-emerald-400 mt-1">
             {messages.filter((m) => m.status === 'RESOLVED').length}
           </p>
         </div>
       </div>
 
       {/* Filter and Search */}
-      <div className="p-4 rounded-2xl bg-[#0D1527] border border-slate-800 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+      <div className="p-3.5 sm:p-4 rounded-2xl bg-[#0D1527] border border-slate-800 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
         <div className="relative flex-1 max-w-md">
           <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
@@ -148,12 +148,12 @@ export const AdminContactMessagesView: React.FC = () => {
           />
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs">
           {(['ALL', 'UNREAD', 'RESOLVED'] as const).map((st) => (
             <button
               key={st}
               onClick={() => setFilter(st)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors ${
+              className={`px-3 py-1.5 rounded-xl font-semibold transition-colors whitespace-nowrap ${
                 filter === st
                   ? 'bg-blue-600 text-white'
                   : 'bg-[#111827] text-slate-400 hover:text-white border border-slate-800'
@@ -170,23 +170,23 @@ export const AdminContactMessagesView: React.FC = () => {
         {filtered.map((msg) => (
           <div
             key={msg.id}
-            className="p-5 rounded-2xl bg-[#0D1527] border border-slate-800 hover:border-slate-700 transition-all flex flex-col justify-between group"
+            className="p-4 sm:p-5 rounded-2xl bg-[#0D1527] border border-slate-800 hover:border-slate-700 transition-all flex flex-col justify-between group"
           >
             <div>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2.5 border-b border-slate-800/80">
-                <div className="flex items-center gap-2.5">
+                <div className="flex items-center gap-2.5 min-w-0">
                   <span
-                    className={`w-2.5 h-2.5 rounded-full ${
+                    className={`w-2.5 h-2.5 rounded-full shrink-0 ${
                       msg.status === 'UNREAD' ? 'bg-blue-400 animate-pulse' : 'bg-slate-600'
                     }`}
                   />
-                  <h3 className="text-sm font-bold text-white group-hover:text-cyan-300 transition-colors">
+                  <h3 className="text-sm font-bold text-white group-hover:text-cyan-300 transition-colors truncate">
                     {msg.name}
                   </h3>
-                  <span className="text-xs text-slate-400">({msg.email})</span>
+                  <span className="text-xs text-slate-400 truncate">({msg.email})</span>
                 </div>
 
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 shrink-0">
                   <span className="text-[11px] text-slate-500">{msg.date}</span>
                   <span
                     className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
@@ -204,7 +204,7 @@ export const AdminContactMessagesView: React.FC = () => {
               <p className="text-xs text-slate-400 mt-1 leading-relaxed">{msg.message}</p>
             </div>
 
-            <div className="pt-3 mt-3 border-t border-slate-800/80 flex items-center justify-end gap-2">
+            <div className="pt-3 mt-3 border-t border-slate-800/80 flex flex-wrap items-center justify-end gap-2">
               <button
                 onClick={() => setReplyModalMessage(msg)}
                 className="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors"

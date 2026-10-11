@@ -100,7 +100,7 @@ export const AdminNotificationsView: React.FC = () => {
   return (
     <div className="space-y-6 max-w-5xl mx-auto animate-in fade-in duration-300">
       {/* Top Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 sm:p-6 rounded-3xl bg-[#0D1527] border border-slate-800">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 sm:p-6 rounded-3xl bg-[#0D1527] border border-slate-800">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-2xl bg-blue-600/20 text-blue-400 flex items-center justify-center shrink-0">
             <Bell className="w-5 h-5" />
@@ -115,7 +115,7 @@ export const AdminNotificationsView: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
           <button
             onClick={handleMarkAllRead}
             className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 flex items-center gap-1.5 transition-colors"
@@ -133,20 +133,20 @@ export const AdminNotificationsView: React.FC = () => {
       </div>
 
       {/* KPI Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-        <div className="p-4 rounded-2xl bg-[#0D1527] border border-slate-800">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-[#0D1527] border border-slate-800">
           <span className="text-[11px] font-medium text-slate-400">Total Notifications</span>
-          <p className="text-2xl font-black text-white mt-1">{notifications.length}</p>
+          <p className="text-xl sm:text-2xl font-black text-white mt-1">{notifications.length}</p>
         </div>
-        <div className="p-4 rounded-2xl bg-[#0D1527] border border-slate-800">
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-[#0D1527] border border-slate-800">
           <span className="text-[11px] font-medium text-slate-400">Unread Critical Pings</span>
-          <p className="text-2xl font-black text-blue-400 mt-1">
+          <p className="text-xl sm:text-2xl font-black text-blue-400 mt-1">
             {notifications.filter((n) => n.unread).length}
           </p>
         </div>
-        <div className="p-4 rounded-2xl bg-[#0D1527] border border-slate-800">
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-[#0D1527] border border-slate-800">
           <span className="text-[11px] font-medium text-slate-400">System Health Alerts</span>
-          <p className="text-2xl font-black text-emerald-400 mt-1">100% Resolved</p>
+          <p className="text-xl sm:text-2xl font-black text-emerald-400 mt-1">100% Resolved</p>
         </div>
       </div>
 

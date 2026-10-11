@@ -48,8 +48,8 @@ export const AdminSystemStatusModal: React.FC<AdminSystemStatusModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="fixed inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative w-full max-w-lg rounded-3xl bg-[#0F172A] border border-slate-700/80 shadow-2xl overflow-hidden z-10 animate-in zoom-in-95 duration-200">
-        <div className="p-5 sm:p-6 border-b border-slate-800 flex items-center justify-between">
+      <div className="relative w-full max-w-lg max-h-[90vh] flex flex-col rounded-3xl bg-[#0F172A] border border-slate-700/80 shadow-2xl overflow-hidden z-10 animate-in zoom-in-95 duration-200">
+        <div className="p-5 sm:p-6 border-b border-slate-800 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-2.5">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
             <h3 className="font-extrabold text-base sm:text-lg text-white">
@@ -64,7 +64,7 @@ export const AdminSystemStatusModal: React.FC<AdminSystemStatusModalProps> = ({
           </button>
         </div>
 
-        <div className="p-5 sm:p-6 space-y-3.5">
+        <div className="p-5 sm:p-6 space-y-3.5 overflow-y-auto flex-1 scrollbar-thin scrollbar-thumb-slate-800">
           {metrics.map((m) => {
             const Icon = m.icon;
             return (

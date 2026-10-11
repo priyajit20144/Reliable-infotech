@@ -51,18 +51,18 @@ export const AdminRequestModal: React.FC<AdminRequestModalProps> = ({
       />
 
       {/* Modal Dialog */}
-      <div className="relative w-full max-w-2xl rounded-3xl bg-[#0F172A] border border-slate-700/80 shadow-2xl overflow-hidden z-10 animate-in zoom-in-95 duration-200">
+      <div className="relative w-full max-w-2xl max-h-[90vh] flex flex-col rounded-3xl bg-[#0F172A] border border-slate-700/80 shadow-2xl overflow-hidden z-10 animate-in zoom-in-95 duration-200">
         {/* Header */}
-        <div className="p-5 sm:p-6 border-b border-slate-800 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <span className="p-2 rounded-xl bg-blue-600/20 text-blue-400 font-mono font-bold text-xs">
+        <div className="p-4 sm:p-6 border-b border-slate-800 flex items-center justify-between shrink-0">
+          <div className="flex items-center gap-3 min-w-0 pr-2">
+            <span className="p-2 rounded-xl bg-blue-600/20 text-blue-400 font-mono font-bold text-xs shrink-0">
               {request.id}
             </span>
-            <div>
-              <h3 className="font-extrabold text-base sm:text-lg text-white">
+            <div className="min-w-0">
+              <h3 className="font-extrabold text-base sm:text-lg text-white truncate">
                 {request.type}
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-400 truncate">
                 Submitted by <span className="text-white font-medium">{request.client}</span> on {request.date}
               </p>
             </div>
@@ -70,14 +70,14 @@ export const AdminRequestModal: React.FC<AdminRequestModalProps> = ({
 
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors shrink-0"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Content */}
-        <form onSubmit={handleSave} className="p-5 sm:p-6 space-y-5 max-h-[75vh] overflow-y-auto">
+        <form onSubmit={handleSave} className="p-4 sm:p-6 space-y-5 overflow-y-auto flex-1 scrollbar-thin scrollbar-thumb-slate-800">
           {/* Key details grid */}
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3.5">
             <div className="p-3 rounded-xl bg-slate-800/40 border border-slate-800">

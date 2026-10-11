@@ -276,7 +276,7 @@ export const AdminMessagesView: React.FC = () => {
   const totalUnread = conversations.reduce((sum, c) => sum + (c.unreadCount || 0), 0);
 
   return (
-    <div className="space-y-4 max-w-7xl mx-auto h-[calc(100vh-140px)] flex flex-col animate-in fade-in duration-300">
+    <div className="space-y-4 max-w-7xl mx-auto min-h-[520px] sm:min-h-[600px] h-[calc(100vh-140px)] flex flex-col animate-in fade-in duration-300">
       {/* Messages Shell Container */}
       <div className="flex-1 rounded-3xl bg-[#0B0F1D] border border-slate-800 overflow-hidden flex flex-col md:flex-row shadow-2xl">
         {/* ======================================================== */}
@@ -429,7 +429,7 @@ export const AdminMessagesView: React.FC = () => {
 
             {/* Encrypted Channel Badge */}
             <div className="flex items-center gap-2 shrink-0">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                 <Circle className="w-1.5 h-1.5 fill-emerald-400" />
                 <span>Encrypted Channel</span>
               </span>

@@ -244,26 +244,26 @@ export const AdminTeamView: React.FC = () => {
       </div>
 
       {/* KPI Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="p-4 rounded-2xl bg-[#0D1527] border border-slate-800">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-[#0D1527] border border-slate-800">
           <span className="text-[11px] font-medium text-slate-400">Total Team Members</span>
-          <p className="text-2xl font-black text-white mt-1">{members.length}</p>
+          <p className="text-xl sm:text-2xl font-black text-white mt-1">{members.length}</p>
         </div>
-        <div className="p-4 rounded-2xl bg-[#0D1527] border border-slate-800">
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-[#0D1527] border border-slate-800">
           <span className="text-[11px] font-medium text-slate-400">Online & Active</span>
-          <p className="text-2xl font-black text-emerald-400 mt-1">
+          <p className="text-xl sm:text-2xl font-black text-emerald-400 mt-1">
             {members.filter((m) => m.status === 'online').length}
           </p>
         </div>
-        <div className="p-4 rounded-2xl bg-[#0D1527] border border-slate-800">
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-[#0D1527] border border-slate-800">
           <span className="text-[11px] font-medium text-slate-400">Assigned Sprints</span>
-          <p className="text-2xl font-black text-cyan-400 mt-1">
+          <p className="text-xl sm:text-2xl font-black text-cyan-400 mt-1">
             {members.reduce((acc, m) => acc + m.activeProjects, 0)}
           </p>
         </div>
-        <div className="p-4 rounded-2xl bg-[#0D1527] border border-slate-800">
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-[#0D1527] border border-slate-800">
           <span className="text-[11px] font-medium text-slate-400">Sprint SLA Delivery</span>
-          <p className="text-2xl font-black text-purple-400 mt-1">99.2%</p>
+          <p className="text-xl sm:text-2xl font-black text-purple-400 mt-1">99.2%</p>
         </div>
       </div>
 
@@ -314,7 +314,7 @@ export const AdminTeamView: React.FC = () => {
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
           {filteredMembers.map((member) => (
             <div
               key={member.id}

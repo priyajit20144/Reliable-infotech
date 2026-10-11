@@ -548,16 +548,16 @@ export const AdminDashboardPage: React.FC = () => {
 
       {/* Sub-tabs header with "Back to Dashboard" when navigating details */}
       {activeTab !== 'dashboard' && (
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800 animate-in fade-in duration-200">
-          <div className="flex items-center gap-3">
+        <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-3 pb-3 border-b border-slate-800 animate-in fade-in duration-200">
+          <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 min-w-0">
             <button
               onClick={() => handleTabChange('dashboard')}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-xs font-semibold text-slate-300 hover:text-white border border-slate-700 transition-colors shadow-sm"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-xs font-semibold text-slate-300 hover:text-white border border-slate-700 transition-colors shadow-sm shrink-0"
             >
               <ChevronLeft className="w-4 h-4" />
               <span>Back to Dashboard</span>
             </button>
-            <h2 className="text-lg sm:text-xl font-extrabold text-white capitalize">
+            <h2 className="text-base sm:text-xl font-extrabold text-white capitalize truncate">
               {activeTab === 'requests'
                 ? 'All Website Requests'
                 : activeTab === 'inquiries'
@@ -584,7 +584,7 @@ export const AdminDashboardPage: React.FC = () => {
             </h2>
           </div>
 
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none text-xs">
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-2 xl:pb-0 scrollbar-thin scrollbar-thumb-slate-800 -mx-1 px-1 text-xs shrink-0 max-w-full">
             {[
               { id: 'requests', label: `Requests (${requests.length})` },
               { id: 'inquiries', label: `Inquiries (${inquiries.length})` },
@@ -623,7 +623,7 @@ export const AdminDashboardPage: React.FC = () => {
           <Card className="p-4 sm:p-5">
             <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
               {/* Search input */}
-              <div className="relative flex-1">
+              <div className="relative flex-1 min-w-0">
                 <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
@@ -643,11 +643,11 @@ export const AdminDashboardPage: React.FC = () => {
               </div>
 
               {/* Status and Priority Filters */}
-              <div className="flex flex-wrap sm:flex-nowrap items-center gap-2.5">
+              <div className="grid grid-cols-2 sm:flex sm:items-center gap-2.5 w-full md:w-auto shrink-0">
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="bg-[#111827] text-white text-xs rounded-xl border border-white/10 px-3 py-2.5 focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-[#111827] text-white text-xs rounded-xl border border-white/10 px-3 py-2.5 focus:outline-none focus:border-indigo-500"
                 >
                   <option value="ALL">All Statuses</option>
                   <option value="NEW">NEW</option>
@@ -665,7 +665,7 @@ export const AdminDashboardPage: React.FC = () => {
                 <select
                   value={priorityFilter}
                   onChange={(e) => setPriorityFilter(e.target.value)}
-                  className="bg-[#111827] text-white text-xs rounded-xl border border-white/10 px-3 py-2.5 focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-[#111827] text-white text-xs rounded-xl border border-white/10 px-3 py-2.5 focus:outline-none focus:border-indigo-500"
                 >
                   <option value="ALL">All Priorities</option>
                   <option value="LOW">LOW</option>
@@ -866,8 +866,8 @@ export const AdminDashboardPage: React.FC = () => {
               {/* RESPONSIVE VIEW 2: Desktop High-Density Table (>= lg) */}
               <div className="hidden lg:block">
                 <Card className="p-0 overflow-hidden border border-white/10 shadow-xl">
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left text-xs">
+                  <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-slate-800">
+                    <table className="w-full text-left text-xs min-w-[1040px]">
                       <thead className="bg-white/[0.03] text-gray-400 uppercase font-mono border-b border-white/10">
                         <tr>
                           <th className="p-4 pl-5">Client Profile</th>
@@ -1032,8 +1032,8 @@ export const AdminDashboardPage: React.FC = () => {
               </div>
 
               {/* Desktop & Tablet Table (hidden sm:block) */}
-              <div className="hidden sm:block overflow-x-auto">
-                <table className="w-full text-left text-xs min-w-[600px]">
+              <div className="hidden sm:block overflow-x-auto scrollbar-thin scrollbar-thumb-slate-800">
+                <table className="w-full text-left text-xs min-w-[760px]">
                   <thead className="bg-white/[0.03] text-gray-400 uppercase font-mono border-b border-white/10">
                     <tr>
                       <th className="p-4 pl-5">Client Name</th>
@@ -1173,7 +1173,7 @@ export const AdminDashboardPage: React.FC = () => {
               )}
             </Card>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 sm:gap-5">
               {filteredProjects.map((proj) => {
                 const isTargetDeleting =
                   isDeletingProject &&
@@ -1339,8 +1339,8 @@ export const AdminDashboardPage: React.FC = () => {
           </div>
 
           {/* Desktop & Tablet Table (hidden sm:block) */}
-          <div className="hidden sm:block overflow-x-auto">
-            <table className="w-full text-left text-xs min-w-[550px]">
+          <div className="hidden sm:block overflow-x-auto scrollbar-thin scrollbar-thumb-slate-800">
+            <table className="w-full text-left text-xs min-w-[680px]">
               <thead className="bg-white/[0.03] text-gray-400 uppercase font-mono border-b border-white/10">
                 <tr>
                   <th className="p-4 pl-5">User</th>

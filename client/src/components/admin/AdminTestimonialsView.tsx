@@ -142,7 +142,7 @@ export const AdminTestimonialsView: React.FC = () => {
 
         <button
           onClick={() => setAddModal(true)}
-          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 active:scale-95 text-white text-xs font-bold shadow-lg shadow-blue-600/30 transition-all shrink-0"
+          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 active:scale-95 text-white text-xs font-bold shadow-lg shadow-blue-600/30 transition-all w-full sm:w-auto shrink-0"
         >
           <Plus className="w-4 h-4" />
           <span>Add Testimonial</span>
@@ -150,21 +150,21 @@ export const AdminTestimonialsView: React.FC = () => {
       </div>
 
       {/* KPI Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-        <div className="p-4 rounded-2xl bg-[#0D1527] border border-slate-800">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-[#0D1527] border border-slate-800">
           <span className="text-[11px] font-medium text-slate-400">Total Client Reviews</span>
-          <p className="text-2xl font-black text-white mt-1">{testimonials.length}</p>
+          <p className="text-xl sm:text-2xl font-black text-white mt-1">{testimonials.length}</p>
         </div>
-        <div className="p-4 rounded-2xl bg-[#0D1527] border border-slate-800">
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-[#0D1527] border border-slate-800">
           <span className="text-[11px] font-medium text-slate-400">Live on Public Landing</span>
-          <p className="text-2xl font-black text-emerald-400 mt-1">
+          <p className="text-xl sm:text-2xl font-black text-emerald-400 mt-1">
             {testimonials.filter((t) => t.published).length}
           </p>
         </div>
-        <div className="p-4 rounded-2xl bg-[#0D1527] border border-slate-800">
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-[#0D1527] border border-slate-800">
           <span className="text-[11px] font-medium text-slate-400">Average Rating</span>
           <div className="flex items-center gap-2 mt-1">
-            <span className="text-2xl font-black text-amber-400">5.0</span>
+            <span className="text-xl sm:text-2xl font-black text-amber-400">5.0</span>
             <div className="flex items-center gap-0.5">
               {[...Array(5)].map((_, i) => (
                 <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
@@ -175,12 +175,12 @@ export const AdminTestimonialsView: React.FC = () => {
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs">
         {(['ALL', 'PUBLISHED', 'DRAFT'] as const).map((st) => (
           <button
             key={st}
             onClick={() => setFilter(st)}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-colors ${
+            className={`px-3.5 py-1.5 rounded-xl font-semibold transition-colors whitespace-nowrap ${
               filter === st
                 ? 'bg-blue-600 text-white'
                 : 'bg-[#0D1527] text-slate-400 hover:text-white border border-slate-800'
@@ -192,7 +192,7 @@ export const AdminTestimonialsView: React.FC = () => {
       </div>
 
       {/* Testimonials Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {filteredTestimonials.map((item) => (
           <div
             key={item.id}
@@ -229,7 +229,7 @@ export const AdminTestimonialsView: React.FC = () => {
             </div>
 
             {/* Author details & actions */}
-            <div className="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-3">
+            <div className="pt-4 mt-4 border-t border-slate-800/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
               <div className="flex items-center gap-3">
                 <img
                   src={item.avatar}

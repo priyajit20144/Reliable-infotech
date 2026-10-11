@@ -72,12 +72,14 @@ export const AdminKpiCards: React.FC<AdminKpiCardsProps> = ({ stats }) => {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3.5 sm:gap-4">
-      {kpis.map((kpi) => {
+      {kpis.map((kpi, idx) => {
         const Icon = kpi.icon;
         return (
           <div
             key={kpi.id}
-            className="group relative overflow-hidden rounded-2xl bg-[#0D1527] border border-slate-800/80 hover:border-slate-700 p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-950/30 flex items-center gap-3.5"
+            className={`group relative overflow-hidden rounded-2xl bg-[#0D1527] border border-slate-800/80 hover:border-slate-700 p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-950/30 flex items-center gap-3.5 ${
+              idx === 4 ? 'sm:col-span-2 lg:col-span-1 xl:col-span-1' : ''
+            }`}
           >
             {/* Subtle card corner shine */}
             <div className="absolute top-0 right-0 w-20 h-20 bg-white/[0.02] rounded-full blur-xl pointer-events-none group-hover:bg-white/[0.04] transition-all" />

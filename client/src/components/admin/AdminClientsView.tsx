@@ -185,7 +185,7 @@ export const AdminClientsView: React.FC<AdminClientsViewProps> = ({ users }) => 
 
         <button
           onClick={() => setCreateModal(true)}
-          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 active:scale-95 text-white text-xs font-bold shadow-lg shadow-blue-600/30 transition-all shrink-0"
+          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 active:scale-95 text-white text-xs font-bold shadow-lg shadow-blue-600/30 transition-all w-full sm:w-auto shrink-0"
         >
           <Plus className="w-4 h-4" />
           <span>Onboard New Client</span>
@@ -193,29 +193,29 @@ export const AdminClientsView: React.FC<AdminClientsViewProps> = ({ users }) => 
       </div>
 
       {/* KPI Stats Bar */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="p-4 rounded-2xl bg-[#0D1527] border border-slate-800">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-[#0D1527] border border-slate-800">
           <span className="text-[11px] font-medium text-slate-400">Total Client Portfolio</span>
-          <p className="text-2xl font-black text-white mt-1">{clients.length}</p>
+          <p className="text-xl sm:text-2xl font-black text-white mt-1">{clients.length}</p>
         </div>
-        <div className="p-4 rounded-2xl bg-[#0D1527] border border-slate-800">
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-[#0D1527] border border-slate-800">
           <span className="text-[11px] font-medium text-slate-400">Active Retainers</span>
-          <p className="text-2xl font-black text-emerald-400 mt-1">
+          <p className="text-xl sm:text-2xl font-black text-emerald-400 mt-1">
             {clients.filter((c) => c.status === 'ACTIVE').length}
           </p>
         </div>
-        <div className="p-4 rounded-2xl bg-[#0D1527] border border-slate-800">
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-[#0D1527] border border-slate-800">
           <span className="text-[11px] font-medium text-slate-400">Avg Lifetime Spend</span>
-          <p className="text-2xl font-black text-cyan-400 mt-1">$7,680</p>
+          <p className="text-xl sm:text-2xl font-black text-cyan-400 mt-1">$7,680</p>
         </div>
-        <div className="p-4 rounded-2xl bg-[#0D1527] border border-slate-800">
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-[#0D1527] border border-slate-800">
           <span className="text-[11px] font-medium text-slate-400">Client Retention</span>
-          <p className="text-2xl font-black text-purple-400 mt-1">96.4%</p>
+          <p className="text-xl sm:text-2xl font-black text-purple-400 mt-1">96.4%</p>
         </div>
       </div>
 
       {/* Search & Filter Toolbar */}
-      <div className="p-4 rounded-2xl bg-[#0D1527] border border-slate-800 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+      <div className="p-3.5 sm:p-4 rounded-2xl bg-[#0D1527] border border-slate-800 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
         <div className="relative flex-1 max-w-md">
           <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
@@ -245,7 +245,7 @@ export const AdminClientsView: React.FC<AdminClientsViewProps> = ({ users }) => 
       </div>
 
       {/* Clients Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
         {filteredClients.map((client) => (
           <div
             key={client.id}

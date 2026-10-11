@@ -106,28 +106,28 @@ export const AdminNavbar: React.FC<AdminNavbarProps> = ({
   ];
 
   return (
-    <header className="sticky top-0 z-30 h-16 w-full bg-[#0B101E]/90 backdrop-blur-xl border-b border-slate-800/80 px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
+    <header className="sticky top-0 z-30 h-16 w-full bg-[#0B101E]/90 backdrop-blur-xl border-b border-slate-800/80 px-3 sm:px-6 lg:px-8 flex items-center justify-between gap-2 sm:gap-4">
       {/* Left Area: Mobile Menu Trigger + Search Bar */}
-      <div className="flex items-center gap-3 sm:gap-4 flex-1 max-w-xl">
+      <div className="flex items-center gap-2 sm:gap-4 flex-1 min-w-0 max-w-xl">
         {/* Mobile Hamburger Button */}
         <button
           onClick={onOpenMobileSidebar}
-          className="lg:hidden p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 transition-colors"
+          className="lg:hidden p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 transition-colors shrink-0"
           aria-label="Open Admin Navigation"
         >
           <Menu className="w-5 h-5" />
         </button>
 
         {/* Global Search Bar */}
-        <div className="relative w-full max-w-md">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+        <div className="relative w-full max-w-md min-w-0">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
           <input
             ref={searchInputRef}
             type="text"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Search anything..."
-            className="w-full bg-[#111827]/80 text-sm text-white placeholder-slate-400 rounded-xl pl-9 pr-14 py-2 border border-slate-700/60 hover:border-slate-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all shadow-inner"
+            className="w-full bg-[#111827]/80 text-xs sm:text-sm text-white placeholder-slate-400 rounded-xl pl-8 sm:pl-9 pr-6 sm:pr-14 py-2 border border-slate-700/60 hover:border-slate-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all shadow-inner truncate"
           />
           <div className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none hidden sm:flex items-center">
             <kbd className="px-1.5 py-0.5 text-[10px] font-semibold text-slate-400 bg-slate-800/90 border border-slate-700/60 rounded flex items-center gap-0.5 shadow-sm">
@@ -139,7 +139,7 @@ export const AdminNavbar: React.FC<AdminNavbarProps> = ({
       </div>
 
       {/* Right Area: Notification Bell & Admin Profile */}
-      <div className="flex items-center gap-3 sm:gap-4 shrink-0">
+      <div className="flex items-center gap-1.5 sm:gap-4 shrink-0">
         {/* Notification Bell Dropdown */}
         <div className="relative" ref={notifRef}>
           <button
@@ -157,7 +157,7 @@ export const AdminNavbar: React.FC<AdminNavbarProps> = ({
 
           {/* Notifications Dropdown Panel */}
           {showNotifications && (
-            <div className="absolute right-0 mt-2 w-[calc(100vw-2rem)] max-w-sm sm:w-96 rounded-2xl bg-[#0F172A] border border-slate-700/80 shadow-2xl overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-150">
+            <div className="absolute right-0 sm:right-0 mt-2 w-[calc(100vw-1.5rem)] max-w-sm rounded-2xl bg-[#0F172A] border border-slate-700/80 shadow-2xl overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-150">
               <div className="p-3.5 border-b border-slate-800 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="font-bold text-sm text-white">Notifications</span>
