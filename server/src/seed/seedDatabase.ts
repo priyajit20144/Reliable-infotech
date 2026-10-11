@@ -47,8 +47,8 @@ export const seedDatabaseIfEmpty = async () => {
       console.log(`[MongoDB Seeder] Successfully seeded ${store.users.length} users.`);
     }
 
-    // Only seed projects if initial seed has NEVER happened before
-    if (!meta.hasSeededProjects && existingProjectCount === 0) {
+    // Only seed projects if table is empty of active projects
+    if (existingProjectCount === 0) {
       const deletedSet = new Set(mergedDeleted);
       const eligibleProjects = store.projects.filter(
         (p) => !deletedSet.has(p._id) && !deletedSet.has(p.slug)
@@ -59,9 +59,6 @@ export const seedDatabaseIfEmpty = async () => {
         await ProjectModel.insertMany(eligibleProjects);
         console.log(`[MongoDB Seeder] Successfully seeded initial showcase projects.`);
       }
-      meta.hasSeededProjects = true;
-      await meta.save();
-    } else if (existingProjectCount > 0 && !meta.hasSeededProjects) {
       meta.hasSeededProjects = true;
       await meta.save();
     }
