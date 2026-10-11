@@ -41,86 +41,7 @@ const PRESET_AVATARS = [
   'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
 ];
 
-const INITIAL_MEMBERS: TeamMember[] = [
-  {
-    id: 'tm_1',
-    name: 'Priyajit Das',
-    role: 'Founder & Principal Systems Architect',
-    department: 'Full Stack',
-    email: 'priyajitd80@gmail.com',
-    phone: '+91 98765 43210',
-    avatar:
-      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
-    status: 'online',
-    activeProjects: 4,
-    skills: ['Architecture', 'Kubernetes', 'TypeScript', 'React', 'Security'],
-  },
-  {
-    id: 'tm_2',
-    name: 'Sarah Chen',
-    role: 'Lead Cloud & Systems Engineer',
-    department: 'DevOps',
-    email: 'team@reliableinfotech.io',
-    phone: '+1 (555) 876-5432',
-    avatar:
-      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80',
-    status: 'online',
-    activeProjects: 3,
-    skills: ['AWS', 'Docker', 'PostgreSQL', 'Terraform', 'Node.js'],
-  },
-  {
-    id: 'tm_3',
-    name: 'Rahul Sharma',
-    role: 'Senior Frontend Developer',
-    department: 'Frontend',
-    email: 'rahul.dev@reliableinfotech.io',
-    phone: '+1 (555) 234-5678',
-    avatar:
-      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80',
-    status: 'online',
-    activeProjects: 3,
-    skills: ['React', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
-  },
-  {
-    id: 'tm_4',
-    name: 'Priya Mehta',
-    role: 'Senior Backend Engineer',
-    department: 'Backend',
-    email: 'priya.backend@reliableinfotech.io',
-    phone: '+1 (555) 987-6543',
-    avatar:
-      'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=150&q=80',
-    status: 'online',
-    activeProjects: 2,
-    skills: ['Express', 'MongoDB', 'Redis', 'GraphQL', 'Python'],
-  },
-  {
-    id: 'tm_5',
-    name: 'Amit Verma',
-    role: 'Principal UI/UX Designer',
-    department: 'UI/UX',
-    email: 'amit.design@reliableinfotech.io',
-    phone: '+1 (555) 456-7890',
-    avatar:
-      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80',
-    status: 'away',
-    activeProjects: 2,
-    skills: ['Figma', 'Design Systems', 'Micro-interactions', 'Prototyping'],
-  },
-  {
-    id: 'tm_6',
-    name: 'Neha Singh',
-    role: 'Full Stack Engineer',
-    department: 'Full Stack',
-    email: 'neha.fullstack@reliableinfotech.io',
-    phone: '+1 (555) 321-7654',
-    avatar:
-      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
-    status: 'online',
-    activeProjects: 3,
-    skills: ['Next.js', 'PostgreSQL', 'Stripe', 'Docker'],
-  },
-];
+const INITIAL_MEMBERS: TeamMember[] = [];
 
 export const AdminTeamView: React.FC = () => {
   const [filterDept, setFilterDept] = useState<string>('ALL');
@@ -128,7 +49,7 @@ export const AdminTeamView: React.FC = () => {
   const [memberToRemove, setMemberToRemove] = useState<TeamMember | null>(null);
   const [headerRemoveModal, setHeaderRemoveModal] = useState(false);
   const [selectedHeaderMemberId, setSelectedHeaderMemberId] = useState<string>('');
-  const [reassignTo, setReassignTo] = useState<string>('Sarah Chen (Lead Cloud)');
+  const [reassignTo, setReassignTo] = useState<string>('Unassigned Pool');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // New member form state
@@ -141,16 +62,29 @@ export const AdminTeamView: React.FC = () => {
   const [newMemberAvatar, setNewMemberAvatar] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Persistent team members from localStorage
+  // Persistent team members from localStorage (strictly real, non-demo members)
   const [members, setMembers] = useState<TeamMember[]>(() => {
     try {
       const saved = localStorage.getItem('reliable_admin_team_members');
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed)) {
+          const demoIds = ['tm_1', 'tm_2', 'tm_3', 'tm_4', 'tm_5', 'tm_6'];
+          const demoEmails = [
+            'team@reliableinfotech.io',
+            'rahul.dev@reliableinfotech.io',
+            'priya.backend@reliableinfotech.io',
+            'amit.design@reliableinfotech.io',
+            'neha.fullstack@reliableinfotech.io',
+          ];
+          const validReal = parsed.filter(
+            (m: any) => !demoIds.includes(m.id) && !demoEmails.includes(m.email)
+          );
+          return validReal;
+        }
       }
     } catch (e) {}
-    return INITIAL_MEMBERS;
+    return [];
   });
 
   useEffect(() => {
@@ -329,7 +263,9 @@ export const AdminTeamView: React.FC = () => {
         </div>
         <div className="p-3.5 sm:p-4 rounded-2xl bg-[#0D1527] border border-slate-800">
           <span className="text-[11px] font-medium text-slate-400">Sprint SLA Delivery</span>
-          <p className="text-xl sm:text-2xl font-black text-purple-400 mt-1">99.2%</p>
+          <p className="text-xl sm:text-2xl font-black text-purple-400 mt-1">
+            {members.length > 0 ? '99.2%' : '100%'}
+          </p>
         </div>
       </div>
 
@@ -353,16 +289,16 @@ export const AdminTeamView: React.FC = () => {
       {/* Team Members Grid or Empty State */}
       {filteredMembers.length === 0 ? (
         <div className="p-12 text-center rounded-3xl bg-[#0D1527] border border-slate-800">
-          <div className="w-14 h-14 mx-auto rounded-2xl bg-slate-800/60 text-slate-400 flex items-center justify-center mb-4">
-            <Users2 className="w-7 h-7" />
+          <div className="w-16 h-16 mx-auto rounded-2xl bg-blue-600/10 border border-blue-500/20 text-blue-400 flex items-center justify-center mb-4 shadow-lg shadow-blue-500/10">
+            <Users2 className="w-8 h-8" />
           </div>
-          <h3 className="text-base font-bold text-white">No team members found</h3>
-          <p className="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
+          <h3 className="text-lg font-bold text-white">No Team Members Added Yet</h3>
+          <p className="text-xs text-slate-400 mt-1.5 max-w-md mx-auto leading-relaxed">
             {filterDept === 'ALL'
-              ? 'There are currently no active team members in Reliable Info Tech Core.'
+              ? 'All demo team members have been permanently removed. You can now add your verified team members with custom photos, roles, and department allocations.'
               : `No team members found in the "${filterDept}" department.`}
           </p>
-          <div className="mt-5 flex items-center justify-center gap-3">
+          <div className="mt-6 flex items-center justify-center gap-3">
             {filterDept !== 'ALL' && (
               <button
                 onClick={() => setFilterDept('ALL')}
@@ -373,9 +309,10 @@ export const AdminTeamView: React.FC = () => {
             )}
             <button
               onClick={() => setAddModal(true)}
-              className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white shadow-lg shadow-blue-600/30 transition-colors"
+              className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white shadow-lg shadow-blue-600/30 flex items-center gap-2 transition-all active:scale-95"
             >
-              Add Member
+              <Plus className="w-4 h-4" />
+              <span>Add Team Member</span>
             </button>
           </div>
         </div>

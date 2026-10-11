@@ -21,7 +21,22 @@ export const AdminRequestModal: React.FC<AdminRequestModalProps> = ({
   const original = request.originalRequest;
   const initialStatus = original?.status || 'UNDER_REVIEW';
   const [status, setStatus] = useState<string>(initialStatus);
-  const [assignedTo, setAssignedTo] = useState<string>(original?.assignedTo || 'Sarah Chen (Lead Architect)');
+  const [assignedTo, setAssignedTo] = useState<string>(
+    original?.assignedTo || 'Priyajit Das (Lead Architect)'
+  );
+  const [teamOptions, setTeamOptions] = useState<any[]>(() => {
+    try {
+      const saved = localStorage.getItem('reliable_admin_team_members');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          const demoIds = ['tm_1', 'tm_2', 'tm_3', 'tm_4', 'tm_5', 'tm_6'];
+          return parsed.filter((m: any) => !demoIds.includes(m.id));
+        }
+      }
+    } catch (e) {}
+    return [];
+  });
   const [note, setNote] = useState<string>('');
   const [saving, setSaving] = useState(false);
 
@@ -161,10 +176,13 @@ export const AdminRequestModal: React.FC<AdminRequestModalProps> = ({
                   onChange={(e) => setAssignedTo(e.target.value)}
                   className="w-full bg-[#111827] text-xs text-white rounded-xl px-3 py-2 border border-slate-700 focus:outline-none focus:border-blue-500"
                 >
-                  <option value="Sarah Chen (Lead Architect)">Sarah Chen (Lead Architect)</option>
-                  <option value="Rahul Sharma (Frontend Developer)">Rahul Sharma (Frontend Developer)</option>
-                  <option value="Priya Mehta (Backend Developer)">Priya Mehta (Backend Developer)</option>
-                  <option value="Alex Rivera (System Admin)">Alex Rivera (System Admin)</option>
+                  <option value="Priyajit Das (Lead Architect)">Priyajit Das (Lead Architect)</option>
+                  <option value="Reliable Info Tech Core Team">Reliable Info Tech Core Team</option>
+                  {teamOptions.map((t: any) => (
+                    <option key={t.id} value={`${t.name} (${t.role})`}>
+                      {t.name} ({t.role})
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>

@@ -42,63 +42,47 @@ interface TeamMember {
 export const AboutPage: React.FC = () => {
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
 
-  const teamMembers: TeamMember[] = [
-    {
-      id: 'rahul-sharma',
-      name: 'Rahul Sharma',
-      role: 'Founder & CEO',
-      image: '/images/team/rahul.jpg',
-      bio: 'Visionary entrepreneur and tech strategist with 8+ years leading cross-functional engineering teams, architecting scalable platforms, and empowering businesses through modern software.',
-      skills: ['System Architecture', 'Product Strategy', 'Cloud Infrastructure', 'Team Leadership'],
-      linkedin: 'https://linkedin.com',
-      github: 'https://github.com',
-      instagram: 'https://instagram.com',
-    },
-    {
-      id: 'priya-mehta',
-      name: 'Priya Mehta',
-      role: 'Frontend Developer',
-      image: '/images/team/priya.jpg',
-      bio: 'Specialist in modern React ecosystems, micro-interactions, responsive design systems, and crafting silky-smooth, accessible digital interfaces.',
-      skills: ['React', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Web Accessibility'],
-      linkedin: 'https://linkedin.com',
-      github: 'https://github.com',
-      instagram: 'https://instagram.com',
-    },
-    {
-      id: 'amit-verma',
-      name: 'Amit Verma',
-      role: 'Backend Developer',
-      image: '/images/team/amit.jpg',
-      bio: 'Dedicated backend systems engineer focused on high-throughput microservices, robust REST/GraphQL APIs, distributed databases, and bulletproof security protocols.',
-      skills: ['Node.js', 'Express', 'MongoDB Atlas', 'PostgreSQL', 'Redis', 'Docker'],
-      linkedin: 'https://linkedin.com',
-      github: 'https://github.com',
-      instagram: 'https://instagram.com',
-    },
-    {
-      id: 'neha-singh',
-      name: 'Neha Singh',
-      role: 'UI/UX Designer',
-      image: '/images/team/neha.jpg',
-      bio: 'Human-centered product designer turning complex business workflows into intuitive, beautiful, and delightfully frictionless interactive prototypes.',
-      skills: ['Figma', 'UI Architecture', 'User Journey Mapping', 'Design Tokens', 'Design Systems'],
-      linkedin: 'https://linkedin.com',
-      github: 'https://github.com',
-      instagram: 'https://instagram.com',
-    },
-    {
-      id: 'rohit-kumar',
-      name: 'Rohit Kumar',
-      role: 'Full Stack Developer',
-      image: '/images/team/rohit.jpg',
-      bio: 'End-to-end full stack engineer bridging client interfaces and server infrastructure with clean maintainable code, test automation, and CI/CD pipelines.',
-      skills: ['Full Stack Dev', 'MERN Stack', 'Next.js', 'API Integration', 'DevOps CI/CD'],
-      linkedin: 'https://linkedin.com',
-      github: 'https://github.com',
-      instagram: 'https://instagram.com',
-    },
-  ];
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>(() => {
+    try {
+      const saved = localStorage.getItem('reliable_admin_team_members');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          const demoIds = ['tm_1', 'tm_2', 'tm_3', 'tm_4', 'tm_5', 'tm_6'];
+          const valid = parsed.filter((m: any) => !demoIds.includes(m.id));
+          if (valid.length > 0) {
+            return valid.map((m: any) => ({
+              id: m.id,
+              name: m.name,
+              role: m.role,
+              image: m.avatar,
+              bio: `Core engineering specialist in ${m.department} contributing to scalable, enterprise web platforms and client solutions.`,
+              skills: m.skills || ['Full Stack', 'Modern Web', 'Reliable Info Tech'],
+              linkedin: 'https://linkedin.com',
+              github: 'https://github.com',
+              instagram: 'https://instagram.com',
+            }));
+          }
+        }
+      }
+    } catch (e) {}
+
+    // Founder profile
+    return [
+      {
+        id: 'priyajit-das',
+        name: 'Priyajit Das',
+        role: 'Founder & Principal Systems Architect',
+        image:
+          'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80',
+        bio: 'Visionary architect and lead developer leading reliable digital transformations, custom full-stack web platforms, and modern enterprise software architectures.',
+        skills: ['System Architecture', 'Product Strategy', 'Cloud Infrastructure', 'Full Stack Development'],
+        linkedin: 'https://linkedin.com',
+        github: 'https://github.com',
+        instagram: 'https://instagram.com',
+      },
+    ];
+  });
 
   const values = [
     {
