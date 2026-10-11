@@ -4,7 +4,7 @@ import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import path from 'path';
 import dotenv from 'dotenv';
-import { connectDB, isConnectedToMongo } from './config/db.js';
+import { connectDB, isConnectedToMongo, getMongoConnectionStatus } from './config/db.js';
 import { errorHandler } from './middleware/errorHandler.js';
 
 // Route imports
@@ -99,6 +99,7 @@ app.get(['/api', '/api/', '/api/health', '/health'], (_req, res) => {
     status: 'online',
     platform: 'Reliable Info Tech Platform API',
     mongoConnected: isConnectedToMongo,
+    mongoDetails: getMongoConnectionStatus(),
     timestamp: new Date().toISOString(),
   });
 });
