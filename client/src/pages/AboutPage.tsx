@@ -83,14 +83,38 @@ export const AboutPage: React.FC = () => {
       }
     } catch (e) {}
 
-    // Founder profile
+    // Core Engineering Team & Creators
     return [
+      {
+        id: 'sahil-sekh',
+        name: 'Sahil Sekh',
+        role: 'Lead Full Stack & UI Architect',
+        image:
+          'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=400&q=80',
+        bio: 'Frontend architect and full-stack specialist spearheading responsive user interfaces, reactive state paradigms, dynamic animations, and enterprise web solutions.',
+        skills: ['React / Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'REST & GraphQL APIs'],
+        linkedin: 'https://linkedin.com',
+        github: 'https://github.com',
+        instagram: 'https://instagram.com',
+      },
+      {
+        id: 'diganta-chakraborty',
+        name: 'Diganta Chakraborty',
+        role: 'Senior Full Stack & Cloud Systems Engineer',
+        image:
+          'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=400&q=80',
+        bio: 'Senior full-stack engineer leading backend architecture, database optimizations, resilient microservices, and secure cloud pipelines.',
+        skills: ['Node.js & Express', 'PostgreSQL / MongoDB', 'System Design', 'Cloud DevOps', 'Docker / CI/CD'],
+        linkedin: 'https://linkedin.com',
+        github: 'https://github.com',
+        instagram: 'https://instagram.com',
+      },
       {
         id: 'priyajit-das',
         name: 'Priyajit Das',
         role: 'Founder & Principal Systems Architect',
         image:
-          'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80',
+          'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
         bio: 'Visionary architect and lead developer leading reliable digital transformations, custom full-stack web platforms, and modern enterprise software architectures.',
         skills: ['System Architecture', 'Product Strategy', 'Cloud Infrastructure', 'Full Stack Development'],
         linkedin: 'https://linkedin.com',

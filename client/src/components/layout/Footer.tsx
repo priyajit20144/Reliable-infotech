@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Code2,
@@ -13,191 +13,596 @@ import {
   ArrowUp,
   Rocket,
   ArrowRight,
+  Heart,
+  Sparkles,
+  Terminal,
+  CheckCircle2,
+  Github,
+  Copy,
+  Check,
+  Zap,
+  ExternalLink,
+  ShieldCheck,
+  Send,
+  Cpu,
 } from 'lucide-react';
+import { Modal } from '../common/Modal';
+
+interface CreatorProfile {
+  id: string;
+  name: string;
+  role: string;
+  badge: string;
+  avatar: string;
+  initials: string;
+  shortBio: string;
+  fullBio: string;
+  specialties: string[];
+  skills: string[];
+  github: string;
+  linkedin: string;
+  email: string;
+  accent: {
+    name: string;
+    text: string;
+    badgeBg: string;
+    border: string;
+    glow: string;
+    gradient: string;
+    ring: string;
+  };
+}
+
+const CREATORS: CreatorProfile[] = [
+  {
+    id: 'sahil-sekh',
+    name: 'Sahil Sekh',
+    role: 'Lead Full Stack & UI Architect',
+    badge: 'UI Architecture Lead',
+    avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=400&q=80',
+    initials: 'SS',
+    shortBio: 'Frontend architect and full-stack specialist crafting interactive user interfaces and micro-animations.',
+    fullBio: 'Sahil is a Senior Full Stack Developer specializing in responsive design architectures, high-performance React ecosystems, dynamic animations, and state orchestration. He leads the visual fidelity, UX design language, and frontend performance at Reliable InfoTech.',
+    specialties: ['React / Next.js', 'Interactive UI & Motion', 'TypeScript Ecosystem', 'Component Systems'],
+    skills: ['React 19', 'TypeScript', 'Next.js', 'Tailwind CSS', 'Framer Motion', 'REST/GraphQL', 'Vite', 'UI/UX Design'],
+    github: 'https://github.com',
+    linkedin: 'https://linkedin.com',
+    email: 'sahil@reliableinfotech.io',
+    accent: {
+      name: 'cyan',
+      text: 'text-cyan-400',
+      badgeBg: 'bg-cyan-500/15 border-cyan-500/30 text-cyan-300',
+      border: 'hover:border-cyan-500/50',
+      glow: 'group-hover:shadow-[0_0_30px_rgba(6,182,212,0.3)]',
+      gradient: 'from-cyan-500/20 via-blue-500/10 to-transparent',
+      ring: 'ring-cyan-500/40',
+    },
+  },
+  {
+    id: 'diganta-chakraborty',
+    name: 'Diganta Chakraborty',
+    role: 'Senior Full Stack & Systems Engineer',
+    badge: 'Cloud & API Systems Lead',
+    avatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=400&q=80',
+    initials: 'DC',
+    shortBio: 'Full-stack systems engineer focused on resilient backend microservices, databases, and secure APIs.',
+    fullBio: 'Diganta leads backend engineering, data modeling, database optimizations, and secure API gateways. With a deep passion for scalable architecture, he ensures every system behind Reliable InfoTech is lightning fast, reliable, and fault-tolerant.',
+    specialties: ['Backend Engineering', 'Database Design & SQL', 'Cloud Microservices', 'API Security & Auth'],
+    skills: ['Node.js', 'Express', 'PostgreSQL', 'MongoDB', 'REST APIs', 'System Design', 'Docker', 'Redis'],
+    github: 'https://github.com',
+    linkedin: 'https://linkedin.com',
+    email: 'diganta@reliableinfotech.io',
+    accent: {
+      name: 'indigo',
+      text: 'text-indigo-400',
+      badgeBg: 'bg-indigo-500/15 border-indigo-500/30 text-indigo-300',
+      border: 'hover:border-indigo-500/50',
+      glow: 'group-hover:shadow-[0_0_30px_rgba(99,102,241,0.3)]',
+      gradient: 'from-indigo-500/20 via-purple-500/10 to-transparent',
+      ring: 'ring-indigo-500/40',
+    },
+  },
+  {
+    id: 'priyajit-das',
+    name: 'Priyajit Das',
+    role: 'Founder & Principal Systems Architect',
+    badge: 'Founder & Systems Architect',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
+    initials: 'PD',
+    shortBio: 'Visionary architect and founder steering enterprise digital transformations, cloud infrastructure, and technical strategy.',
+    fullBio: 'Priyajit is the Founder and Principal Systems Architect behind Reliable InfoTech. He leads technical roadmap execution, enterprise web strategy, scalable cloud platforms, and end-to-end full-stack digital transformations with unwavering dedication to engineering excellence.',
+    specialties: ['Enterprise Architecture', 'Cloud Infrastructure', 'Technical Leadership', 'Full Stack Core'],
+    skills: ['Cloud Architecture', 'DevOps & CI/CD', 'Full Stack Development', 'Product Strategy', 'System Scaling', 'Database Optimization'],
+    github: 'https://github.com',
+    linkedin: 'https://linkedin.com',
+    email: 'priyajit@reliableinfotech.io',
+    accent: {
+      name: 'purple',
+      text: 'text-purple-400',
+      badgeBg: 'bg-purple-500/15 border-purple-500/30 text-purple-300',
+      border: 'hover:border-purple-500/50',
+      glow: 'group-hover:shadow-[0_0_30px_rgba(168,85,247,0.3)]',
+      gradient: 'from-purple-500/20 via-pink-500/10 to-transparent',
+      ring: 'ring-purple-500/40',
+    },
+  },
+];
 
 export const Footer: React.FC = () => {
+  const [copiedEmail, setCopiedEmail] = useState<boolean>(false);
+  const [selectedCreator, setSelectedCreator] = useState<CreatorProfile | null>(null);
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleCopyEmail = (e: React.MouseEvent) => {
+    e.preventDefault();
+    navigator.clipboard.writeText('contact@reliableinfotech.io');
+    setCopiedEmail(true);
+    setTimeout(() => setCopiedEmail(false), 2200);
+  };
+
   return (
-    <footer className="w-full bg-[#070A12] border-t border-white/8 pt-16 pb-12 text-gray-400 select-none relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <footer className="w-full bg-[#070A12] border-t border-white/8 pt-16 pb-12 text-gray-400 select-none relative overflow-hidden">
+      {/* Top Animated Laser Beam Divider */}
+      <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-cyan-500/40 via-indigo-500/50 to-transparent overflow-hidden">
+        <div className="h-full w-48 bg-gradient-to-r from-transparent via-cyan-300 to-transparent animate-beam" />
+      </div>
+
+      {/* Ambient Radial Background Glows */}
+      <div className="absolute top-0 left-1/4 -translate-x-1/2 w-[550px] h-[350px] bg-cyan-600/5 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-1/3 right-1/4 translate-x-1/2 w-[550px] h-[350px] bg-indigo-600/5 rounded-full blur-[140px] pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
-        {/* Main Grid matching reference image */}
+        {/* ========================================================================= */}
+        {/* 1. MAIN GRID (5 Columns)                                                  */}
+        {/* ========================================================================= */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 pb-12 border-b border-white/8 text-left items-start">
           
           {/* Column 1: Brand Info (col-span-3) */}
           <div className="lg:col-span-3 space-y-4">
-            <Link to="/" className="flex items-center gap-2.5">
+            <Link to="/" className="flex items-center gap-2.5 group w-fit">
               <img
                 src="/reliable-symbol.png"
                 alt="Reliable InfoTech Logo"
-                className="w-9 h-9 object-contain drop-shadow-[0_0_10px_rgba(6,182,212,0.5)]"
+                className="w-9 h-9 object-contain drop-shadow-[0_0_12px_rgba(6,182,212,0.6)] group-hover:scale-110 group-hover:rotate-6 transition-all duration-300"
               />
               <span className="text-xl font-extrabold text-white tracking-tight flex items-center">
                 <span>Reliable</span>
-                <span className="text-cyan-400 ml-1">Info</span>
-                <span className="text-purple-400">Tech</span>
+                <span className="text-cyan-400 ml-1 group-hover:text-cyan-300 transition-colors">Info</span>
+                <span className="text-purple-400 group-hover:text-purple-300 transition-colors">Tech</span>
               </span>
             </Link>
+
             <p className="text-xs text-gray-400 leading-relaxed max-w-xs font-normal">
-              We build modern websites, web applications, e-commerce platforms and custom digital products for businesses and individuals.
+              We build modern websites, web applications, e-commerce platforms and custom digital products for businesses and individuals worldwide.
             </p>
-            {/* Social Icons */}
+
+            {/* Live Operational Status Badge */}
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[11px] font-medium text-emerald-400">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+              </span>
+              <span>Available for New Projects</span>
+            </div>
+
+            {/* Social Icons with Glowing States */}
             <div className="flex items-center gap-2 pt-1">
-              <a
-                href="https://facebook.com"
-                target="_blank"
-                rel="noreferrer"
-                className="w-7 h-7 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-colors"
-                aria-label="Facebook"
-              >
-                <Facebook className="w-3.5 h-3.5" />
-              </a>
-              <a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noreferrer"
-                className="w-7 h-7 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-colors"
-                aria-label="Twitter"
-              >
-                <Twitter className="w-3.5 h-3.5" />
-              </a>
-              <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noreferrer"
-                className="w-7 h-7 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-colors"
-                aria-label="LinkedIn"
-              >
-                <Linkedin className="w-3.5 h-3.5" />
-              </a>
-              <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noreferrer"
-                className="w-7 h-7 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-colors"
-                aria-label="Instagram"
-              >
-                <Instagram className="w-3.5 h-3.5" />
-              </a>
-              <a
-                href="https://youtube.com"
-                target="_blank"
-                rel="noreferrer"
-                className="w-7 h-7 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-colors"
-                aria-label="YouTube"
-              >
-                <Youtube className="w-3.5 h-3.5" />
-              </a>
+              {[
+                { Icon: Facebook, href: 'https://facebook.com', label: 'Facebook' },
+                { Icon: Twitter, href: 'https://twitter.com', label: 'Twitter' },
+                { Icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
+                { Icon: Instagram, href: 'https://instagram.com', label: 'Instagram' },
+                { Icon: Youtube, href: 'https://youtube.com', label: 'YouTube' },
+                { Icon: Github, href: 'https://github.com', label: 'GitHub' },
+              ].map(({ Icon, href, label }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-7 h-7 rounded-lg bg-white/5 hover:bg-white/10 hover:border-cyan-500/40 border border-transparent flex items-center justify-center text-gray-400 hover:text-cyan-300 hover:shadow-[0_0_12px_rgba(6,182,212,0.4)] hover:-translate-y-0.5 transition-all duration-200"
+                  aria-label={label}
+                  title={label}
+                >
+                  <Icon className="w-3.5 h-3.5" />
+                </a>
+              ))}
             </div>
           </div>
 
           {/* Column 2: Quick Links (col-span-2) */}
           <div className="lg:col-span-2 space-y-3">
-            <h4 className="text-xs font-bold text-white uppercase tracking-wider">
+            <h4 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
               Quick Links
             </h4>
             <ul className="space-y-2 text-xs">
-              <li>
-                <Link to="/" className="hover:text-white transition-colors">Home</Link>
-              </li>
-              <li>
-                <Link to="/projects" className="hover:text-white transition-colors">Projects</Link>
-              </li>
-              <li>
-                <a href="#services" className="hover:text-white transition-colors">Services</a>
-              </li>
-              <li>
-                <a href="#process" className="hover:text-white transition-colors">About</a>
-              </li>
-              <li>
-                <Link to="/contact" className="hover:text-white transition-colors">Contact</Link>
-              </li>
+              {[
+                { to: '/', label: 'Home' },
+                { to: '/projects', label: 'Projects' },
+                { href: '#services', label: 'Services' },
+                { href: '#process', label: 'About' },
+                { to: '/contact', label: 'Contact' },
+              ].map((item, idx) => (
+                <li key={idx}>
+                  {item.to ? (
+                    <Link
+                      to={item.to}
+                      className="group flex items-center gap-1.5 hover:text-white transition-all duration-200 hover:translate-x-1"
+                    >
+                      <span className="w-1 h-1 rounded-full bg-transparent group-hover:bg-cyan-400 transition-colors" />
+                      <span>{item.label}</span>
+                    </Link>
+                  ) : (
+                    <a
+                      href={item.href}
+                      className="group flex items-center gap-1.5 hover:text-white transition-all duration-200 hover:translate-x-1"
+                    >
+                      <span className="w-1 h-1 rounded-full bg-transparent group-hover:bg-cyan-400 transition-colors" />
+                      <span>{item.label}</span>
+                    </a>
+                  )}
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* Column 3: Services (col-span-2) */}
           <div className="lg:col-span-2 space-y-3">
-            <h4 className="text-xs font-bold text-white uppercase tracking-wider">
+            <h4 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
               Services
             </h4>
             <ul className="space-y-2 text-xs">
-              <li>
-                <a href="#services" className="hover:text-white transition-colors">Web Development</a>
-              </li>
-              <li>
-                <a href="#services" className="hover:text-white transition-colors">E-Commerce</a>
-              </li>
-              <li>
-                <a href="#services" className="hover:text-white transition-colors">Custom Software</a>
-              </li>
-              <li>
-                <a href="#services" className="hover:text-white transition-colors">UI/UX Design</a>
-              </li>
-              <li>
-                <a href="#services" className="hover:text-white transition-colors">Maintenance</a>
-              </li>
+              {[
+                'Web Development',
+                'E-Commerce',
+                'Custom Software',
+                'UI/UX Design',
+                'Cloud & Maintenance',
+              ].map((service, idx) => (
+                <li key={idx}>
+                  <a
+                    href="#services"
+                    className="group flex items-center gap-1.5 hover:text-white transition-all duration-200 hover:translate-x-1"
+                  >
+                    <span className="w-1 h-1 rounded-full bg-transparent group-hover:bg-indigo-400 transition-colors" />
+                    <span>{service}</span>
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* Column 4: Contact Details (col-span-2) */}
           <div className="lg:col-span-2 space-y-3">
-            <h4 className="text-xs font-bold text-white uppercase tracking-wider">
+            <h4 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
               Contact
             </h4>
             <ul className="space-y-2.5 text-xs">
-              <li className="flex items-center gap-2">
-                <Mail className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
-                <a href="mailto:contact@reliableinfotech.io" className="hover:text-white transition-colors">
-                  contact@reliableinfotech.io
-                </a>
+              <li className="relative group">
+                <button
+                  type="button"
+                  onClick={handleCopyEmail}
+                  className="flex items-center gap-2 text-left hover:text-white transition-colors w-full focus:outline-none"
+                  title="Click to copy email address"
+                >
+                  <div className="w-6 h-6 rounded-md bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shrink-0 group-hover:bg-indigo-500/20 text-indigo-400 transition-colors">
+                    {copiedEmail ? <Check className="w-3 h-3 text-emerald-400" /> : <Mail className="w-3 h-3" />}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <span className="block truncate text-gray-300 group-hover:text-white">
+                      contact@reliableinfotech.io
+                    </span>
+                    <span className="text-[10px] text-cyan-400/80 group-hover:text-cyan-300 flex items-center gap-1 mt-0.5">
+                      {copiedEmail ? (
+                        <span className="text-emerald-400 font-semibold flex items-center gap-1">
+                          <Check className="w-2.5 h-2.5" /> Copied to clipboard!
+                        </span>
+                      ) : (
+                        <span className="flex items-center gap-1">
+                          <Copy className="w-2.5 h-2.5" /> Click to copy
+                        </span>
+                      )}
+                    </span>
+                  </div>
+                </button>
               </li>
-              <li className="flex items-center gap-2">
-                <Phone className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+              <li className="flex items-center gap-2 group">
+                <div className="w-6 h-6 rounded-md bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shrink-0 text-indigo-400 group-hover:bg-indigo-500/20 transition-colors">
+                  <Phone className="w-3 h-3" />
+                </div>
                 <a href="tel:+15551234567" className="hover:text-white transition-colors">
                   +1 (555) 123-4567
                 </a>
               </li>
-              <li className="flex items-center gap-2">
-                <MapPin className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+              <li className="flex items-center gap-2 group">
+                <div className="w-6 h-6 rounded-md bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shrink-0 text-indigo-400 group-hover:bg-indigo-500/20 transition-colors">
+                  <MapPin className="w-3 h-3" />
+                </div>
                 <span>Berkeley, CA, USA</span>
+              </li>
+              <li className="pt-1">
+                <div className="px-2.5 py-1 rounded-lg bg-white/[0.02] border border-white/5 text-[10px] text-gray-400 flex items-center gap-1.5">
+                  <Zap className="w-3 h-3 text-amber-400 shrink-0" />
+                  <span>Avg. response time: &lt; 2 hours</span>
+                </div>
               </li>
             </ul>
           </div>
 
           {/* Column 5: Right Banner "Have a project in mind?" (col-span-3) */}
           <div className="lg:col-span-3">
-            <div className="rounded-2xl bg-gradient-to-br from-indigo-950/80 via-[#151D42] to-blue-950/80 border border-indigo-500/30 p-5 space-y-3 text-left shadow-glow-primary relative overflow-hidden group">
-              <div className="w-9 h-9 rounded-xl bg-indigo-500/20 border border-indigo-500/30 text-indigo-400 flex items-center justify-center">
+            <div className="rounded-2xl bg-gradient-to-br from-indigo-950/90 via-[#151D42] to-blue-950/90 border border-indigo-500/40 p-5 space-y-3 text-left shadow-glow-primary relative overflow-hidden group hover:border-indigo-400 transition-all duration-300">
+              {/* Background ambient shine */}
+              <div className="absolute -right-10 -bottom-10 w-28 h-28 bg-indigo-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500 pointer-events-none" />
+
+              <div className="w-9 h-9 rounded-xl bg-indigo-500/20 border border-indigo-500/30 text-indigo-400 flex items-center justify-center group-hover:scale-110 group-hover:text-cyan-300 transition-all">
                 <Rocket className="w-4 h-4 animate-pulse" />
               </div>
               <div>
-                <h4 className="text-sm font-bold text-white">Have a project in mind?</h4>
+                <h4 className="text-sm font-bold text-white flex items-center gap-1.5">
+                  <span>Have a project in mind?</span>
+                </h4>
                 <p className="text-[11px] text-gray-300 mt-1 leading-relaxed">
-                  Let's bring your ideas to life with our expert team.
+                  Let&#39;s bring your ideas to life with our expert full-stack engineering team.
                 </p>
               </div>
               <Link
                 to="/request"
-                className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold text-white bg-gradient-to-r from-devcraft-primary to-devcraft-secondary hover:from-devcraft-primaryHover hover:to-[#7C3AED] shadow-sm transition-all hover:scale-105 active:scale-95"
+                className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold text-white bg-gradient-to-r from-devcraft-primary to-devcraft-secondary hover:from-devcraft-primaryHover hover:to-[#7C3AED] shadow-md hover:shadow-glow-secondary transition-all hover:scale-105 active:scale-95 group/btn"
               >
                 <span>Get Started</span>
-                <ArrowRight className="w-3 h-3" />
+                <ArrowRight className="w-3 h-3 group-hover/btn:translate-x-1 transition-transform" />
               </Link>
             </div>
           </div>
 
         </div>
 
-        {/* Bottom Bar: Copyright & Legal */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-400">
-          <p>© 2026 Reliable Info Tech. All rights reserved.</p>
-          <div className="flex items-center gap-6">
+        {/* ========================================================================= */}
+        {/* 2. EXCLUSIVE ANIMATED DEVELOPER SHOWCASE & SIGNATURE SECTION              */}
+        {/* ========================================================================= */}
+        <div className="my-10 relative">
+          <div className="rounded-3xl bg-gradient-to-br from-[#0B1120]/95 via-[#0E172E]/90 to-[#0A0F1D]/95 border border-indigo-500/25 p-6 sm:p-8 backdrop-blur-xl shadow-2xl relative overflow-hidden">
+            
+            {/* Ambient Multi-Hue Lighting */}
+            <div className="absolute -top-24 -left-24 w-72 h-72 bg-cyan-500/10 rounded-full blur-[100px] pointer-events-none" />
+            <div className="absolute -bottom-24 -right-24 w-72 h-72 bg-purple-500/10 rounded-full blur-[100px] pointer-events-none" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-48 bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none" />
+
+            {/* Showcase Header */}
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 border-b border-white/8 relative z-10 text-left">
+              <div>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.04] border border-white/10 text-xs font-semibold text-gray-300">
+                  <Sparkles className="w-3.5 h-3.5 text-cyan-400 animate-spin-slow" />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-300 to-purple-400 font-bold uppercase tracking-wider">
+                    Core Engineering Leadership
+                  </span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse ml-1" />
+                </div>
+                <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight mt-2 flex items-center gap-2 flex-wrap">
+                  <span>Architected &amp; Engineered by</span>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-400 to-purple-400">
+                    Senior Full-Stack Specialists
+                  </span>
+                </h3>
+                <p className="text-xs sm:text-sm text-gray-400 mt-1 max-w-2xl font-normal">
+                  Handcrafted with performance, security, and responsive elegance by the core creator trio. Click any developer to view technical dossier.
+                </p>
+              </div>
+
+              {/* Live Terminal / Git Build Badge */}
+              <div className="flex items-center gap-2 bg-[#050811]/90 border border-white/10 rounded-xl px-3.5 py-2 text-xs font-mono text-gray-300 shadow-inner shrink-0">
+                <Terminal className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                <span className="text-gray-400">git:</span>
+                <span className="text-emerald-400 font-semibold">prod/v2.4.0</span>
+                <span className="text-gray-600">|</span>
+                <span className="text-gray-400 flex items-center gap-1">
+                  <Cpu className="w-3 h-3 text-indigo-400" />
+                  MERN + TS
+                </span>
+              </div>
+            </div>
+
+            {/* 3 Developer Cards Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 pt-6 relative z-10">
+              {CREATORS.map((creator) => (
+                <div
+                  key={creator.id}
+                  onClick={() => setSelectedCreator(creator)}
+                  className={`group relative rounded-2xl bg-[#090E1A]/80 hover:bg-[#0E1528]/95 border border-white/8 ${creator.accent.border} ${creator.accent.glow} p-5 transition-all duration-300 hover:-translate-y-2 cursor-pointer text-left shadow-lg flex flex-col justify-between`}
+                >
+                  {/* Subtle Top Card Gradient Aura */}
+                  <div className={`absolute inset-0 rounded-2xl bg-gradient-to-b ${creator.accent.gradient} opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none`} />
+
+                  <div className="relative z-10 space-y-4">
+                    {/* Top Row: Avatar & Status + Micro Badge */}
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="relative">
+                        <div className={`w-14 h-14 rounded-2xl overflow-hidden ring-2 ${creator.accent.ring} bg-slate-800 shadow-md group-hover:scale-105 transition-transform duration-300`}>
+                          <img
+                            src={creator.avatar}
+                            alt={creator.name}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              // Fallback placeholder if unsplash fails
+                              const target = e.target as HTMLImageElement;
+                              target.style.display = 'none';
+                              if (target.parentElement) {
+                                target.parentElement.innerHTML = `<div class="w-full h-full flex items-center justify-center font-bold text-base text-white bg-indigo-600/50">${creator.initials}</div>`;
+                              }
+                            }}
+                          />
+                        </div>
+                        {/* Active Beacon Dot */}
+                        <span className="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#090E1A] ring-1 ring-white/10">
+                          <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+                        </span>
+                      </div>
+
+                      {/* Role Pill */}
+                      <span className={`text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded-full border ${creator.accent.badgeBg}`}>
+                        {creator.badge}
+                      </span>
+                    </div>
+
+                    {/* Developer Name & Role */}
+                    <div>
+                      <h4 className={`text-base font-extrabold text-white group-hover:${creator.accent.text} transition-colors flex items-center gap-1.5`}>
+                        <span>{creator.name}</span>
+                        <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                      </h4>
+                      <p className="text-xs font-medium text-gray-300 mt-0.5">
+                        {creator.role}
+                      </p>
+                      <p className="text-[11px] text-gray-400 leading-relaxed mt-2 line-clamp-2">
+                        {creator.shortBio}
+                      </p>
+                    </div>
+
+                    {/* Tech Badges */}
+                    <div className="flex flex-wrap gap-1.5 pt-1">
+                      {creator.specialties.map((spec, sIdx) => (
+                        <span
+                          key={sIdx}
+                          className="text-[10px] px-2 py-0.5 rounded-md bg-white/[0.03] text-gray-300 border border-white/5 font-mono"
+                        >
+                          {spec}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Card Footer: Interactive Links & View Profile CTA */}
+                  <div
+                    className="relative z-10 pt-4 mt-4 border-t border-white/5 flex items-center justify-between gap-2"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <a
+                        href={creator.github}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="w-7 h-7 rounded-lg bg-white/5 hover:bg-white/15 flex items-center justify-center text-gray-400 hover:text-white transition-all text-xs"
+                        title="GitHub Profile"
+                      >
+                        <Github className="w-3.5 h-3.5" />
+                      </a>
+                      <a
+                        href={creator.linkedin}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="w-7 h-7 rounded-lg bg-white/5 hover:bg-white/15 flex items-center justify-center text-gray-400 hover:text-white transition-all text-xs"
+                        title="LinkedIn Profile"
+                      >
+                        <Linkedin className="w-3.5 h-3.5" />
+                      </a>
+                      <a
+                        href={`mailto:${creator.email}`}
+                        className="w-7 h-7 rounded-lg bg-white/5 hover:bg-white/15 flex items-center justify-center text-gray-400 hover:text-white transition-all text-xs"
+                        title={`Email ${creator.name}`}
+                      >
+                        <Mail className="w-3.5 h-3.5" />
+                      </a>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => setSelectedCreator(creator)}
+                      className={`text-[11px] font-semibold text-gray-400 group-hover:${creator.accent.text} flex items-center gap-1 transition-colors`}
+                    >
+                      <span>Spotlight</span>
+                      <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Bottom Interactive Command Bar */}
+            <div className="mt-6 pt-4 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-gray-400 font-mono relative z-10">
+              <div className="flex items-center gap-2 overflow-x-auto max-w-full">
+                <span className="text-cyan-400 font-bold">$</span>
+                <span className="text-gray-300">
+                  reliable-infotech --authors &quot;Sahil Sekh, Diganta Chakraborty, Priyajit Das&quot;
+                </span>
+                <span className="text-emerald-400 font-bold">[100% PRODUCTION READY]</span>
+              </div>
+              <div className="flex items-center gap-3 shrink-0">
+                <span className="flex items-center gap-1 text-gray-400">
+                  <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
+                  Enterprise Grade
+                </span>
+                <span className="text-gray-600">•</span>
+                <span className="flex items-center gap-1 text-gray-400">
+                  <Zap className="w-3.5 h-3.5 text-amber-400" />
+                  Ultra Fast Vite Engine
+                </span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        {/* ========================================================================= */}
+        {/* 3. BOTTOM BAR: Copyright, Animated Heart Credits & Status                 */}
+        {/* ========================================================================= */}
+        <div className="pt-4 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gray-400">
+          
+          {/* Copyright */}
+          <p className="order-2 md:order-1 text-center md:text-left">
+            © 2026 Reliable Info Tech. All rights reserved.
+          </p>
+
+          {/* Animated Trio Credit Chip */}
+          <div className="order-1 md:order-2 flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.03] border border-white/8 hover:border-cyan-500/30 transition-all shadow-inner group">
+            <Sparkles className="w-3.5 h-3.5 text-cyan-400 animate-spin-slow shrink-0" />
+            <span className="text-gray-400 text-[11px]">Crafted with</span>
+            <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500 animate-pulse shrink-0" />
+            <span className="text-gray-400 text-[11px]">by</span>
+            <div className="flex items-center gap-1.5 font-semibold text-white text-[11px]">
+              <span
+                onClick={() => setSelectedCreator(CREATORS[0])}
+                className="hover:text-cyan-300 cursor-pointer transition-colors"
+                title="View Sahil Sekh's Profile"
+              >
+                Sahil Sekh
+              </span>
+              <span className="text-gray-600">•</span>
+              <span
+                onClick={() => setSelectedCreator(CREATORS[1])}
+                className="hover:text-indigo-300 cursor-pointer transition-colors"
+                title="View Diganta Chakraborty's Profile"
+              >
+                Diganta Chakraborty
+              </span>
+              <span className="text-gray-600">•</span>
+              <span
+                onClick={() => setSelectedCreator(CREATORS[2])}
+                className="hover:text-purple-300 cursor-pointer transition-colors"
+                title="View Priyajit Das's Profile"
+              >
+                Priyajit Das
+              </span>
+            </div>
+          </div>
+
+          {/* Legal Links & Status */}
+          <div className="order-3 flex items-center gap-5 text-center">
             <a href="#privacy" className="hover:text-white transition-colors">Privacy Policy</a>
             <a href="#terms" className="hover:text-white transition-colors">Terms of Service</a>
+            <div className="flex items-center gap-1.5 text-[11px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span>99.9% Uptime</span>
+            </div>
           </div>
+
         </div>
 
       </div>
@@ -206,12 +611,119 @@ export const Footer: React.FC = () => {
       <button
         type="button"
         onClick={scrollToTop}
-        className="fixed bottom-6 right-6 z-40 w-11 h-11 rounded-full bg-gradient-to-tr from-devcraft-primary to-devcraft-secondary text-white shadow-glow-primary hover:scale-110 active:scale-95 transition-all duration-200 flex items-center justify-center"
+        className="fixed bottom-6 right-6 z-40 w-11 h-11 rounded-full bg-gradient-to-tr from-devcraft-primary to-devcraft-secondary text-white shadow-glow-primary hover:scale-110 active:scale-95 transition-all duration-200 flex items-center justify-center group"
         title="Back to Top"
         aria-label="Back to top"
       >
-        <ArrowUp className="w-5 h-5" />
+        <ArrowUp className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform" />
       </button>
+
+      {/* ========================================================================= */}
+      {/* 4. DEVELOPER SPOTLIGHT INTERACTIVE MODAL                                  */}
+      {/* ========================================================================= */}
+      <Modal
+        isOpen={Boolean(selectedCreator)}
+        onClose={() => setSelectedCreator(null)}
+        title={selectedCreator?.name || 'Developer Spotlight'}
+      >
+        {selectedCreator && (
+          <div className="space-y-6 text-left text-xs">
+            {/* Header with Avatar & Title */}
+            <div className="flex items-center gap-4 p-4 rounded-2xl bg-white/[0.02] border border-white/8 relative overflow-hidden">
+              <div className={`w-16 h-16 rounded-2xl overflow-hidden ring-2 ${selectedCreator.accent.ring} shrink-0 bg-slate-800`}>
+                <img
+                  src={selectedCreator.avatar}
+                  alt={selectedCreator.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="space-y-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h4 className="text-lg font-black text-white">{selectedCreator.name}</h4>
+                  <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full border ${selectedCreator.accent.badgeBg}`}>
+                    {selectedCreator.badge}
+                  </span>
+                </div>
+                <p className="text-xs text-gray-300 font-medium">{selectedCreator.role}</p>
+                <div className="flex items-center gap-2 pt-1">
+                  <a
+                    href={selectedCreator.github}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="p-1.5 rounded-lg bg-white/5 hover:bg-white/15 text-gray-300 hover:text-white transition-colors"
+                    title="GitHub"
+                  >
+                    <Github className="w-3.5 h-3.5" />
+                  </a>
+                  <a
+                    href={selectedCreator.linkedin}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="p-1.5 rounded-lg bg-white/5 hover:bg-white/15 text-gray-300 hover:text-white transition-colors"
+                    title="LinkedIn"
+                  >
+                    <Linkedin className="w-3.5 h-3.5" />
+                  </a>
+                  <a
+                    href={`mailto:${selectedCreator.email}`}
+                    className="p-1.5 rounded-lg bg-white/5 hover:bg-white/15 text-gray-300 hover:text-white transition-colors"
+                    title="Email"
+                  >
+                    <Mail className="w-3.5 h-3.5" />
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* Engineering Dossier / Biography */}
+            <div className="space-y-2">
+              <h5 className="text-[11px] font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+                <Code2 className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Engineering Biography</span>
+              </h5>
+              <div className="p-3.5 rounded-xl bg-[#090E1A] border border-white/5 text-gray-300 leading-relaxed font-normal">
+                {selectedCreator.fullBio}
+              </div>
+            </div>
+
+            {/* Core Tech Stack */}
+            <div className="space-y-2">
+              <h5 className="text-[11px] font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+                <Cpu className="w-3.5 h-3.5 text-indigo-400" />
+                <span>Core Technologies &amp; Architecture Focus</span>
+              </h5>
+              <div className="flex flex-wrap gap-1.5">
+                {selectedCreator.skills.map((skill, sIdx) => (
+                  <span
+                    key={sIdx}
+                    className="text-[11px] px-2.5 py-1 rounded-lg bg-indigo-500/10 text-indigo-300 border border-indigo-500/25 font-mono font-medium"
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Modal Actions */}
+            <div className="pt-4 border-t border-white/8 flex items-center justify-between gap-3">
+              <a
+                href={`mailto:${selectedCreator.email}`}
+                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-devcraft-primary to-devcraft-secondary hover:brightness-110 shadow-glow-primary transition-all active:scale-95"
+              >
+                <Send className="w-3.5 h-3.5" />
+                <span>Connect via Email</span>
+              </a>
+              <button
+                type="button"
+                onClick={() => setSelectedCreator(null)}
+                className="px-4 py-2.5 rounded-xl text-xs font-semibold text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 transition-colors"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
+      </Modal>
     </footer>
   );
 };

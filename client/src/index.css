@@ -275,6 +275,48 @@
   animation-play-state: paused;
 }
 
+/* Modern Cyberpunk & Glass Glow Animations */
+@keyframes beam-slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes gradient-x {
+  0%, 100% {
+    background-size: 200% 200%;
+    background-position: left center;
+  }
+  50% {
+    background-size: 200% 200%;
+    background-position: right center;
+  }
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-beam {
+  animation: beam-slide 3.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.animate-gradient-x {
+  animation: gradient-x 6s ease infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 15s linear infinite;
+}
+
 /* Reduced motion accessibility support */
 @media (prefers-reduced-motion: reduce) {
   *,
