@@ -47,9 +47,51 @@ const mapProjectToFeaturedItem = (p: Project, idx: number): FeaturedItem => ({
   price: p.price,
 });
 
+const DEFAULT_SHOWCASE_PROJECTS: FeaturedItem[] = [
+  {
+    id: 'prj-showcase-01',
+    slug: 'nexus-cloud-enterprise',
+    category: 'Cloud Architecture',
+    categoryColor: 'border-[#363636] text-[#C9C9C9] bg-[#1E1E1E]',
+    title: 'Nexus Cloud Enterprise Portal',
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80',
+    technologies: ['React 18', 'TypeScript', 'Node.js', 'AWS'],
+    description: 'Mission-critical enterprise dashboard managing multi-tenant cloud microservices with sub-second latency.',
+    likes: 38,
+    features: ['Real-time telemetry', 'Multi-tenant RBAC', 'Automated CI/CD'],
+    price: 3499,
+  },
+  {
+    id: 'prj-showcase-02',
+    slug: 'finpulse-payment-engine',
+    category: 'FinTech Platform',
+    categoryColor: 'border-[#363636] text-[#C9C9C9] bg-[#1E1E1E]',
+    title: 'FinPulse Global Payment Engine',
+    image: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80',
+    technologies: ['Next.js 14', 'PostgreSQL', 'Tailwind CSS', 'Docker'],
+    description: 'High-volume transaction processing platform with bank-grade security protocols and instant reconciliations.',
+    likes: 47,
+    features: ['Stripe & UPI integration', 'Automated invoicing', 'Fraud detection'],
+    price: 4899,
+  },
+  {
+    id: 'prj-showcase-03',
+    slug: 'omnicommerce-headless',
+    category: 'E-Commerce Platform',
+    categoryColor: 'border-[#363636] text-[#C9C9C9] bg-[#1E1E1E]',
+    title: 'OmniCommerce Headless Storefront',
+    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80',
+    technologies: ['React', 'GraphQL', 'MongoDB', 'Redis'],
+    description: 'Ultra-fast headless commerce platform optimized for 99+ Google Lighthouse score and instant checkout.',
+    likes: 52,
+    features: ['Instant search indexing', 'Multi-currency support', 'Cart abandonment recovery'],
+    price: 2999,
+  },
+];
+
 export const FeaturedProjectsSection: React.FC = () => {
-  const [projectsData, setProjectsData] = useState<FeaturedItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [projectsData, setProjectsData] = useState<FeaturedItem[]>(DEFAULT_SHOWCASE_PROJECTS);
+  const [loading, setLoading] = useState(false);
   const [likedMap, setLikedMap] = useState<Record<string, boolean>>({});
   const [selectedProject, setSelectedProject] = useState<FeaturedItem | null>(null);
 
@@ -57,11 +99,14 @@ export const FeaturedProjectsSection: React.FC = () => {
     try {
       setLoading(true);
       const res = await projectService.getProjects();
-      if (res.success && Array.isArray(res.data)) {
+      if (res.success && Array.isArray(res.data) && res.data.length > 0) {
         setProjectsData(res.data.map(mapProjectToFeaturedItem));
+      } else {
+        setProjectsData(DEFAULT_SHOWCASE_PROJECTS);
       }
     } catch (err) {
       console.error('Failed to load featured projects:', err);
+      setProjectsData(DEFAULT_SHOWCASE_PROJECTS);
     } finally {
       setLoading(false);
     }
