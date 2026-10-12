@@ -59,7 +59,7 @@ export const AdminLayout: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#0B0F19] text-[#F8FAFC]">
+    <div className="min-h-screen w-full bg-[#0B0B0B] text-[#EEEEEE]">
       {/* Mobile Drawer */}
       {mobileSidebarOpen && (
         <div className="fixed inset-0 z-50 lg:hidden flex">
@@ -71,7 +71,7 @@ export const AdminLayout: React.FC = () => {
           />
 
           {/* Drawer content */}
-          <div className="relative w-72 max-w-[85vw] h-full bg-[#0D1322] z-10 shadow-2xl flex flex-col animate-in slide-in-from-left duration-200">
+          <div className="relative w-72 max-w-[85vw] h-full bg-[#121212] border-r border-[#262626] z-10 shadow-2xl flex flex-col animate-in slide-in-from-left duration-200">
             <AdminSidebar
               activeTab={activeTab}
               onSelectTab={handleSelectTab}
@@ -88,12 +88,12 @@ export const AdminLayout: React.FC = () => {
       */}
       <div className="lg:grid lg:grid-cols-[250px_minmax(0,1fr)] xl:grid-cols-[265px_minmax(0,1fr)] min-h-screen w-full">
         {/* Desktop Sidebar Column */}
-        <div className="hidden lg:block h-screen sticky top-0 overflow-y-auto z-40">
+        <div className="hidden lg:block h-screen sticky top-0 overflow-y-auto z-40 border-r border-[#262626] bg-[#121212]">
           <AdminSidebar activeTab={activeTab} onSelectTab={handleSelectTab} counts={counts} />
         </div>
 
         {/* Main Content Area */}
-        <div className="flex flex-col min-w-0 w-full min-h-screen bg-[#0B0F19]">
+        <div className="flex flex-col min-w-0 w-full min-h-screen bg-[#0B0B0B]">
           {/* Top Navbar */}
           <AdminNavbar
             onOpenMobileSidebar={() => setMobileSidebarOpen(true)}

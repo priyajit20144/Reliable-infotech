@@ -56,7 +56,7 @@ export const AnalyticsChart: React.FC = () => {
   const currentData = datasets[timeRange];
 
   return (
-    <Card className="p-5 sm:p-6 w-full overflow-hidden">
+    <Card brackets={true} className="p-5 sm:p-6 w-full overflow-hidden">
       {/* Top Header & Range Selector */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/8 mb-6">
         <div>

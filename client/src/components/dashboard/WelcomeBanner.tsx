@@ -21,35 +21,48 @@ export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({
   };
 
   return (
-    <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-900/60 via-purple-900/40 to-slate-900 border border-indigo-500/30 p-6 sm:p-8 shadow-card">
-      {/* Background radial glow */}
-      <div className="absolute right-0 top-0 -mt-8 -mr-8 w-64 h-64 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
+    <div className="nf-frame relative overflow-hidden rounded bg-[#121212] border border-[#262626] p-6 sm:p-8">
+      <span className="nf-c nf-c-tl" />
+      <span className="nf-c nf-c-tr" />
+      <span className="nf-c nf-c-bl" />
+      <span className="nf-c nf-c-br" />
+
+      {/* Subtle hatched band */}
+      <div
+        className="absolute inset-x-0 top-0 h-1 pointer-events-none opacity-30"
+        style={{
+          background: 'repeating-linear-gradient(45deg, #EEEEEE 0, #EEEEEE 2px, transparent 0, transparent 8px)',
+        }}
+      />
 
       <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="space-y-2 max-w-xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-xs font-medium text-indigo-300 backdrop-blur-sm border border-white/10">
-            <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
-            <span>Reliable Info Tech Client Workspace</span>
+          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-[#181818] text-xs font-mono text-[#A1A1AA] border border-[#262626]">
+            <Sparkles className="w-3.5 h-3.5 text-[#EEEEEE]" />
+            <span>RELIABLE INFOTECH CLIENT WORKSPACE</span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-            {getGreeting()}, {user?.name || 'Rahul Sharma'} 👋
+          <h1 className="text-2xl sm:text-3xl font-medium text-white tracking-tight">
+            {getGreeting()},{' '}
+            <span className="font-serif italic text-white/90">
+              {user?.name || 'Rahul Sharma'}
+            </span>
           </h1>
-          <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
+          <p className="text-xs sm:text-sm text-[#A1A1AA] leading-relaxed">
             Here's what's happening with your digital builds, pending quotations, and live deployment sprints.
           </p>
         </div>
 
         {/* Dynamic status beacons */}
         <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 shrink-0">
-          <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-semibold backdrop-blur-md">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span>Active Projects: {activeProjectsCount}</span>
+          <div className="flex items-center gap-2.5 px-3.5 py-2 rounded bg-[#181818] border border-[#262626] text-[#4ADE80] text-xs font-mono">
+            <span className="w-2 h-2 rounded-full bg-[#4ADE80] animate-pulse" />
+            <span>ACTIVE PROJECTS: {activeProjectsCount}</span>
           </div>
 
-          <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 text-xs font-semibold backdrop-blur-md">
-            <span className="w-2.5 h-2.5 rounded-full bg-indigo-400" />
-            <span>Pending Requests: {pendingRequestsCount}</span>
+          <div className="flex items-center gap-2.5 px-3.5 py-2 rounded bg-[#181818] border border-[#262626] text-[#EEEEEE] text-xs font-mono">
+            <span className="w-2 h-2 rounded-full bg-[#EEEEEE]" />
+            <span>PENDING REQUESTS: {pendingRequestsCount}</span>
           </div>
         </div>
       </div>

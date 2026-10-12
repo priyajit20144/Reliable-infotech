@@ -20,64 +20,55 @@ export const AuthVisualPanel: React.FC<AuthVisualPanelProps> = ({ mode = 'client
   const isRegister = mode === 'register';
 
   return (
-    <div className="hidden lg:flex flex-col justify-between relative rounded-3xl bg-gradient-to-br from-[#111827]/90 via-[#0E1526]/85 to-[#0B0F19]/90 border border-white/10 p-8 xl:p-10 overflow-hidden shadow-2xl backdrop-blur-xl">
-      {/* Ambient decorative glowing orbs */}
-      <div
-        className={`absolute -top-24 -right-24 w-80 h-80 rounded-full blur-[90px] pointer-events-none opacity-40 transition-colors duration-700 ${
-          isAdmin ? 'bg-amber-500/25' : 'bg-indigo-600/30'
-        }`}
-      />
-      <div className="absolute -bottom-20 -left-20 w-80 h-80 rounded-full bg-cyan-500/20 blur-[90px] pointer-events-none opacity-30" />
-
-      {/* Decorative subtle background grid */}
-      <div
-        className="absolute inset-0 opacity-[0.04] pointer-events-none bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]"
-        aria-hidden="true"
-      />
+    <div className="nf-frame relative hidden lg:flex flex-col justify-between rounded bg-[#121212] border border-[#262626] p-8 xl:p-10 overflow-hidden shadow-2xl">
+      <span className="nf-c nf-c-tl" />
+      <span className="nf-c nf-c-tr" />
+      <span className="nf-c nf-c-bl" />
+      <span className="nf-c nf-c-br" />
 
       {/* Top Header Information */}
       <div className="relative z-10 space-y-3">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.05] border border-white/10 text-xs text-gray-300 backdrop-blur-md">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded text-[11px] font-mono tracking-wider text-[#A1A1AA] bg-[#181818] border border-[#262626]">
           {isAdmin ? (
             <>
-              <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
-              <span className="font-semibold text-amber-300">Admin Command Console</span>
+              <ShieldCheck className="w-3.5 h-3.5 text-[#4ADE80]" />
+              <span className="font-mono text-[#EEEEEE]">ADMIN COMMAND CONSOLE</span>
             </>
           ) : isRegister ? (
             <>
-              <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-              <span className="font-semibold text-cyan-300">Developer Cloud Platform</span>
+              <Sparkles className="w-3.5 h-3.5 text-[#EEEEEE]" />
+              <span className="font-mono text-[#EEEEEE]">DEVELOPER CLOUD PLATFORM</span>
             </>
           ) : (
             <>
-              <Lock className="w-3.5 h-3.5 text-indigo-400" />
-              <span className="font-semibold text-indigo-300">Enterprise Security</span>
+              <Lock className="w-3.5 h-3.5 text-[#A1A1AA]" />
+              <span className="font-mono text-[#EEEEEE]">ENTERPRISE SECURITY GATEWAY</span>
             </>
           )}
-          <span className="w-1 h-1 rounded-full bg-white/30" />
-          <span className="text-[11px] text-gray-400 font-mono">v2.4 LTS</span>
+          <span className="w-1 h-1 rounded-full bg-[#363636]" />
+          <span className="text-[10px] text-[#71717A] font-mono">v2.0 LTS</span>
         </div>
 
-        <h3 className="text-2xl font-extrabold text-white tracking-tight">
+        <h3 className="text-2xl font-medium text-white tracking-tight leading-snug">
           {isAdmin ? (
             <span>
               Real-Time Oversight & <br />
-              <span className="text-gradient">Infrastructure Controls</span>
+              <span className="font-serif italic text-white/90">Infrastructure Controls</span>
             </span>
           ) : isRegister ? (
             <span>
               Accelerate Digital Projects with <br />
-              <span className="text-gradient">Senior Full-Stack Talent</span>
+              <span className="font-serif italic text-white/90">Senior Full-Stack Talent</span>
             </span>
           ) : (
             <span>
               Crafting High-Impact <br />
-              <span className="text-gradient">Websites & Platforms</span>
+              <span className="font-serif italic text-white/90">Websites & Platforms</span>
             </span>
           )}
         </h3>
 
-        <p className="text-xs text-gray-400 leading-relaxed max-w-md">
+        <p className="text-xs text-[#A1A1AA] leading-relaxed max-w-md font-normal">
           {isAdmin
             ? 'Manage client specifications, inspect delivery milestones, analyze acquisition pipelines, and review system logs.'
             : 'Track custom website requests, communicate with lead architects, review staging builds, and control project deliverables.'}

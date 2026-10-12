@@ -144,67 +144,73 @@ export const MyRequestsPage: React.FC = () => {
 
       {/* Admin Scope Switcher Banner if Admin */}
       {isTeamMember && (
-        <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="flex items-center gap-2 text-xs">
-            <ShieldCheck className="w-4 h-4 text-amber-400 shrink-0" />
-            <span className="text-gray-300">
-              Admin Scope Filter:
-            </span>
-            <div className="flex items-center p-0.5 rounded-xl bg-white/5 border border-white/10 text-xs">
-              <button
-                type="button"
-                onClick={() => setScope('all')}
-                className={`px-3 py-1 rounded-lg font-semibold transition-all ${
-                  scope === 'all'
-                    ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
-                    : 'text-gray-400 hover:text-white'
-                }`}
-              >
-                All Clients ({allClientRequests.length})
-              </button>
-              <button
-                type="button"
-                onClick={() => setScope('my')}
-                className={`px-3 py-1 rounded-lg font-semibold transition-all ${
-                  scope === 'my'
-                    ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'
-                    : 'text-gray-400 hover:text-white'
-                }`}
-              >
-                My Own ({requests.length})
-              </button>
+        <div className="nf-frame relative">
+          <span className="nf-c nf-c-tl" />
+          <span className="nf-c nf-c-tr" />
+          <span className="nf-c nf-c-bl" />
+          <span className="nf-c nf-c-br" />
+          <div className="p-3.5 rounded bg-[#121212] border border-[#262626] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex items-center gap-2 text-xs font-mono">
+              <ShieldCheck className="w-4 h-4 text-[#4ADE80] shrink-0" />
+              <span className="text-[#A1A1AA]">
+                ADMIN SCOPE:
+              </span>
+              <div className="flex items-center p-0.5 rounded bg-[#181818] border border-[#262626] text-xs">
+                <button
+                  type="button"
+                  onClick={() => setScope('all')}
+                  className={`px-3 py-1 rounded font-mono font-medium transition-colors cursor-pointer ${
+                    scope === 'all'
+                      ? 'bg-[#EEEEEE] text-[#0B0B0B]'
+                      : 'text-[#A1A1AA] hover:text-white'
+                  }`}
+                >
+                  All Clients ({allClientRequests.length})
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setScope('my')}
+                  className={`px-3 py-1 rounded font-mono font-medium transition-colors cursor-pointer ${
+                    scope === 'my'
+                      ? 'bg-[#EEEEEE] text-[#0B0B0B]'
+                      : 'text-[#A1A1AA] hover:text-white'
+                  }`}
+                >
+                  My Own ({requests.length})
+                </button>
+              </div>
             </div>
-          </div>
 
-          <Link
-            to="/admin?tab=requests"
-            className="text-xs text-amber-400 hover:text-amber-300 font-semibold inline-flex items-center gap-1"
-          >
-            <span>Manage statuses in Master Console</span>
-            <ArrowRight className="w-3 h-3" />
-          </Link>
+            <Link
+              to="/admin?tab=requests"
+              className="text-xs text-[#EEEEEE] hover:underline font-mono inline-flex items-center gap-1"
+            >
+              <span>MANAGE STATUSES IN MASTER CONSOLE</span>
+              <ArrowRight className="w-3 h-3" />
+            </Link>
+          </div>
         </div>
       )}
 
       {/* Filter and Search Bar */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
         <div className="relative flex-1 max-w-md">
-          <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-[#71717A] absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search by archetype, client name, business, or keywords..."
-            className="w-full bg-[#111827] text-xs text-white rounded-xl border border-white/10 pl-9 pr-4 py-2.5 focus:outline-none focus:border-indigo-500"
+            className="w-full bg-[#181818] text-xs text-white rounded border border-[#262626] pl-9 pr-4 py-2.5 focus:outline-none focus:border-[#EEEEEE]"
           />
         </div>
 
         <div className="flex items-center gap-2">
-          <Filter className="w-4 h-4 text-gray-400" />
+          <Filter className="w-4 h-4 text-[#71717A]" />
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="bg-[#111827] text-xs text-white rounded-xl border border-white/10 px-3 py-2.5 focus:outline-none focus:border-indigo-500"
+            className="bg-[#181818] text-xs text-white rounded border border-[#262626] px-3 py-2.5 focus:outline-none focus:border-[#EEEEEE] font-mono"
           >
             <option value="ALL">All Statuses</option>
             <option value="NEW">New</option>
@@ -221,13 +227,13 @@ export const MyRequestsPage: React.FC = () => {
       {/* List / Cards */}
       {loading ? (
         <div className="space-y-4">
-          <Skeleton className="h-28 rounded-2xl" />
-          <Skeleton className="h-28 rounded-2xl" />
+          <Skeleton className="h-28 rounded" />
+          <Skeleton className="h-28 rounded" />
         </div>
       ) : filteredRequests.length === 0 ? (
-        <Card className="text-center py-16">
+        <Card brackets={true} className="text-center py-16">
           <p className="text-sm font-semibold text-white">No requests found</p>
-          <p className="text-xs text-gray-400 mt-1">
+          <p className="text-xs text-[#A1A1AA] mt-1 font-mono">
             {searchTerm || statusFilter !== 'ALL'
               ? 'Try adjusting your search criteria.'
               : isTeamMember && scope === 'my'
@@ -250,39 +256,40 @@ export const MyRequestsPage: React.FC = () => {
           {filteredRequests.map((req) => (
             <Card
               key={req._id}
-              className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-indigo-500/40 transition-all"
+              brackets={true}
+              className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-[#EEEEEE]/30 transition-all"
             >
               <div className="space-y-2 max-w-xl">
                 <div className="flex flex-wrap items-center gap-2.5">
-                  <span className="text-base font-bold text-white">
+                  <span className="text-base font-semibold text-white">
                     {req.businessName || req.websiteType}
                   </span>
                   {getStatusBadge(req.status)}
                   {scope === 'all' && isTeamMember && (
-                    <span className="text-xs text-amber-300 font-medium">
+                    <span className="text-xs text-[#EEEEEE] font-mono">
                       (Client: {req.name})
                     </span>
                   )}
                 </div>
-                <p className="text-xs text-gray-400 leading-relaxed line-clamp-2">
+                <p className="text-xs text-[#A1A1AA] leading-relaxed line-clamp-2">
                   {req.description}
                 </p>
-                <div className="flex flex-wrap items-center gap-4 text-xs text-gray-400 pt-1">
-                  <span className="flex items-center gap-1 font-mono text-emerald-400 font-semibold">
+                <div className="flex flex-wrap items-center gap-4 text-xs text-[#A1A1AA] pt-1 font-mono">
+                  <span className="flex items-center gap-1 font-mono text-[#4ADE80] font-semibold">
                     <DollarSign className="w-3.5 h-3.5" />
                     ${req.budgetMin} – ${req.budgetMax}
                   </span>
                   <span className="flex items-center gap-1">
-                    <Calendar className="w-3.5 h-3.5 text-indigo-400" />
+                    <Calendar className="w-3.5 h-3.5 text-[#EEEEEE]" />
                     Deadline: {req.deadline || 'Flexible'}
                   </span>
-                  <span className="text-indigo-300">
+                  <span className="text-[#EEEEEE]">
                     Lead: {req.assignedTo || 'Core Team'}
                   </span>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2.5 shrink-0 pt-2 md:pt-0 border-t md:border-t-0 border-white/5">
+              <div className="flex items-center gap-2.5 shrink-0 pt-2 md:pt-0 border-t md:border-t-0 border-[#262626]">
                 {isTeamMember && (
                   <Link to="/admin?tab=requests">
                     <Button variant="secondary" size="sm" icon={<ShieldCheck className="w-3.5 h-3.5" />}>

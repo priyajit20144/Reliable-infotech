@@ -126,25 +126,21 @@ export const RegisterPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0B0F19] text-[#F8FAFC] flex flex-col justify-center py-10 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-      {/* Background ambient glow */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[650px] bg-purple-600/10 rounded-full blur-[160px] pointer-events-none" />
-      <div className="absolute bottom-10 left-10 w-[450px] h-[450px] bg-cyan-600/10 rounded-full blur-[140px] pointer-events-none" />
-
+    <div className="min-h-screen bg-[#0B0B0B] text-[#EEEEEE] flex flex-col justify-center py-10 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Top Bar with Back Link */}
       <div className="max-w-6xl mx-auto w-full mb-6 flex items-center justify-between relative z-10">
         <Link
           to="/"
-          className="inline-flex items-center gap-2 text-xs font-medium text-gray-400 hover:text-white transition-colors group px-3 py-1.5 rounded-full bg-white/[0.03] hover:bg-white/[0.08] border border-white/8"
+          className="inline-flex items-center gap-2 text-xs font-mono text-[#8D8D8D] hover:text-white transition-colors group px-3 py-1.5 rounded bg-[#181818] border border-[#262626]"
         >
-          <ChevronLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
-          <span>Back to Reliable Info Tech Website</span>
+          <ChevronLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform text-[#8D8D8D]" />
+          <span>Back to Reliable InfoTech</span>
         </Link>
 
-        <div className="flex items-center gap-2 text-xs text-gray-400 font-mono">
-          <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
+        <div className="flex items-center gap-2 text-xs text-[#8D8D8D] font-mono">
+          <ShieldCheck className="w-3.5 h-3.5 text-[#22C55E]" />
           <span className="hidden sm:inline">Role Allocation:</span>
-          <span className="font-semibold text-gray-300">Verified Client Workspace</span>
+          <span className="font-semibold text-[#EEEEEE]">Verified Client Workspace</span>
         </div>
       </div>
 
@@ -155,8 +151,12 @@ export const RegisterPage: React.FC = () => {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, ease: 'easeOut' }}
-          className="flex flex-col justify-between bg-[#111827]/85 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden"
+          className="nf-frame relative flex flex-col justify-between bg-[#121212] border border-[#262626] rounded p-6 sm:p-10 shadow-2xl overflow-hidden"
         >
+          <span className="nf-c nf-c-tl" />
+          <span className="nf-c nf-c-tr" />
+          <span className="nf-c nf-c-bl" />
+          <span className="nf-c nf-c-br" />
           <div>
             {/* Brand Logo Header */}
             <div className="flex items-center justify-between mb-5">

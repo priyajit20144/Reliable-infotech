@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Star, ChevronLeft, ChevronRight } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Star, ChevronLeft, ChevronRight, Quote } from 'lucide-react';
 
 export const TestimonialsSection: React.FC = () => {
   const testimonials = [
@@ -8,7 +9,7 @@ export const TestimonialsSection: React.FC = () => {
       role: 'CEO, TechSolutions',
       avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80',
       content:
-        'Reliable Info Tech delivered an amazing website for our business. The team was professional, responsive and easy to work with. Highly recommended!',
+        'Reliable InfoTech delivered an exceptional digital architecture for our SaaS operations. The team executed with rare precision, speed, and proactive communication.',
       rating: 5,
     },
     {
@@ -16,104 +17,125 @@ export const TestimonialsSection: React.FC = () => {
       role: 'Founder, StartupHub',
       avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80',
       content:
-        'Their attention to detail and communication made our project smooth and successful. We love the final product.',
+        'Their engineering rigor and attention to aesthetic details made our product launch remarkably seamless. The final platform exceeded our expectations.',
       rating: 5,
     },
     {
       name: 'Emily Davis',
-      role: 'Marketing Manager',
+      role: 'Head of Product, RetailFlow',
       avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80',
       content:
-        'Great team, excellent work! They built our e-commerce platform exactly as we wanted, and the support has been fantastic.',
+        'A world-class team. They engineered our enterprise portal and custom dashboard with zero downtime, robust security, and delightful micro-interactions.',
       rating: 5,
     },
   ];
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  const handlePrev = () => {
-    setCurrentIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1));
-  };
-
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
-  };
+  const brandLogos = [
+    'Brightdesk',
+    'Kinfolk Studio',
+    'Meridian Labs',
+    'Parcel Cloud',
+    'Tandem Tech',
+    'Vertex Systems',
+    'Lumen Digital',
+    'Quanta Core',
+  ];
 
   return (
-    <section className="py-20 bg-[#0B0F19] relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-16 md:py-24 relative border-t border-[#262626]">
+      <div className="max-w-7xl 2xl:max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8">
+        
         {/* Section Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-12 gap-4">
-          <div className="space-y-1.5 text-left">
-            <p className="text-xs font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-1.5">
-              <span>«</span>
-              <span>TESTIMONIALS</span>
-            </p>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-              What Our Clients Say
-            </h2>
-            <p className="text-xs sm:text-sm text-gray-400 max-w-xl leading-relaxed">
-              Don't just take our word for it. Here's what our clients have to say about working with Reliable Info Tech.
-            </p>
+        <div className="space-y-3 text-left mb-14">
+          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded text-[11px] font-mono tracking-wider text-[#A1A1AA] bg-[#181818] border border-[#262626]">
+            <span>VERIFIED ENDORSEMENTS</span>
           </div>
-
-          {/* Carousel Arrows matching reference image */}
-          <div className="flex items-center gap-2 shrink-0">
-            <button
-              type="button"
-              onClick={handlePrev}
-              className="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-colors"
-              aria-label="Previous testimonial"
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-            <button
-              type="button"
-              onClick={handleNext}
-              className="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-colors"
-              aria-label="Next testimonial"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
-          </div>
+          <h2 className="text-3xl sm:text-4xl font-normal tracking-tight text-[#EEEEEE]">
+            <span>Partners Who </span>
+            <span className="font-serif italic text-[#C9C9C9]">Trust Our Craft</span>
+          </h2>
+          <p className="text-sm text-[#8D8D8D] max-w-xl leading-relaxed">
+            Real feedback from founders, product leaders, and enterprise teams scaling on our software solutions.
+          </p>
         </div>
 
-        {/* 3 Testimonials Grid (Desktop 3 col, Mobile/Tablet responsive) */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Testimonials Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {testimonials.map((t, idx) => (
-            <div
+            <motion.div
               key={idx}
-              className="rounded-2xl bg-[#0F172A]/75 hover:bg-[#131B33]/90 border border-white/8 hover:border-indigo-500/40 p-6 flex flex-col justify-between space-y-4 text-left transition-all duration-300 hover:-translate-y-1 group shadow-lg"
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.45, delay: idx * 0.09 }}
+              whileHover={{ y: -4 }}
+              className="nf-frame nf-frame-hover"
             >
-              {/* Client Profile Row (Top) */}
-              <div className="flex items-center gap-3">
-                <img
-                  src={t.avatar}
-                  alt={t.name}
-                  className="w-10 h-10 rounded-full object-cover border border-indigo-500/30"
-                />
-                <div>
-                  <h4 className="text-sm font-bold text-white group-hover:text-indigo-300 transition-colors">
-                    {t.name}
-                  </h4>
-                  <p className="text-xs text-gray-400">{t.role}</p>
+              <span className="nf-c nf-c-tl" />
+              <span className="nf-c nf-c-tr" />
+              <span className="nf-c nf-c-bl" />
+              <span className="nf-c nf-c-br" />
+
+              <div className="h-full p-6 rounded bg-[#181818] border border-[#262626] hover:border-[#363636] flex flex-col justify-between space-y-5 text-left transition-colors shadow-sm group">
+                <div className="space-y-4">
+                  {/* Stars + Quote Icon */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1 text-[#EEEEEE]">
+                      {[...Array(t.rating)].map((_, i) => (
+                        <Star key={i} className="w-3.5 h-3.5 fill-current" />
+                      ))}
+                    </div>
+                    <Quote className="w-4 h-4 text-[#5D5D5D] group-hover:text-[#8D8D8D] transition-colors" />
+                  </div>
+
+                  {/* Quote text */}
+                  <blockquote className="text-xs sm:text-[13.5px] text-[#C9C9C9] leading-relaxed font-sans">
+                    "{t.content}"
+                  </blockquote>
+                </div>
+
+                {/* Client Profile Row (Bottom) */}
+                <div className="pt-4 border-t border-dashed border-[#262626] flex items-center gap-3">
+                  <img
+                    src={t.avatar}
+                    alt={t.name}
+                    className="w-9 h-9 rounded-full object-cover border border-[#363636]"
+                  />
+                  <div>
+                    <h4 className="text-xs font-semibold text-[#EEEEEE]">
+                      {t.name}
+                    </h4>
+                    <p className="text-[11px] font-mono text-[#8D8D8D]">{t.role}</p>
+                  </div>
                 </div>
               </div>
-
-              {/* Quote text */}
-              <p className="text-xs sm:text-sm text-gray-300 leading-relaxed italic">
-                "{t.content}"
-              </p>
-
-              {/* 5 Gold Stars (Bottom) */}
-              <div className="flex items-center gap-1 text-amber-400 pt-2 border-t border-white/5">
-                {[...Array(t.rating)].map((_, i) => (
-                  <Star key={i} className="w-3.5 h-3.5 fill-current" />
-                ))}
-              </div>
-            </div>
+            </motion.div>
           ))}
         </div>
+
+        {/* Infinite Brand Marquee (as in 21st template) */}
+        <div className="mt-16 pt-8 border-t border-[#262626] overflow-hidden">
+          <p className="text-[10px] font-mono tracking-widest text-[#5D5D5D] uppercase text-center mb-6">
+            ENTERPRISES & FAST-GROWING VENTURES
+          </p>
+          <div className="relative w-full overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_15%,#000_85%,transparent)]">
+            <motion.div
+              animate={{ x: ['0%', '-50%'] }}
+              transition={{ repeat: Infinity, duration: 25, ease: 'linear' }}
+              className="flex w-max items-center gap-12 sm:gap-16 py-2"
+            >
+              {[...brandLogos, ...brandLogos].map((brand, i) => (
+                <span
+                  key={i}
+                  className="font-mono text-sm sm:text-base font-medium text-[#71717A] hover:text-[#EEEEEE] transition-colors whitespace-nowrap tracking-wider"
+                >
+                  {brand}
+                </span>
+              ))}
+            </motion.div>
+          </div>
+        </div>
+
       </div>
     </section>
   );

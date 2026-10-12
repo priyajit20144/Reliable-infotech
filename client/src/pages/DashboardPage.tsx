@@ -174,33 +174,39 @@ export const DashboardPage: React.FC = () => {
     <div className="space-y-6 max-w-7xl mx-auto w-full min-w-0">
       {/* Admin Command Quick Access Notice Banner */}
       {isTeamMember && (
-        <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-500/15 via-indigo-500/10 to-slate-900 border border-amber-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/30 shrink-0">
-              <ShieldCheck className="w-5 h-5" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-white text-sm">Admin Access Active</span>
-                {newAdminRequestsCount > 0 && (
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500 text-slate-950 animate-pulse">
-                    {newAdminRequestsCount} New Client Request{newAdminRequestsCount > 1 ? 's' : ''}
-                  </span>
-                )}
+        <div className="nf-frame relative">
+          <span className="nf-c nf-c-tl" />
+          <span className="nf-c nf-c-tr" />
+          <span className="nf-c nf-c-bl" />
+          <span className="nf-c nf-c-br" />
+          <div className="p-4 rounded bg-[#121212] border border-[#262626] flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded bg-[#181818] text-[#EEEEEE] border border-[#262626] shrink-0">
+                <ShieldCheck className="w-5 h-5 text-[#4ADE80]" />
               </div>
-              <p className="text-xs text-gray-300 mt-0.5">
-                You have {allClientRequests.length} total client website requests in the database.
-              </p>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold text-white text-sm">ADMIN ACCESS ACTIVE</span>
+                  {newAdminRequestsCount > 0 && (
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#EEEEEE] text-[#0B0B0B] animate-pulse">
+                      {newAdminRequestsCount} NEW CLIENT REQUEST{newAdminRequestsCount > 1 ? 'S' : ''}
+                    </span>
+                  )}
+                </div>
+                <p className="text-xs text-[#A1A1AA] mt-0.5 font-mono">
+                  You have {allClientRequests.length} total client website requests in the database.
+                </p>
+              </div>
             </div>
-          </div>
 
-          <Link
-            to="/admin?tab=requests"
-            className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-400 text-slate-950 transition-all shrink-0 shadow-md"
-          >
-            <span>Open Admin Console</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
+            <Link
+              to="/admin?tab=requests"
+              className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded text-xs font-mono font-semibold bg-[#EEEEEE] hover:bg-white text-[#0B0B0B] transition-colors shrink-0 cursor-pointer"
+            >
+              <span>OPEN ADMIN CONSOLE</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
         </div>
       )}
 

@@ -309,13 +309,14 @@ export const LoginPage: React.FC = () => {
               initial={{ opacity: 0, scale: 0.96, y: 16 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.5, ease: 'easeOut' }}
-              className="w-full max-w-[460px] relative"
             >
-              {/* Outer Ambient Glow Ring */}
-              <div className="absolute -inset-1 bg-gradient-to-b from-[#00D2FF]/30 via-[#0066FE]/20 to-[#9D4EDD]/30 rounded-[2.2rem] blur-xl opacity-80 -z-10 pointer-events-none" />
+              <div className="nf-frame relative w-full max-w-[460px]">
+              <span className="nf-c nf-c-tl" />
+              <span className="nf-c nf-c-tr" />
+              <span className="nf-c nf-c-bl" />
+              <span className="nf-c nf-c-br" />
 
-              {/* The Card */}
-              <div className="bg-[#0A122E]/90 sm:bg-[#0A122E]/85 backdrop-blur-2xl border border-[#00D2FF]/30 rounded-3xl sm:rounded-[2rem] p-6 sm:p-9 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9),0_0_40px_rgba(0,210,255,0.15)] relative overflow-hidden">
+              <div className="bg-[#121212] border border-[#262626] rounded-xl p-6 sm:p-9 shadow-2xl relative overflow-hidden">
                 
                 {/* Centered Top Branding */}
                 <div className="flex flex-col items-center justify-center text-center">
@@ -592,6 +593,7 @@ export const LoginPage: React.FC = () => {
                   </Link>
                 </div>
 
+              </div>
               </div>
             </motion.div>
           </div>

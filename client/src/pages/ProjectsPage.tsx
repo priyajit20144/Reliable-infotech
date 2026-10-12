@@ -247,65 +247,70 @@ export const ProjectsPage: React.FC = () => {
         {/* ========================================================================= */}
         {/* 1. HERO SECTION (Breadcrumbs, Title, Metrics, 3D Mockup Visual)          */}
         {/* ========================================================================= */}
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0F172A]/90 via-[#0B0F19] to-indigo-950/30 border border-white/8 p-6 sm:p-10 shadow-2xl">
-          {/* Ambient glow light trails */}
-          <div className="absolute top-0 right-0 w-[500px] h-[300px] bg-gradient-to-r from-cyan-500/15 via-indigo-600/20 to-purple-600/15 rounded-full blur-[120px] pointer-events-none" />
+        <div className="nf-frame nf-frame-hover relative overflow-hidden rounded bg-[#121212] border border-[#262626] p-6 sm:p-10 shadow-xl">
+          <span className="nf-c nf-c-tl" />
+          <span className="nf-c nf-c-tr" />
+          <span className="nf-c nf-c-bl" />
+          <span className="nf-c nf-c-br" />
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
             {/* Left Column: Breadcrumb, Title, Subtitle, Metrics */}
             <div className="lg:col-span-7 space-y-5 text-left">
               {/* Breadcrumbs */}
-              <div className="flex items-center gap-2 text-xs font-medium text-gray-400">
+              <div className="flex items-center gap-2 text-xs font-mono text-[#8D8D8D]">
                 <Link to="/" className="hover:text-white flex items-center gap-1 transition-colors">
-                  <Home className="w-3.5 h-3.5 text-gray-400" />
+                  <Home className="w-3.5 h-3.5 text-[#8D8D8D]" />
                   <span>Home</span>
                 </Link>
-                <ChevronRight className="w-3 h-3 text-gray-400" />
-                <span className="text-indigo-400 font-semibold">Projects</span>
+                <ChevronRight className="w-3 h-3 text-[#363636]" />
+                <span className="text-[#EEEEEE] font-medium">Projects</span>
               </div>
 
-              {/* Headline */}
-              <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
-                Our <span className="text-gradient-brand">Projects</span>
-              </h1>
+              {/* Shaded Band Headline */}
+              <div className="py-2.5 px-3 -mx-3 border-y border-[#262626] bg-gradient-to-r from-[#181818] via-[#141414] to-transparent">
+                <h1 className="text-3xl sm:text-5xl font-medium tracking-tight text-white">
+                  <span>Our </span>
+                  <span className="font-serif italic text-white/90">Showcase Works</span>
+                </h1>
+              </div>
 
               {/* Subtitle */}
-              <p className="text-xs sm:text-sm text-gray-300 leading-relaxed max-w-xl font-normal">
-                Explore our latest work and discover how we turn ideas into powerful digital solutions. Each project is crafted with modern technology, clean code and a focus on great user experience.
+              <p className="text-xs sm:text-sm text-[#A1A1AA] leading-relaxed max-w-xl font-normal">
+                Explore our latest production systems and bespoke builds. Each project is engineered with high-performance cloud architectures, verified scalability, and responsive interfaces.
               </p>
 
               {/* Metrics Row (3 Counters with Icons) */}
-              <div className="pt-3 flex flex-wrap items-center gap-6">
+              <div className="pt-3 flex flex-wrap items-center gap-6 border-t border-[#262626]">
                 {/* Metric 1: 50+ */}
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shadow-sm">
-                    <Code2 className="w-5 h-5" />
+                  <div className="w-9 h-9 rounded border border-[#363636] bg-[#1E1E1E] flex items-center justify-center text-[#EEEEEE]">
+                    <Code2 className="w-4 h-4" />
                   </div>
-                  <div className="text-left">
-                    <p className="text-xl font-black text-white leading-none">50+</p>
-                    <p className="text-[11px] text-gray-400 mt-0.5">Projects Completed</p>
+                  <div className="text-left font-mono">
+                    <p className="text-lg font-semibold text-[#EEEEEE] leading-none">50+</p>
+                    <p className="text-[10px] text-[#71717A] mt-0.5 uppercase tracking-wider">Completed</p>
                   </div>
                 </div>
 
                 {/* Metric 2: 30+ */}
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-400 shadow-sm">
-                    <Heart className="w-5 h-5" />
+                  <div className="w-9 h-9 rounded border border-[#363636] bg-[#1E1E1E] flex items-center justify-center text-[#EEEEEE]">
+                    <Heart className="w-4 h-4" />
                   </div>
-                  <div className="text-left">
-                    <p className="text-xl font-black text-white leading-none">30+</p>
-                    <p className="text-[11px] text-gray-400 mt-0.5">Happy Clients</p>
+                  <div className="text-left font-mono">
+                    <p className="text-lg font-semibold text-[#EEEEEE] leading-none">30+</p>
+                    <p className="text-[10px] text-[#71717A] mt-0.5 uppercase tracking-wider">Clients</p>
                   </div>
                 </div>
 
                 {/* Metric 3: 5+ */}
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-purple-400 shadow-sm">
-                    <ShieldCheck className="w-5 h-5" />
+                  <div className="w-9 h-9 rounded border border-[#363636] bg-[#1E1E1E] flex items-center justify-center text-[#EEEEEE]">
+                    <ShieldCheck className="w-4 h-4" />
                   </div>
-                  <div className="text-left">
-                    <p className="text-xl font-black text-white leading-none">5+</p>
-                    <p className="text-[11px] text-gray-400 mt-0.5">Years Experience</p>
+                  <div className="text-left font-mono">
+                    <p className="text-lg font-semibold text-[#EEEEEE] leading-none">5+</p>
+                    <p className="text-[10px] text-[#71717A] mt-0.5 uppercase tracking-wider">Years Exp</p>
                   </div>
                 </div>
               </div>
@@ -630,9 +635,14 @@ export const ProjectsPage: React.FC = () => {
 
             {/* Empty Search / Filter Feedback */}
             {filteredProjects.length === 0 ? (
-              <div className="rounded-2xl bg-[#0F172A]/70 border border-white/10 p-10 text-center space-y-4 max-w-lg mx-auto my-6">
-                <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center mx-auto mb-2">
-                  <FolderGit2 className="w-7 h-7" />
+              <div className="nf-frame relative rounded bg-[#181818] border border-[#262626] p-10 text-center space-y-4 max-w-lg mx-auto my-6 shadow-xl">
+                <span className="nf-c nf-c-tl" />
+                <span className="nf-c nf-c-tr" />
+                <span className="nf-c nf-c-bl" />
+                <span className="nf-c nf-c-br" />
+
+                <div className="w-12 h-12 rounded border border-[#363636] bg-[#1E1E1E] text-[#EEEEEE] flex items-center justify-center mx-auto mb-2">
+                  <FolderGit2 className="w-6 h-6" />
                 </div>
                 {currentCatalog.length === 0 ? (
                   <>
@@ -686,8 +696,13 @@ export const ProjectsPage: React.FC = () => {
                     <div
                       key={project.id}
                       onClick={() => setSelectedProject(project)}
-                      className="rounded-2xl bg-[#0F172A]/75 hover:bg-[#131B33]/90 border border-white/8 hover:border-indigo-500/40 overflow-hidden flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 group shadow-xl cursor-pointer"
+                      className="nf-frame nf-frame-hover rounded bg-[#181818] hover:bg-[#1C1C1C] border border-[#262626] hover:border-[#363636] overflow-hidden flex flex-col justify-between transition-colors group shadow-md cursor-pointer relative"
                     >
+                      <span className="nf-c nf-c-tl" />
+                      <span className="nf-c nf-c-tr" />
+                      <span className="nf-c nf-c-bl" />
+                      <span className="nf-c nf-c-br" />
+
                       {/* Image Preview with Category Badge & Featured pill */}
                       <div className="relative h-44 w-full overflow-hidden bg-slate-900">
                         <img
@@ -788,8 +803,12 @@ export const ProjectsPage: React.FC = () => {
                     <div
                       key={project.id}
                       onClick={() => setSelectedProject(project)}
-                      className="rounded-2xl bg-[#0F172A]/75 hover:bg-[#131B33]/90 border border-white/8 hover:border-indigo-500/40 p-4 sm:p-5 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-5 transition-all duration-300 hover:-translate-y-0.5 group shadow-lg cursor-pointer"
+                      className="nf-frame nf-frame-hover rounded bg-[#181818] hover:bg-[#1C1C1C] border border-[#262626] hover:border-[#363636] p-4 sm:p-5 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-5 transition-colors group shadow-md cursor-pointer relative"
                     >
+                      <span className="nf-c nf-c-tl" />
+                      <span className="nf-c nf-c-tr" />
+                      <span className="nf-c nf-c-bl" />
+                      <span className="nf-c nf-c-br" />
                       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 text-left">
                         <img
                           src={project.image}

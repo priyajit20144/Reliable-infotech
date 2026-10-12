@@ -21,7 +21,7 @@ export const RecentNotifications: React.FC = () => {
   };
 
   return (
-    <Card className="p-5 sm:p-6 flex flex-col justify-between">
+    <Card brackets={true} className="p-5 sm:p-6 flex flex-col justify-between">
       <div>
         <div className="flex items-center justify-between pb-4 border-b border-white/8 mb-4">
           <div className="flex items-center gap-2">

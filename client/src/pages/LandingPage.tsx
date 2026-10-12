@@ -11,7 +11,7 @@ import { Footer } from '../components/layout/Footer';
 
 export const LandingPage: React.FC = () => {
   return (
-    <div className="min-h-screen bg-[#0B0F19] text-[#F8FAFC]">
+    <div className="min-h-screen bg-[#0B0B0B] text-[#EEEEEE] selection:bg-[#EEEEEE] selection:text-[#121212] font-sans">
       <PublicNavbar />
       <main>
         <HeroSection />

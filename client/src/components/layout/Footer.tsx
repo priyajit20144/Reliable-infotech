@@ -144,40 +144,32 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="w-full bg-[#070A12] border-t border-white/8 pt-16 pb-12 text-gray-400 select-none relative overflow-hidden">
-      {/* Top Animated Laser Beam Divider */}
-      <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-cyan-500/40 via-indigo-500/50 to-transparent overflow-hidden">
-        <div className="h-full w-48 bg-gradient-to-r from-transparent via-cyan-300 to-transparent animate-beam" />
-      </div>
-
-      {/* Ambient Radial Background Glows */}
-      <div className="absolute top-0 left-1/4 -translate-x-1/2 w-[550px] h-[350px] bg-cyan-600/5 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute top-1/3 right-1/4 translate-x-1/2 w-[550px] h-[350px] bg-indigo-600/5 rounded-full blur-[140px] pointer-events-none" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <footer className="w-full bg-[#0B0B0B] border-t border-[#262626] pt-16 pb-12 text-[#8D8D8D] select-none relative overflow-hidden">
+      <div className="max-w-7xl 2xl:max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* ========================================================================= */}
         {/* 1. MAIN GRID (5 Columns)                                                  */}
         {/* ========================================================================= */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 pb-12 border-b border-white/8 text-left items-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 pb-12 border-b border-[#262626] text-left items-start">
           
           {/* Column 1: Brand Info (col-span-3) */}
           <div className="lg:col-span-3 space-y-4">
             <Link to="/" className="flex items-center gap-2.5 group w-fit">
-              <img
-                src="/reliable-symbol.png"
-                alt="Reliable InfoTech Logo"
-                className="w-9 h-9 object-contain drop-shadow-[0_0_12px_rgba(6,182,212,0.6)] group-hover:scale-110 group-hover:rotate-6 transition-all duration-300"
-              />
-              <span className="text-xl font-extrabold text-white tracking-tight flex items-center">
+              <div className="w-8 h-8 rounded border border-[#363636] bg-[#181818] p-1 flex items-center justify-center transition-transform group-hover:scale-105">
+                <img
+                  src="/reliable-symbol.png"
+                  alt="Reliable InfoTech Logo"
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              <span className="text-[15px] font-semibold text-[#EEEEEE] tracking-tight flex items-center">
                 <span>Reliable</span>
-                <span className="text-cyan-400 ml-1 group-hover:text-cyan-300 transition-colors">Info</span>
-                <span className="text-purple-400 group-hover:text-purple-300 transition-colors">Tech</span>
+                <span className="text-[#8D8D8D] font-serif italic ml-1.5 font-normal text-base">InfoTech</span>
               </span>
             </Link>
 
-            <p className="text-xs text-gray-400 leading-relaxed max-w-xs font-normal">
-              We build modern websites, web applications, e-commerce platforms and custom digital products for businesses and individuals worldwide.
+            <p className="text-xs text-[#8D8D8D] leading-relaxed max-w-xs font-normal">
+              We engineer scalable web applications, enterprise software, e-commerce architectures and custom digital products for businesses worldwide.
             </p>
 
             {/* Live Operational Status Badge */}
@@ -369,43 +361,38 @@ export const Footer: React.FC = () => {
         {/* 2. EXCLUSIVE ANIMATED DEVELOPER SHOWCASE & SIGNATURE SECTION              */}
         {/* ========================================================================= */}
         <div className="my-6 sm:my-7 relative">
-          <div className="rounded-2xl bg-gradient-to-br from-[#0B1120]/95 via-[#0E172E]/90 to-[#0A0F1D]/95 border border-indigo-500/20 p-4 sm:p-5 lg:p-5.5 backdrop-blur-xl shadow-xl relative overflow-hidden">
-            
-            {/* Ambient Multi-Hue Lighting */}
-            <div className="absolute -top-20 -left-20 w-56 h-56 bg-cyan-500/10 rounded-full blur-[90px] pointer-events-none" />
-            <div className="absolute -bottom-20 -right-20 w-56 h-56 bg-purple-500/10 rounded-full blur-[90px] pointer-events-none" />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-36 bg-indigo-500/5 rounded-full blur-[100px] pointer-events-none" />
+          <div className="nf-frame rounded bg-[#181818] border border-[#262626] p-4 sm:p-5 lg:p-6 shadow-sm relative overflow-hidden">
+            <span className="nf-c nf-c-tl" />
+            <span className="nf-c nf-c-tr" />
+            <span className="nf-c nf-c-bl" />
+            <span className="nf-c nf-c-br" />
 
             {/* Showcase Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 sm:pb-3.5 border-b border-white/8 relative z-10 text-left">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 sm:pb-3.5 border-b border-[#262626] relative z-10 text-left">
               <div>
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/[0.04] border border-white/10 text-[10px] font-semibold text-gray-300">
-                  <Sparkles className="w-3 h-3 text-cyan-400 animate-spin-slow" />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-300 to-purple-400 font-bold uppercase tracking-wider">
-                    Core Engineering Leadership
-                  </span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse ml-0.5" />
+                <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-mono tracking-wider text-[#A1A1AA] bg-[#121212] border border-[#262626]">
+                  <Sparkles className="w-3 h-3 text-[#E4E4E7]" />
+                  <span>CORE ENGINEERING LEADERSHIP</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E] animate-pulse ml-0.5" />
                 </div>
-                <h3 className="text-base sm:text-lg font-bold text-white tracking-tight mt-1 flex items-center gap-1.5 flex-wrap">
-                  <span>Architected &amp; Engineered by</span>
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-400 to-purple-400">
-                    Senior Full-Stack Specialists
-                  </span>
+                <h3 className="text-base sm:text-lg font-normal text-[#EEEEEE] tracking-tight mt-1">
+                  <span>Architected &amp; Engineered by </span>
+                  <span className="font-serif italic text-[#C9C9C9]">Senior Full-Stack Specialists</span>
                 </h3>
-                <p className="text-[11px] sm:text-xs text-gray-400 mt-0.5 max-w-xl font-normal leading-relaxed">
-                  Handcrafted with performance, security, and responsive elegance by the core creator trio. Click any developer to view technical dossier.
+                <p className="text-[11px] sm:text-xs text-[#8D8D8D] mt-0.5 max-w-xl font-normal leading-relaxed">
+                  Handcrafted with performance, security, and responsive elegance. Click any developer to view technical dossier.
                 </p>
               </div>
 
               {/* Live Terminal / Git Build Badge */}
-              <div className="flex items-center gap-2 bg-[#050811]/90 border border-white/10 rounded-lg px-2.5 py-1.5 text-[11px] font-mono text-gray-300 shadow-inner shrink-0 self-start sm:self-center">
-                <Terminal className="w-3 h-3 text-cyan-400 shrink-0" />
-                <span className="text-gray-400">git:</span>
-                <span className="text-emerald-400 font-semibold">prod/v2.4.0</span>
-                <span className="text-gray-600">|</span>
-                <span className="text-gray-400 flex items-center gap-1">
-                  <Cpu className="w-3 h-3 text-indigo-400" />
-                  MERN + TS
+              <div className="flex items-center gap-2 bg-[#121212] border border-[#262626] rounded px-2.5 py-1.5 text-[11px] font-mono text-[#A1A1AA] shrink-0 self-start sm:self-center">
+                <Terminal className="w-3 h-3 text-[#A1A1AA] shrink-0" />
+                <span className="text-[#71717A]">git:</span>
+                <span className="text-[#EEEEEE] font-semibold">prod/v2.4.0</span>
+                <span className="text-[#363636]">|</span>
+                <span className="text-[#A1A1AA] flex items-center gap-1">
+                  <Cpu className="w-3 h-3 text-[#EEEEEE]" />
+                  TS + CANVAS 3D
                 </span>
               </div>
             </div>
@@ -416,10 +403,12 @@ export const Footer: React.FC = () => {
                 <div
                   key={creator.id}
                   onClick={() => setSelectedCreator(creator)}
-                  className={`group relative rounded-xl sm:rounded-2xl bg-[#090E1A]/85 hover:bg-[#0E1528]/95 border border-white/8 ${creator.accent.border} ${creator.accent.glow} p-3.5 sm:p-4 transition-all duration-300 hover:-translate-y-1 cursor-pointer text-left shadow-md flex flex-col justify-between`}
+                  className="nf-frame nf-frame-hover group relative rounded bg-[#121212] hover:bg-[#151515] border border-[#262626] hover:border-[#363636] p-3.5 sm:p-4 transition-all duration-300 hover:-translate-y-1 cursor-pointer text-left shadow-sm flex flex-col justify-between"
                 >
-                  {/* Subtle Top Card Gradient Aura */}
-                  <div className={`absolute inset-0 rounded-xl sm:rounded-2xl bg-gradient-to-b ${creator.accent.gradient} opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none`} />
+                  <span className="nf-c nf-c-tl" />
+                  <span className="nf-c nf-c-tr" />
+                  <span className="nf-c nf-c-bl" />
+                  <span className="nf-c nf-c-br" />
 
                   <div className="relative z-10 space-y-2.5">
                     {/* Top Row: Avatar & Status + Micro Badge */}

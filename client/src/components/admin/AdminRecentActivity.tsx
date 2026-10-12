@@ -82,59 +82,66 @@ export const AdminRecentActivity: React.FC<AdminRecentActivityProps> = ({ onView
   ];
 
   return (
-    <div className="h-full rounded-2xl bg-[#0D1527] border border-slate-800/80 p-4 sm:p-5 flex flex-col justify-between">
-      {/* Header */}
-      <div className="flex items-center justify-between pb-2 border-b border-slate-800/60">
-        <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-blue-600/20 text-blue-400 flex items-center justify-center">
-            <Activity className="w-4 h-4" />
+    <div className="nf-frame relative h-full">
+      <span className="nf-c nf-c-tl" />
+      <span className="nf-c nf-c-tr" />
+      <span className="nf-c nf-c-bl" />
+      <span className="nf-c nf-c-br" />
+
+      <div className="h-full rounded bg-[#121212] border border-[#262626] p-4 sm:p-5 flex flex-col justify-between">
+        {/* Header */}
+        <div className="flex items-center justify-between pb-2 border-b border-[#262626]">
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded bg-[#181818] text-[#EEEEEE] border border-[#262626] flex items-center justify-center">
+              <Activity className="w-4 h-4" />
+            </div>
+            <h3 className="font-semibold text-sm sm:text-base text-white tracking-tight font-mono uppercase">
+              Recent Activity
+            </h3>
           </div>
-          <h3 className="font-bold text-sm sm:text-base text-white tracking-tight">
-            Recent Activity
-          </h3>
+
+          <button
+            onClick={onViewAll}
+            className="text-xs text-[#EEEEEE] hover:underline font-mono transition-colors cursor-pointer"
+          >
+            VIEW ALL
+          </button>
         </div>
 
-        <button
-          onClick={onViewAll}
-          className="text-xs text-blue-400 hover:text-blue-300 font-semibold transition-colors"
-        >
-          View All
-        </button>
-      </div>
-
-      {/* Activity Timeline List */}
-      <div className="space-y-3 pt-3 flex-1 overflow-y-auto">
-        {activities.map((item) => {
-          const Icon = item.icon;
-          return (
-            <div
-              key={item.id}
-              className="flex items-start gap-3 p-1.5 rounded-xl hover:bg-slate-800/40 transition-colors group cursor-default"
-            >
-              {/* Icon pill */}
+        {/* Activity Timeline List */}
+        <div className="space-y-3 pt-3 flex-1 overflow-y-auto">
+          {activities.map((item) => {
+            const Icon = item.icon;
+            return (
               <div
-                className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border ${item.iconBg} group-hover:scale-105 transition-transform`}
+                key={item.id}
+                className="flex items-start gap-3 p-1.5 rounded hover:bg-[#181818] transition-colors group cursor-default"
               >
-                <Icon className={`w-4 h-4 ${item.iconColor}`} />
-              </div>
+                {/* Icon pill */}
+                <div
+                  className="w-8 h-8 rounded bg-[#181818] flex items-center justify-center shrink-0 border border-[#262626] text-[#EEEEEE]"
+                >
+                  <Icon className="w-4 h-4" />
+                </div>
 
-              {/* Text */}
-              <div className="min-w-0 flex-1">
-                <p className="text-xs font-semibold text-slate-100 truncate group-hover:text-white transition-colors">
-                  {item.title}
-                </p>
-                <p className="text-[11px] text-slate-400 truncate mt-0.5">
-                  {item.subtitle}
-                </p>
-              </div>
+                {/* Text */}
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-semibold text-white truncate transition-colors">
+                    {item.title}
+                  </p>
+                  <p className="text-[11px] text-[#A1A1AA] truncate mt-0.5 font-mono">
+                    {item.subtitle}
+                  </p>
+                </div>
 
-              {/* Timestamp */}
-              <span className="text-[10px] text-slate-400 shrink-0 mt-0.5 font-medium">
-                {item.time}
-              </span>
-            </div>
-          );
-        })}
+                {/* Timestamp */}
+                <span className="text-[10px] text-[#71717A] shrink-0 mt-0.5 font-mono">
+                  {item.time}
+                </span>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

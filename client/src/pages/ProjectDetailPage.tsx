@@ -124,39 +124,45 @@ export const ProjectDetailPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#0B0F19] text-[#F8FAFC]">
+    <div className="min-h-screen bg-[#0B0B0B] text-white font-sans">
       <PublicNavbar />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Admin Management Bar */}
         {user?.role === 'ADMIN' && (
-          <div className="mb-6 p-4 rounded-2xl bg-indigo-950/40 border border-indigo-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-indigo-600/30 text-indigo-400 flex items-center justify-center shrink-0">
-                <ShieldCheck className="w-4 h-4" />
+          <div className="nf-frame relative mb-6">
+            <span className="nf-c nf-c-tl" />
+            <span className="nf-c nf-c-tr" />
+            <span className="nf-c nf-c-bl" />
+            <span className="nf-c nf-c-br" />
+            <div className="p-4 rounded bg-[#121212] border border-[#262626] flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded bg-[#181818] text-[#EEEEEE] border border-[#262626] flex items-center justify-center shrink-0">
+                  <ShieldCheck className="w-4 h-4 text-[#4ADE80]" />
+                </div>
+                <div>
+                  <span className="text-xs font-mono font-semibold text-white block">ADMINISTRATOR CONTROL BAR</span>
+                  <span className="text-[11px] text-[#A1A1AA] font-mono">
+                    Managing showcase portfolio item: <strong className="text-white">{project.title}</strong>
+                  </span>
+                </div>
               </div>
-              <div>
-                <span className="text-xs font-bold text-white block">Administrator Control Bar</span>
-                <span className="text-[11px] text-gray-400">
-                  Managing showcase portfolio item: <strong className="text-white">{project.title}</strong>
-                </span>
+              <div className="flex items-center gap-2">
+                <Link
+                  to="/admin?tab=projects"
+                  className="px-3 py-1.5 rounded bg-[#181818] hover:bg-[#262626] text-xs font-mono text-[#A1A1AA] hover:text-white border border-[#262626] transition-colors"
+                >
+                  BACK TO CATALOG
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => setDeleteModalOpen(true)}
+                  className="px-3.5 py-1.5 rounded bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white border border-rose-500/30 text-xs font-mono font-semibold transition-all flex items-center gap-1.5 shadow-sm cursor-pointer"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span>DELETE SHOWCASE PROJECT</span>
+                </button>
               </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <Link
-                to="/admin?tab=projects"
-                className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-medium text-gray-300 hover:text-white border border-white/10 transition-colors"
-              >
-                Back to Admin Catalog
-              </Link>
-              <button
-                type="button"
-                onClick={() => setDeleteModalOpen(true)}
-                className="px-3.5 py-1.5 rounded-xl bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white border border-rose-500/30 text-xs font-semibold transition-all flex items-center gap-1.5 shadow-sm"
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-                <span>Delete Showcase Project</span>
-              </button>
             </div>
           </div>
         )}
@@ -164,23 +170,23 @@ export const ProjectDetailPage: React.FC = () => {
         {/* Breadcrumb / Back Link */}
         <Link
           to="/projects"
-          className="inline-flex items-center gap-2 text-xs font-semibold text-gray-400 hover:text-white transition-colors mb-8"
+          className="inline-flex items-center gap-2 text-xs font-mono text-[#A1A1AA] hover:text-white transition-colors mb-8"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Back to All Showcase Projects</span>
+          <span>BACK TO ALL SHOWCASE PROJECTS</span>
         </Link>
 
         {/* Top Header */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-8 border-b border-white/10 mb-8">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-8 border-b border-[#262626] mb-8">
           <div className="space-y-2 max-w-3xl">
             <div className="flex items-center gap-2.5">
               <Badge variant="purple" size="md">{project.category}</Badge>
               {project.featured && <Badge variant="emerald" size="sm">Featured Project</Badge>}
             </div>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+            <h1 className="text-3xl sm:text-4xl font-medium text-white tracking-tight">
               {project.title}
             </h1>
-            <p className="text-sm sm:text-base text-gray-300 leading-relaxed">
+            <p className="text-sm sm:text-base text-[#A1A1AA] leading-relaxed">
               {project.shortDescription}
             </p>
           </div>
@@ -188,8 +194,8 @@ export const ProjectDetailPage: React.FC = () => {
           {/* Action CTAs */}
           <div className="flex flex-wrap items-center gap-3 shrink-0">
             {project.price ? (
-              <div className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-right">
-                <p className="text-[10px] text-gray-400 uppercase tracking-wider">Estimated Price</p>
+              <div className="px-4 py-2 rounded bg-[#121212] border border-[#262626] text-right font-mono">
+                <p className="text-[10px] text-[#71717A] uppercase tracking-wider">Estimated Price</p>
                 <p className="text-xl font-bold text-white">${project.price.toLocaleString()}</p>
               </div>
             ) : null}
@@ -208,13 +214,19 @@ export const ProjectDetailPage: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           {/* Left 2 Cols: Gallery & Description */}
           <div className="lg:col-span-2 space-y-8">
-            {/* Main Preview Image */}
-            <div className="rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-slate-900 h-80 sm:h-[420px] relative">
-              <img
-                src={selectedImg || project.images[0]}
-                alt={project.title}
-                className="w-full h-full object-cover object-top"
-              />
+            {/* Main Preview Image with Corner Brackets */}
+            <div className="nf-frame relative">
+              <span className="nf-c nf-c-tl" />
+              <span className="nf-c nf-c-tr" />
+              <span className="nf-c nf-c-bl" />
+              <span className="nf-c nf-c-br" />
+              <div className="rounded overflow-hidden border border-[#262626] shadow-2xl bg-[#121212] h-80 sm:h-[420px] relative">
+                <img
+                  src={selectedImg || project.images[0]}
+                  alt={project.title}
+                  className="w-full h-full object-cover object-top"
+                />
+              </div>
             </div>
 
             {/* Gallery Thumbnails */}
@@ -224,8 +236,8 @@ export const ProjectDetailPage: React.FC = () => {
                   <button
                     key={i}
                     onClick={() => setSelectedImg(img)}
-                    className={`w-24 h-16 rounded-xl overflow-hidden border-2 shrink-0 transition-all ${
-                      selectedImg === img ? 'border-devcraft-primary scale-105' : 'border-white/10 opacity-70 hover:opacity-100'
+                    className={`w-24 h-16 rounded overflow-hidden border-2 shrink-0 transition-all cursor-pointer ${
+                      selectedImg === img ? 'border-[#EEEEEE] scale-105' : 'border-[#262626] opacity-70 hover:opacity-100'
                     }`}
                   >
                     <img src={img} alt="thumbnail" className="w-full h-full object-cover" />
@@ -235,21 +247,21 @@ export const ProjectDetailPage: React.FC = () => {
             )}
 
             {/* Detailed Description */}
-            <Card className="space-y-4">
-              <h3 className="text-lg font-bold text-white">System Architecture & Overview</h3>
-              <p className="text-sm text-gray-300 leading-relaxed whitespace-pre-line">
+            <Card brackets={true} className="space-y-4">
+              <h3 className="text-lg font-semibold text-white">System Architecture & Overview</h3>
+              <p className="text-sm text-[#A1A1AA] leading-relaxed whitespace-pre-line">
                 {project.description}
               </p>
             </Card>
 
             {/* Core Features */}
-            <Card className="space-y-4">
-              <h3 className="text-lg font-bold text-white">Key Functional Features</h3>
+            <Card brackets={true} className="space-y-4">
+              <h3 className="text-lg font-semibold text-white">Key Functional Features</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {project.features.map((feat, i) => (
-                  <div key={i} className="flex items-start gap-2.5 p-2 rounded-lg bg-white/[0.02]">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                    <span className="text-xs text-gray-300 leading-snug">{feat}</span>
+                  <div key={i} className="flex items-start gap-2.5 p-2 rounded bg-[#181818] border border-[#262626]/50">
+                    <CheckCircle2 className="w-4 h-4 text-[#4ADE80] shrink-0 mt-0.5" />
+                    <span className="text-xs text-[#EEEEEE] leading-snug">{feat}</span>
                   </div>
                 ))}
               </div>
@@ -258,13 +270,13 @@ export const ProjectDetailPage: React.FC = () => {
 
           {/* Right 1 Col: Tech Stack & Live Links */}
           <div className="space-y-6">
-            <Card className="space-y-5">
-              <h3 className="text-base font-bold text-white">Technology Specification</h3>
+            <Card brackets={true} className="space-y-5">
+              <h3 className="text-base font-semibold text-white">Technology Specification</h3>
               <div className="flex flex-wrap gap-2">
                 {project.technologies.map((t, i) => (
                   <span
                     key={i}
-                    className="text-xs px-3 py-1.5 rounded-xl bg-white/5 text-gray-200 border border-white/10 font-mono"
+                    className="text-xs px-3 py-1.5 rounded bg-[#181818] text-[#EEEEEE] border border-[#262626] font-mono"
                   >
                     {t}
                   </span>
@@ -272,13 +284,13 @@ export const ProjectDetailPage: React.FC = () => {
               </div>
 
               {/* Demo and Github Links */}
-              <div className="pt-4 border-t border-white/8 space-y-3">
+              <div className="pt-4 border-t border-[#262626] space-y-3">
                 {project.demoUrl && (
                   <a
                     href={project.demoUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="w-full py-2.5 px-4 rounded-xl bg-devcraft-primary hover:bg-devcraft-primaryHover text-white text-xs font-semibold flex items-center justify-center gap-2 shadow-sm transition-all"
+                    className="w-full py-2.5 px-4 rounded bg-[#EEEEEE] hover:bg-white text-[#0B0B0B] text-xs font-semibold flex items-center justify-center gap-2 shadow-sm transition-colors cursor-pointer"
                   >
                     <span>Launch Live Demo</span>
                     <ExternalLink className="w-3.5 h-3.5" />
@@ -289,7 +301,7 @@ export const ProjectDetailPage: React.FC = () => {
                     href={project.githubUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="w-full py-2.5 px-4 rounded-xl bg-white/5 hover:bg-white/10 text-white text-xs font-semibold border border-white/10 flex items-center justify-center gap-2 transition-colors"
+                    className="w-full py-2.5 px-4 rounded bg-[#181818] hover:bg-[#262626] text-white text-xs font-semibold border border-[#262626] flex items-center justify-center gap-2 transition-colors cursor-pointer"
                   >
                     <Github className="w-3.5 h-3.5" />
                     <span>View Source Repository</span>
@@ -299,12 +311,12 @@ export const ProjectDetailPage: React.FC = () => {
             </Card>
 
             {/* Customization Guarantee Card */}
-            <Card className="space-y-3 bg-gradient-to-br from-indigo-950/40 via-purple-950/20 to-slate-900 border-indigo-500/20">
-              <div className="flex items-center gap-2 text-indigo-400 font-semibold text-sm">
-                <ShieldCheck className="w-5 h-5" />
+            <Card brackets={true} className="space-y-3 bg-[#121212] border-[#262626]">
+              <div className="flex items-center gap-2 text-white font-semibold text-sm">
+                <ShieldCheck className="w-5 h-5 text-[#4ADE80]" />
                 <span>Reliable Info Tech Quality Guarantee</span>
               </div>
-              <p className="text-xs text-gray-300 leading-relaxed">
+              <p className="text-xs text-[#A1A1AA] leading-relaxed">
                 Every project includes full source code transfer, 30 days of complimentary bug-fix support, documentation, and database setup assistance.
               </p>
             </Card>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import {
   Lightbulb,
   FileText,
@@ -13,110 +14,107 @@ export const ProcessSection: React.FC = () => {
   const steps = [
     {
       step: '01',
-      title: 'Idea',
+      title: 'Discovery',
       icon: Lightbulb,
-      description: 'Understand your vision and goals.',
-      color: 'text-amber-400',
+      description: 'Understanding domain logic, system goals, and strategic success metrics.',
     },
     {
       step: '02',
-      title: 'Requirements',
+      title: 'Architecture',
       icon: FileText,
-      description: 'Gather detailed requirements.',
-      color: 'text-blue-400',
+      description: 'Technical specs, schema design, and cloud infrastructure roadmap.',
     },
     {
       step: '03',
-      title: 'Design',
+      title: 'Interface Design',
       icon: PenTool,
-      description: 'Create wireframes and UI/UX designs.',
-      color: 'text-purple-400',
+      description: 'Interactive high-fidelity prototypes and crafted design systems.',
     },
     {
       step: '04',
-      title: 'Development',
+      title: 'Engineering',
       icon: Code2,
-      description: 'Build your solution with clean code.',
-      color: 'text-cyan-400',
+      description: 'Clean TypeScript implementation with automated tests and CI/CD pipelines.',
     },
     {
       step: '05',
-      title: 'Testing',
+      title: 'Quality Assurance',
       icon: CheckCircle2,
-      description: 'Ensure quality and performance.',
-      color: 'text-emerald-400',
+      description: 'Cross-device validation, end-to-end testing, and performance profiling.',
     },
     {
       step: '06',
-      title: 'Launch',
+      title: 'Deployment',
       icon: Rocket,
-      description: 'Deploy and support your product.',
-      color: 'text-rose-400',
+      description: 'Zero-downtime production launch, observability monitoring, and handoff.',
     },
   ];
 
   return (
-    <section id="process" className="py-20 bg-[#0B0F19] relative overflow-hidden">
-      {/* Background ambient glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[300px] bg-indigo-600/10 rounded-full blur-[140px] pointer-events-none" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <section id="process" className="py-16 md:py-24 relative border-t border-[#262626]">
+      <div className="max-w-7xl 2xl:max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8">
+        
         {/* Section Header */}
-        <div className="space-y-1.5 text-left mb-16">
-          <p className="text-xs font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-1.5">
-            <span>«</span>
-            <span>OUR PROCESS</span>
-          </p>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            How We Work
+        <div className="space-y-3 text-left mb-14">
+          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded text-[11px] font-mono tracking-wider text-[#A1A1AA] bg-[#181818] border border-[#262626]">
+            <span>METHODOLOGY · LIFECYCLE</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-normal tracking-tight text-[#EEEEEE]">
+            <span>Built With </span>
+            <span className="font-serif italic text-[#C9C9C9]">Quiet Rigor</span>
           </h2>
-          <p className="text-xs sm:text-sm text-gray-400 max-w-xl leading-relaxed">
-            We follow a simple and effective process to deliver the best results.
+          <p className="text-sm text-[#8D8D8D] max-w-xl leading-relaxed">
+            A repeatable, transparent development pipeline focused on velocity without sacrificing engineering quality.
           </p>
         </div>
 
-        {/* 6 Connected Steps Horizontal Pipeline (Desktop) & Responsive Grid (Mobile/Tablet) */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 relative">
+        {/* 6 Connected Steps Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
           {steps.map((s, idx) => {
             const Icon = s.icon;
-            const isLast = idx === steps.length - 1;
-
             return (
-              <div
+              <motion.div
                 key={s.step}
-                className="flex flex-col items-center text-center group relative"
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.45, delay: idx * 0.08 }}
+                whileHover={{ y: -3 }}
+                className="nf-frame nf-frame-hover"
               >
-                {/* Step Circular Node */}
-                <div className="relative">
-                  <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#111827] border border-white/10 group-hover:border-indigo-500/50 flex items-center justify-center shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(99,102,241,0.3)]">
-                    <Icon className={`w-6 h-6 ${s.color} transition-transform group-hover:scale-105`} />
-                  </div>
+                <span className="nf-c nf-c-tl" />
+                <span className="nf-c nf-c-tr" />
+                <span className="nf-c nf-c-bl" />
+                <span className="nf-c nf-c-br" />
 
-                  {/* Connecting Arrow for Desktop (hidden on last item) */}
-                  {!isLast && (
-                    <div className="hidden lg:flex items-center justify-center absolute -right-6 top-1/2 -translate-y-1/2 text-gray-600 z-10">
-                      <ArrowRight className="w-4 h-4 opacity-60 group-hover:text-cyan-400 group-hover:opacity-100 transition-colors" />
+                <div className="h-full p-5 rounded bg-[#181818] border border-[#262626] hover:border-[#363636] flex flex-col justify-between transition-colors shadow-sm text-left group">
+                  <div>
+                    {/* Step Telemetry Number */}
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="font-mono text-xs font-semibold text-[#EEEEEE] px-2 py-0.5 rounded bg-[#121212] border border-[#262626]">
+                        {s.step}
+                      </span>
+                      <Icon className="w-4 h-4 text-[#8D8D8D] group-hover:text-[#EEEEEE] transition-colors" />
                     </div>
-                  )}
-                </div>
 
-                {/* Step Number & Title */}
-                <div className="mt-4 space-y-1">
-                  <div className="flex items-center justify-center gap-1.5">
-                    <span className="text-xs font-bold text-gray-400 font-mono">
-                      {s.step}
-                    </span>
-                    <h3 className="text-sm font-bold text-white group-hover:text-indigo-300 transition-colors">
+                    <h3 className="text-sm font-semibold text-[#EEEEEE] group-hover:text-white transition-colors">
                       {s.title}
                     </h3>
+                    <p className="text-xs text-[#8D8D8D] leading-relaxed mt-2">
+                      {s.description}
+                    </p>
                   </div>
 
-                  {/* Step Description */}
-                  <p className="text-xs text-gray-400 leading-relaxed max-w-[150px] mx-auto">
-                    {s.description}
-                  </p>
+                  <div className="pt-4 mt-3 border-t border-dashed border-[#262626] flex items-center justify-between text-[10px] font-mono text-[#71717A]">
+                    <span>STEP {s.step}</span>
+                    {idx < steps.length - 1 ? (
+                      <ArrowRight className="w-3 h-3 text-[#5D5D5D]" />
+                    ) : (
+                      <span className="text-[#22C55E]">LIVE</span>
+                    )}
+                  </div>
                 </div>
-              </div>
+              </motion.div>
             );
           })}
         </div>

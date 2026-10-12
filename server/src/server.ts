@@ -93,6 +93,9 @@ registerRoute('/ai', aiRoutes);
 registerRoute('/supabase', supabaseRoutes);
 registerRoute('/email', emailRoutes);
 
+import http from 'http';
+import { initWebSocketServer, getWebSocketStats } from './services/websocketService.js';
+
 // Health and API status check
 app.get(['/api', '/api/', '/api/health', '/health'], (_req, res) => {
   res.json({
@@ -100,6 +103,17 @@ app.get(['/api', '/api/', '/api/health', '/health'], (_req, res) => {
     platform: 'Reliable Info Tech Platform API',
     mongoConnected: isConnectedToMongo,
     mongoDetails: getMongoConnectionStatus(),
+    webSocket: getWebSocketStats(),
+    timestamp: new Date().toISOString(),
+  });
+});
+
+app.get(['/api/ws-status', '/ws-status'], (_req, res) => {
+  res.json({
+    status: 'online',
+    protocol: 'ws',
+    path: '/ws',
+    ...getWebSocketStats(),
     timestamp: new Date().toISOString(),
   });
 });
@@ -107,11 +121,15 @@ app.get(['/api', '/api/', '/api/health', '/health'], (_req, res) => {
 // Error handling
 app.use(errorHandler);
 
-// Start standalone HTTP server when executed directly (local dev), but NOT inside Vercel serverless
+// Start standalone HTTP server with WebSockets
 const startServer = async () => {
   await connectDB();
-  const server = app.listen(PORT, () => {
+  const httpServer = http.createServer(app);
+  initWebSocketServer(httpServer);
+
+  const server = httpServer.listen(PORT, () => {
     console.log(`[Reliable Info Tech Server] Running on http://localhost:${PORT}`);
+    console.log(`[Reliable Info Tech WebSocket] Gateway active at ws://localhost:${PORT}/ws`);
   });
 
   server.on('error', (err: any) => {

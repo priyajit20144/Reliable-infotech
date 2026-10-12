@@ -4,31 +4,47 @@
 
 @layer base {
   :root {
-    --devcraft-bg: #0b0f19;
-    --devcraft-surface: #111827;
-    --devcraft-card: #161f30;
-    --devcraft-primary: #6366f1;
-    --devcraft-secondary: #8b5cf6;
-    --devcraft-border: rgba(255, 255, 255, 0.08);
+    --devcraft-bg: #0b0b0b;
+    --devcraft-surface: #121212;
+    --devcraft-card: #181818;
+    --devcraft-primary: #eeeeee;
+    --devcraft-secondary: #c9c9c9;
+    --devcraft-border: #262626;
+
+    /* 21st Template design tokens */
+    --nf-page: #0b0b0b;
+    --nf-hatch: rgba(255, 255, 255, 0.04);
+    --nf-paper: #121212;
+    --nf-card: #181818;
+    --nf-raise: #1e1e1e;
+    --nf-ink: #eeeeee;
+    --nf-soft: #c9c9c9;
+    --nf-muted: #8d8d8d;
+    --nf-faint: #5d5d5d;
+    --nf-line: #262626;
+    --nf-line-strong: #363636;
+    --nf-bracket: #444444;
+    --nf-band: #1d1d1d;
+    --nf-inv: #efefef;
+    --nf-inv-ink: #121212;
+    --nf-inv-muted: #646464;
+    --nf-sans: 'Manrope', 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --nf-serif: 'Newsreader', Georgia, serif;
+    --nf-mono: 'JetBrains Mono', monospace;
   }
 
   html {
     scroll-behavior: smooth;
-    font-family:
-      "Inter",
-      system-ui,
-      -apple-system,
-      sans-serif;
+    font-family: var(--nf-sans);
     color-scheme: dark;
-    /* Cross-browser dark scrollbar for Firefox */
     scrollbar-width: thin;
-    scrollbar-color: #1f293d #0b0f19;
+    scrollbar-color: #262626 #0b0b0b;
   }
 
   body {
-    background-color: #0b0f19;
-    color: #f8fafc;
-    /* Modern overflow containment that does not break position: sticky */
+    background-color: var(--nf-page);
+    background-image: repeating-linear-gradient(135deg, var(--nf-hatch) 0 1px, transparent 1px 10px);
+    color: var(--nf-ink);
     overflow-x: clip;
     min-height: 100vh;
     width: 100%;
@@ -36,29 +52,94 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Custom Reliable Info Tech dark scrollbar for Webkit/Chromium */
+  /* Reliable Info Tech monochrome scrollbar */
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: #0b0f19;
+    background: #0b0b0b;
   }
   ::-webkit-scrollbar-thumb {
-    background: #1f293d;
+    background: #262626;
     border-radius: 9999px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #374151;
+    background: #363636;
   }
 }
 
 @layer utilities {
+  /* 21st Architectural Brackets & Frames */
+  .nf-frame {
+    position: relative;
+  }
+  .nf-c {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-color: var(--nf-bracket, #444444);
+    border-style: solid;
+    border-width: 0;
+    pointer-events: none;
+    transition: border-color 0.3s ease, transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .nf-c-tl {
+    top: -4px;
+    left: -4px;
+    border-top-width: 1.5px;
+    border-left-width: 1.5px;
+  }
+  .nf-c-tr {
+    top: -4px;
+    right: -4px;
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+  }
+  .nf-c-bl {
+    bottom: -4px;
+    left: -4px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+  }
+  .nf-c-br {
+    bottom: -4px;
+    right: -4px;
+    border-bottom-width: 1.5px;
+    border-right-width: 1.5px;
+  }
+  .nf-frame-hover:hover > .nf-c {
+    border-color: var(--nf-ink, #eeeeee);
+  }
+  .nf-frame-hover:hover > .nf-c-tl {
+    transform: translate(-3px, -3px);
+  }
+  .nf-frame-hover:hover > .nf-c-tr {
+    transform: translate(3px, -3px);
+  }
+  .nf-frame-hover:hover > .nf-c-bl {
+    transform: translate(-3px, 3px);
+  }
+  .nf-frame-hover:hover > .nf-c-br {
+    transform: translate(3px, 3px);
+  }
+
+  /* Architectural Card */
+  .nf-card {
+    background: linear-gradient(180deg, var(--nf-raise), var(--nf-card));
+    border: 1px solid var(--nf-line);
+    transition: border-color 0.3s ease, box-shadow 0.35s ease, transform 0.35s ease;
+  }
+  .nf-card:hover {
+    border-color: var(--nf-line-strong);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7);
+  }
+
   .glass-panel {
-    background: rgba(17, 24, 39, 0.75);
+    background: rgba(18, 18, 18, 0.82);
     -webkit-backdrop-filter: blur(16px);
     backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--nf-line);
   }
 
   .glass-card {

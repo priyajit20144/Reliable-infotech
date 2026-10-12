@@ -41,19 +41,19 @@ export const RecentRequests: React.FC<RecentRequestsProps> = ({
   };
 
   return (
-    <Card className="p-5 sm:p-6 flex flex-col justify-between">
+    <Card brackets={true} className="p-5 sm:p-6 flex flex-col justify-between">
       <div>
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-white/8 mb-4 gap-2.5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#262626] mb-4 gap-2.5">
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-base font-bold text-white">Recent Website Requests</h3>
+              <h3 className="text-base font-semibold text-white">Recent Website Requests</h3>
               {isAdmin && (
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                  Admin View
+                <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#181818] text-[#EEEEEE] border border-[#262626]">
+                  ADMIN VIEW
                 </span>
               )}
             </div>
-            <p className="text-xs text-gray-400 mt-0.5">
+            <p className="text-xs text-[#A1A1AA] mt-0.5 font-mono">
               {viewMode === 'admin'
                 ? 'All incoming client website requirements & quotes'
                 : 'Track your personal website requirement milestones'}

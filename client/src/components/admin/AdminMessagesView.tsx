@@ -14,6 +14,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { messageService } from '../../services/messageService';
+import { websocketService } from '../../services/websocketService';
 import { useAuth } from '../../context/AuthContext';
 
 interface MessageItem {
@@ -162,15 +163,26 @@ export const AdminMessagesView: React.FC = () => {
     }
   }, [selectedConvId]);
 
-  // Real-time polling every 4 seconds to sync client messages
+  // Real-time WebSocket listener + fallback 4s polling
   useEffect(() => {
+    const unsubscribe = websocketService.subscribe('NEW_MESSAGE', (incoming: any) => {
+      fetchConversations(true);
+      if (selectedConvId && (incoming.conversationId === selectedConvId || !incoming.conversationId)) {
+        fetchMessages(selectedConvId, true);
+      }
+    });
+
     const timer = setInterval(() => {
       fetchConversations(true);
       if (selectedConvId) {
         fetchMessages(selectedConvId, true);
       }
     }, 4000);
-    return () => clearInterval(timer);
+
+    return () => {
+      clearInterval(timer);
+      unsubscribe();
+    };
   }, [selectedConvId]);
 
   // Selected conversation object

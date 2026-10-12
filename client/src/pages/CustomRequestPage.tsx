@@ -141,23 +141,28 @@ export const CustomRequestPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0B0F19] text-[#F8FAFC]">
+    <div className="min-h-screen bg-[#0B0B0B] text-[#EEEEEE]">
       <PublicNavbar />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {successData ? (
-          <div className="glass-card rounded-3xl p-8 sm:p-12 text-center max-w-xl mx-auto space-y-5 animate-in zoom-in-95">
-            <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mx-auto">
-              <CheckCircle2 className="w-8 h-8" />
+          <div className="nf-frame relative rounded bg-[#121212] border border-[#262626] p-8 sm:p-12 text-center max-w-xl mx-auto space-y-5 shadow-2xl animate-in zoom-in-95">
+            <span className="nf-c nf-c-tl" />
+            <span className="nf-c nf-c-tr" />
+            <span className="nf-c nf-c-bl" />
+            <span className="nf-c nf-c-br" />
+
+            <div className="w-14 h-14 rounded border border-[#363636] bg-[#1E1E1E] flex items-center justify-center text-[#4ADE80] mx-auto">
+              <CheckCircle2 className="w-7 h-7" />
             </div>
-            <h2 className="text-2xl font-bold text-white">Project Request Created!</h2>
-            <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
-              Your custom website request for <strong>{successData.businessName || successData.websiteType}</strong> has been received by our lead architect.
+            <h2 className="text-2xl font-medium text-white font-sans">Project Request Created!</h2>
+            <p className="text-xs sm:text-sm text-[#A1A1AA] leading-relaxed">
+              Your custom website request for <strong className="text-[#EEEEEE]">{successData.businessName || successData.websiteType}</strong> has been received by our lead architect.
             </p>
-            <div className="p-4 rounded-xl bg-white/5 border border-white/5 text-xs text-gray-400 text-left space-y-1">
-              <p><strong className="text-white">Request ID:</strong> {successData._id}</p>
-              <p><strong className="text-white">Status:</strong> {successData.status}</p>
-              <p><strong className="text-white">Assigned Team:</strong> {successData.assignedTo}</p>
+            <div className="p-4 rounded bg-[#181818] border border-[#262626] text-xs font-mono text-[#8D8D8D] text-left space-y-1">
+              <p><strong className="text-[#EEEEEE]">Request ID:</strong> {successData._id}</p>
+              <p><strong className="text-[#EEEEEE]">Status:</strong> {successData.status}</p>
+              <p><strong className="text-[#EEEEEE]">Assigned Team:</strong> {successData.assignedTo}</p>
             </div>
             <div className="flex flex-col sm:flex-row gap-3 pt-2">
               <Button
@@ -188,18 +193,26 @@ export const CustomRequestPage: React.FC = () => {
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-8">
-            <div className="text-center max-w-2xl mx-auto space-y-2">
-              <Badge variant="purple" size="md">Custom Website Builder</Badge>
-              <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-                Request a Custom Website
-              </h1>
-              <p className="text-xs sm:text-sm text-gray-400">
+            <div className="text-center max-w-2xl mx-auto space-y-2.5">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded text-[11px] font-mono tracking-wider text-[#A1A1AA] bg-[#181818] border border-[#262626]">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E] animate-ping" />
+                <span>SPECIFICATION · ARCHITECTURAL REQUEST</span>
+              </div>
+
+              <div className="py-2.5 px-3 border-y border-[#262626] bg-gradient-to-r from-[#181818] via-[#141414] to-transparent">
+                <h1 className="text-3xl sm:text-4xl font-medium tracking-tight text-white">
+                  <span>Request a </span>
+                  <span className="font-serif italic text-white/90">Custom Website</span>
+                </h1>
+              </div>
+
+              <p className="text-xs sm:text-sm text-[#A1A1AA]">
                 Provide your requirements, feature expectations, and timeline. Our team will review and formulate a fixed-scope quotation.
               </p>
             </div>
 
             {/* Step 1: Contact & Business Information */}
-            <Card className="space-y-4">
+            <Card brackets={true} className="space-y-4">
               <h3 className="text-base font-bold text-white border-b border-white/8 pb-3">
                 1. Client & Organization Details
               </h3>
@@ -235,7 +248,7 @@ export const CustomRequestPage: React.FC = () => {
             </Card>
 
             {/* Step 2: Website Specifications */}
-            <Card className="space-y-5">
+            <Card brackets={true} className="space-y-5">
               <h3 className="text-base font-bold text-white border-b border-white/8 pb-3">
                 2. Project Scope & Architecture
               </h3>
@@ -315,7 +328,7 @@ export const CustomRequestPage: React.FC = () => {
             </Card>
 
             {/* Step 3: Budget, Timeline & Attachments */}
-            <Card className="space-y-5">
+            <Card brackets={true} className="space-y-5">
               <h3 className="text-base font-bold text-white border-b border-white/8 pb-3">
                 3. Budget, Timeline & References
               </h3>

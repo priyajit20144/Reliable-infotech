@@ -55,30 +55,36 @@ export const AdminTeamMembers: React.FC<AdminTeamMembersProps> = ({ onViewAll })
   }, []);
 
   return (
-    <div className="h-full rounded-2xl bg-[#0D1527] border border-slate-800/80 p-4 sm:p-5 flex flex-col justify-between">
-      {/* Header */}
-      <div className="flex items-center justify-between pb-3 border-b border-slate-800/60">
-        <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-blue-600/20 text-blue-400 flex items-center justify-center">
-            <Users2 className="w-4 h-4" />
-          </div>
-          <div>
-            <h3 className="font-bold text-sm sm:text-base text-white tracking-tight flex items-center gap-2">
-              <span>Team Members</span>
-              <span className="px-2 py-0.2 rounded-full text-[10px] font-semibold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                {members.length > 0 ? `${members.length} Active` : '0 Configured'}
-              </span>
-            </h3>
-          </div>
-        </div>
+    <div className="nf-frame relative h-full">
+      <span className="nf-c nf-c-tl" />
+      <span className="nf-c nf-c-tr" />
+      <span className="nf-c nf-c-bl" />
+      <span className="nf-c nf-c-br" />
 
-        <button
-          onClick={onViewAll}
-          className="text-xs text-blue-400 hover:text-blue-300 font-semibold transition-colors"
-        >
-          View All
-        </button>
-      </div>
+      <div className="h-full rounded bg-[#121212] border border-[#262626] p-4 sm:p-5 flex flex-col justify-between">
+        {/* Header */}
+        <div className="flex items-center justify-between pb-3 border-b border-[#262626]">
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded bg-[#181818] text-[#EEEEEE] border border-[#262626] flex items-center justify-center">
+              <Users2 className="w-4 h-4" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-sm sm:text-base text-white tracking-tight flex items-center gap-2 font-mono uppercase">
+                <span>Team Members</span>
+                <span className="px-2 py-0.2 rounded text-[10px] font-mono bg-[#181818] text-[#EEEEEE] border border-[#262626]">
+                  {members.length > 0 ? `${members.length} Active` : '0 Configured'}
+                </span>
+              </h3>
+            </div>
+          </div>
+
+          <button
+            onClick={onViewAll}
+            className="text-xs text-[#EEEEEE] hover:underline font-mono transition-colors cursor-pointer"
+          >
+            VIEW ALL
+          </button>
+        </div>
 
       {/* Members 2x2 or empty state */}
       {members.length === 0 ? (
@@ -100,7 +106,7 @@ export const AdminTeamMembers: React.FC<AdminTeamMembersProps> = ({ onViewAll })
           {members.map((member) => (
             <div
               key={member.id}
-              className="flex items-center gap-3 p-2.5 rounded-xl bg-slate-800/30 hover:bg-slate-800/60 border border-slate-700/40 transition-colors group"
+              className="flex items-center gap-3 p-2.5 rounded bg-[#181818] border border-[#262626] transition-colors group"
             >
               {/* Avatar with Status indicator */}
               <div className="relative shrink-0">
@@ -110,46 +116,46 @@ export const AdminTeamMembers: React.FC<AdminTeamMembersProps> = ({ onViewAll })
                   onError={(e) => {
                     (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(
                       member.name
-                    )}&background=2563eb&color=fff&bold=true`;
+                    )}&background=262626&color=eee&bold=true`;
                   }}
-                  className="w-10 h-10 rounded-full object-cover ring-2 ring-slate-700 group-hover:ring-blue-500/60 transition-all bg-slate-800"
+                  className="w-10 h-10 rounded-full object-cover border border-[#262626] bg-[#121212]"
                 />
                 <span
-                  className={`absolute bottom-0 right-0 w-3 h-3 rounded-full ring-2 ring-[#0D1527] ${
+                  className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border border-[#121212] ${
                     member.status === 'online'
-                      ? 'bg-emerald-500'
+                      ? 'bg-[#4ADE80]'
                       : member.status === 'away'
                       ? 'bg-amber-400'
-                      : 'bg-slate-500'
+                      : 'bg-[#71717A]'
                   }`}
                 />
               </div>
 
               {/* Member info */}
               <div className="min-w-0 flex-1">
-                <p className="text-xs font-bold text-white truncate group-hover:text-cyan-300 transition-colors">
+                <p className="text-xs font-semibold text-white truncate transition-colors">
                   {member.name}
                 </p>
-                <p className="text-[11px] text-slate-400 truncate mt-0.5">
+                <p className="text-[11px] text-[#A1A1AA] truncate mt-0.5 font-mono">
                   {member.role}
                 </p>
                 <div className="flex items-center gap-1.5 mt-1">
                   <span
                     className={`w-1.5 h-1.5 rounded-full ${
                       member.status === 'online'
-                        ? 'bg-emerald-400'
+                        ? 'bg-[#4ADE80]'
                         : member.status === 'away'
                         ? 'bg-amber-400'
-                        : 'bg-slate-400'
+                        : 'bg-[#71717A]'
                     }`}
                   />
                   <span
-                    className={`text-[10px] font-medium capitalize ${
+                    className={`text-[10px] font-mono capitalize ${
                       member.status === 'online'
-                        ? 'text-emerald-400'
+                        ? 'text-[#4ADE80]'
                         : member.status === 'away'
                         ? 'text-amber-400'
-                        : 'text-slate-400'
+                        : 'text-[#71717A]'
                     }`}
                   >
                     {member.status}
@@ -161,5 +167,6 @@ export const AdminTeamMembers: React.FC<AdminTeamMembersProps> = ({ onViewAll })
         </div>
       )}
     </div>
-  );
+  </div>
+);
 };

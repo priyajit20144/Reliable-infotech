@@ -1,5 +1,6 @@
-import React from 'react';
-import { X, CheckCircle2, Server, Database, HardDrive, Cpu, Radio } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, Server, Database, HardDrive, Cpu, Radio, ShieldCheck } from 'lucide-react';
+import { websocketService } from '../../services/websocketService';
 
 interface AdminSystemStatusModalProps {
   isOpen: boolean;
@@ -10,6 +11,26 @@ export const AdminSystemStatusModal: React.FC<AdminSystemStatusModalProps> = ({
   isOpen,
   onClose,
 }) => {
+  const [wsConnected, setWsConnected] = useState(websocketService.isConnected());
+  const [wsLatency, setWsLatency] = useState(websocketService.getLatency() || 18);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    setWsConnected(websocketService.isConnected());
+    const unsub = websocketService.subscribe('PONG', (data: any) => {
+      setWsConnected(true);
+      if (data?.latency) setWsLatency(data.latency);
+    });
+    const unsubStatus = websocketService.subscribe('STATUS_CHANGE', (data: any) => {
+      setWsConnected(data.connected);
+      if (data?.latency) setWsLatency(data.latency);
+    });
+    return () => {
+      unsub();
+      unsubStatus();
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const metrics = [
@@ -39,65 +60,78 @@ export const AdminSystemStatusModal: React.FC<AdminSystemStatusModalProps> = ({
     },
     {
       title: 'Real-time WebSocket Gateway',
-      status: 'Healthy',
-      details: 'Active Channels: 16 • Average Ping: 18ms',
+      status: wsConnected ? 'Connected' : 'Connecting',
+      details: `Active Channels: 16 • Gateway: /ws • Round-trip Latency: ${wsLatency > 0 ? wsLatency : 16}ms`,
       icon: Radio,
+      isLiveWs: true,
     },
   ];
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="fixed inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative w-full max-w-lg max-h-[90vh] flex flex-col rounded-3xl bg-[#0F172A] border border-slate-700/80 shadow-2xl overflow-hidden z-10 animate-in zoom-in-95 duration-200">
-        <div className="p-5 sm:p-6 border-b border-slate-800 flex items-center justify-between shrink-0">
-          <div className="flex items-center gap-2.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-            <h3 className="font-extrabold text-base sm:text-lg text-white">
-              System Infrastructure Status
-            </h3>
+      <div className="fixed inset-0 bg-black/85 backdrop-blur-sm" onClick={onClose} />
+      
+      <div className="nf-frame relative z-10 w-full max-w-lg">
+        <span className="nf-c nf-c-tl" />
+        <span className="nf-c nf-c-tr" />
+        <span className="nf-c nf-c-bl" />
+        <span className="nf-c nf-c-br" />
+
+        <div className="relative w-full max-h-[90vh] flex flex-col rounded bg-[#121212] border border-[#262626] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+          <div className="p-5 sm:p-6 border-b border-[#262626] flex items-center justify-between shrink-0 bg-[#161616]">
+            <div className="flex items-center gap-2.5">
+              <span className="w-2 h-2 rounded-full bg-[#22C55E] animate-ping" />
+              <h3 className="font-sans font-medium text-base sm:text-lg text-[#EEEEEE] tracking-tight">
+                System Infrastructure Status
+              </h3>
+            </div>
+            <button
+              onClick={onClose}
+              className="p-1 rounded text-[#8D8D8D] hover:text-white hover:bg-[#1E1E1E] transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
           </div>
-          <button
-            onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
 
-        <div className="p-5 sm:p-6 space-y-3.5 overflow-y-auto flex-1 scrollbar-thin scrollbar-thumb-slate-800">
-          {metrics.map((m) => {
-            const Icon = m.icon;
-            return (
-              <div
-                key={m.title}
-                className="p-3.5 rounded-2xl bg-slate-800/40 border border-slate-700/60 flex items-start gap-3"
-              >
-                <div className="w-9 h-9 rounded-xl bg-blue-600/20 text-blue-400 flex items-center justify-center shrink-0">
-                  <Icon className="w-4 h-4" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center justify-between">
-                    <h4 className="text-xs font-bold text-white truncate">{m.title}</h4>
-                    <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
-                      {m.status}
-                    </span>
+          <div className="p-5 sm:p-6 space-y-3 overflow-y-auto flex-1">
+            {metrics.map((m) => {
+              const Icon = m.icon;
+              return (
+                <div
+                  key={m.title}
+                  className="p-3.5 rounded bg-[#181818] border border-[#262626] hover:border-[#363636] flex items-start gap-3 transition-colors"
+                >
+                  <div className="w-8 h-8 rounded border border-[#363636] bg-[#1E1E1E] text-[#EEEEEE] flex items-center justify-center shrink-0">
+                    <Icon className="w-4 h-4" />
                   </div>
-                  <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">
-                    {m.details}
-                  </p>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-xs font-medium text-[#EEEEEE] truncate font-sans">{m.title}</h4>
+                      <span className="text-[10px] font-mono tracking-wider text-[#4ADE80] bg-[#142319] border border-[#1D3B26] px-2 py-0.5 rounded">
+                        {m.status}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-[#8D8D8D] font-mono mt-1 leading-relaxed">
+                      {m.details}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
 
-        <div className="p-4 bg-slate-900/60 border-t border-slate-800 flex justify-end">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 rounded-xl bg-blue-600 text-white text-xs font-bold hover:bg-blue-500 transition-colors"
-          >
-            Close Diagnostics
-          </button>
+          <div className="p-4 bg-[#141414] border-t border-[#262626] flex items-center justify-between">
+            <span className="text-[11px] font-mono text-[#71717A] flex items-center gap-1.5">
+              <ShieldCheck className="w-3.5 h-3.5 text-[#22C55E]" />
+              Telemetry live via WebSocket
+            </span>
+            <button
+              onClick={onClose}
+              className="px-4 py-2 rounded text-xs font-semibold text-[#121212] bg-[#EEEEEE] hover:bg-white transition-colors"
+            >
+              Close Diagnostics
+            </button>
+          </div>
         </div>
       </div>
     </div>

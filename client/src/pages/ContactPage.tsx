@@ -42,23 +42,31 @@ export const ContactPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0B0F19] text-[#F8FAFC]">
+    <div className="min-h-screen bg-[#0B0B0B] text-[#EEEEEE]">
       <PublicNavbar />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center max-w-2xl mx-auto space-y-3 mb-12">
-          <Badge variant="purple" size="md">Direct Communication</Badge>
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
-            Contact Reliable Info Tech Team
-          </h1>
-          <p className="text-sm text-gray-400">
-            Have a custom inquiry, partnership proposal, or architectural question? We'll reply within 24 hours.
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded text-[11px] font-mono tracking-wider text-[#A1A1AA] bg-[#181818] border border-[#262626]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E] animate-ping" />
+            <span>COMMUNICATION · DIRECT CHANNEL</span>
+          </div>
+
+          <div className="py-2.5 px-3 border-y border-[#262626] bg-gradient-to-r from-[#181818] via-[#141414] to-transparent">
+            <h1 className="text-3xl sm:text-5xl font-medium tracking-tight text-white">
+              <span>Contact </span>
+              <span className="font-serif italic text-white/90">Reliable InfoTech</span>
+            </h1>
+          </div>
+
+          <p className="text-xs sm:text-sm text-[#A1A1AA] leading-relaxed">
+            Have a custom inquiry, enterprise specification, or architectural consultation? Our solutions engineering team will reply within 24 hours.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Contact Details */}
-          <Card className="space-y-6">
+          <Card brackets={true} className="space-y-6">
             <h3 className="text-lg font-bold text-white border-b border-white/8 pb-3">
               Direct Inquiries
             </h3>
@@ -105,7 +113,7 @@ export const ContactPage: React.FC = () => {
           </Card>
 
           {/* Form */}
-          <Card className="md:col-span-2 p-6 sm:p-8">
+          <Card brackets={true} className="md:col-span-2 p-6 sm:p-8">
             {success ? (
               <div className="text-center py-12 space-y-4">
                 <CheckCircle2 className="w-14 h-14 text-emerald-400 mx-auto" />

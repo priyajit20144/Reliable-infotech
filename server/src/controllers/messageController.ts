@@ -5,6 +5,7 @@ import { MessageModel } from '../models/Message.js';
 import { UserModel } from '../models/User.js';
 import { NotificationModel } from '../models/Notification.js';
 import { isConnectedToMongo } from '../config/db.js';
+import { notifyNewMessage, notifyNewNotification } from '../services/websocketService.js';
 
 // Format relative time helper
 const formatRelativeTime = (date: Date | string | number): string => {
@@ -480,6 +481,19 @@ export const sendMessage = async (req: Request, res: Response) => {
 
     // In-memory store sync
     store.messages.push(newMessageData);
+
+    // Real-time WebSocket event dispatch
+    notifyNewMessage(newMessageData);
+    if (!isAdmin) {
+      notifyNewNotification({
+        userId: 'usr_admin_1',
+        title: `New Message from ${currentUserName}`,
+        message: content.length > 80 ? `${content.substring(0, 80)}...` : content,
+        type: 'MESSAGE',
+        referenceId: targetConvId,
+        createdAt: new Date().toISOString(),
+      });
+    }
 
     const conv = store.conversations.find((c) => c._id === targetConvId || c.id === targetConvId);
     if (conv) {

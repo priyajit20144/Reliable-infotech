@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Code2,
   ArrowRight,
@@ -21,7 +22,7 @@ import { useNotifications } from '../../context/NotificationContext';
 import { Avatar } from '../common/Avatar';
 
 export const PublicNavbar: React.FC = () => {
-  const { user, logout, isTeamMember } = useAuth();
+  const { user, logout } = useAuth();
   const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
   const location = useLocation();
   const navigate = useNavigate();
@@ -56,491 +57,408 @@ export const PublicNavbar: React.FC = () => {
 
   const isHome = location.pathname === '/';
 
+  const navLinks = [
+    { label: 'Home', path: '/', active: isHome },
+    ...(user?.role === 'ADMIN'
+      ? [{ label: 'Admin Console', path: '/admin', active: location.pathname.startsWith('/admin'), isAdmin: true }]
+      : [{ label: 'Dashboard', path: '/dashboard', active: location.pathname.startsWith('/dashboard'), isDashboard: true }]),
+    { label: 'Projects', path: '/projects', active: location.pathname === '/projects' },
+    { label: 'Services', path: '/services', active: location.pathname === '/services' },
+    { label: 'About', path: '/about', active: location.pathname === '/about' },
+    { label: 'Contact', path: '/contact', active: location.pathname === '/contact' },
+    { label: 'Intro', path: '/intro', active: location.pathname === '/intro', isIntro: true },
+  ];
+
   return (
-    <header className="sticky top-0 z-50 w-full bg-[#0B0F19]/90 backdrop-blur-xl border-b border-white/8 transition-all">
-      <div className="max-w-7xl 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-        {/* Brand Logo */}
-        <Link to="/" className="flex items-center gap-2.5 group">
-          <img
-            src="/reliable-symbol.png"
-            alt="Reliable InfoTech Logo"
-            className="w-10 h-10 object-contain drop-shadow-[0_0_12px_rgba(6,182,212,0.6)] group-hover:scale-105 transition-transform"
-          />
-          <span className="font-extrabold text-xl text-white tracking-tight flex items-center">
-            <span>Reliable</span>
-            <span className="text-cyan-400 ml-1">Info</span>
-            <span className="text-purple-400">Tech</span>
-          </span>
-        </Link>
+    <header className="sticky top-0 z-50 w-full px-3 sm:px-6 py-2.5 transition-all">
+      <div className="max-w-7xl 2xl:max-w-[1500px] mx-auto nf-frame bg-[#121212]/85 backdrop-blur-xl border border-[#262626] rounded shadow-nf">
+        {/* Subtle corner brackets */}
+        <span className="nf-c nf-c-tl" />
+        <span className="nf-c nf-c-tr" />
+        <span className="nf-c nf-c-bl" />
+        <span className="nf-c nf-c-br" />
 
-        {/* Center Desktop Navigation Pill Container */}
-        <nav className="hidden md:flex items-center gap-1.5 p-1.5 rounded-full bg-white/[0.03] border border-white/8 backdrop-blur-md text-sm font-medium">
-          <Link
-            to="/"
-            className={`px-4 py-1.5 rounded-full transition-all ${
-              isHome
-                ? 'bg-[#1E2342] text-white border border-indigo-500/40 shadow-sm font-semibold'
-                : 'text-gray-400 hover:text-white'
-            }`}
-          >
-            Home
+        <div className="h-14 sm:h-16 px-4 sm:px-6 flex items-center justify-between">
+          {/* Brand Logo */}
+          <Link to="/" className="flex items-center gap-3 group">
+            <div className="w-8 h-8 rounded border border-[#363636] bg-[#181818] p-1 flex items-center justify-center transition-transform group-hover:scale-105">
+              <img
+                src="/reliable-symbol.png"
+                alt="Reliable InfoTech Logo"
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <span className="font-semibold text-[15px] tracking-tight text-[#EEEEEE] flex items-center">
+              <span>Reliable</span>
+              <span className="text-[#8D8D8D] font-serif italic ml-1.5 font-normal text-base">InfoTech</span>
+            </span>
           </Link>
-          {user?.role === 'ADMIN' ? (
-            <Link
-              to="/admin"
-              className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full transition-all ${
-                location.pathname.startsWith('/admin')
-                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm font-semibold'
-                  : 'text-amber-400/90 hover:text-amber-300 hover:bg-amber-500/10'
-              }`}
-            >
-              <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
-              <span>Admin Console</span>
-            </Link>
-          ) : (
-            <Link
-              to="/dashboard"
-              className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full transition-all ${
-                location.pathname.startsWith('/dashboard')
-                  ? 'bg-[#1E2342] text-white border border-indigo-500/40 shadow-sm font-semibold'
-                  : 'text-gray-400 hover:text-white hover:bg-white/5'
-              }`}
-            >
-              <LayoutDashboard className="w-3.5 h-3.5 text-indigo-400" />
-              <span>Dashboard</span>
-            </Link>
-          )}
-          <Link
-            to="/projects"
-            className={`px-4 py-1.5 rounded-full transition-all ${
-              location.pathname === '/projects'
-                ? 'bg-[#1E2342] text-white border border-indigo-500/40 shadow-sm font-semibold'
-                : 'text-gray-400 hover:text-white'
-            }`}
-          >
-            Projects
-          </Link>
-          <Link
-            to="/services"
-            className={`px-4 py-1.5 rounded-full transition-all ${
-              location.pathname === '/services'
-                ? 'bg-[#1E2342] text-white border border-indigo-500/40 shadow-sm font-semibold'
-                : 'text-gray-400 hover:text-white'
-            }`}
-          >
-            Services
-          </Link>
-          <Link
-            to="/about"
-            className={`px-4 py-1.5 rounded-full transition-all ${
-              location.pathname === '/about'
-                ? 'bg-[#1E2342] text-white border border-indigo-500/40 shadow-sm font-semibold'
-                : 'text-gray-400 hover:text-white'
-            }`}
-          >
-            About
-          </Link>
-          <Link
-            to="/contact"
-            className={`px-4 py-1.5 rounded-full transition-all ${
-              location.pathname === '/contact'
-                ? 'bg-[#1E2342] text-white border border-indigo-500/40 shadow-sm font-semibold'
-                : 'text-gray-400 hover:text-white'
-            }`}
-          >
-            Contact
-          </Link>
-          <Link
-            to="/intro"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold text-cyan-300 hover:text-white bg-cyan-500/10 hover:bg-cyan-500/25 border border-cyan-500/30 transition-all shadow-[0_0_12px_rgba(6,182,212,0.2)] ml-1"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-            <span>Intro</span>
-          </Link>
-        </nav>
 
-        {/* Action CTAs (Search, Bell, User Profile Pill, Get Started) */}
-        <div className="hidden md:flex items-center gap-3">
-          {/* Search Icon button */}
-          <div className="relative">
-            {searchOpen ? (
-              <div className="flex items-center gap-2 bg-[#111827] border border-white/10 rounded-full px-3 py-1.5 animate-in fade-in duration-200">
-                <Search className="w-4 h-4 text-gray-400" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search showcase..."
-                  className="bg-transparent text-xs text-white focus:outline-none w-32"
-                  autoFocus
-                  onBlur={() => !searchQuery && setSearchOpen(false)}
-                />
+          {/* Desktop Center Navigation Links */}
+          <nav className="hidden lg:flex items-center gap-1 text-[13.5px]">
+            {navLinks.map((item) => (
+              <Link
+                key={item.path}
+                to={item.path}
+                className={`relative px-3.5 py-1.5 rounded transition-colors font-medium ${
+                  item.active
+                    ? 'text-[#EEEEEE] bg-[#1E1E1E] border border-[#363636]'
+                    : item.isIntro
+                    ? 'text-[#C9C9C9] hover:text-[#EEEEEE] border border-dashed border-[#363636] hover:border-[#5D5D5D]'
+                    : item.isAdmin
+                    ? 'text-amber-300 hover:text-amber-200 bg-amber-500/10 border border-amber-500/30'
+                    : 'text-[#8D8D8D] hover:text-[#EEEEEE]'
+                }`}
+              >
+                {item.active && (
+                  <motion.span
+                    layoutId="navbar-active-pill"
+                    className="absolute inset-0 rounded bg-[#1E1E1E] -z-10"
+                    transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+                  />
+                )}
+                <span className="flex items-center gap-1.5">
+                  {item.isAdmin && <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />}
+                  {item.isDashboard && <LayoutDashboard className="w-3.5 h-3.5 text-[#A1A1AA]" />}
+                  {item.isIntro && <Sparkles className="w-3.5 h-3.5 text-[#E4E4E7]" />}
+                  <span>{item.label}</span>
+                </span>
+              </Link>
+            ))}
+          </nav>
+
+          {/* Right Action CTAs */}
+          <div className="hidden lg:flex items-center gap-2.5">
+            {/* Search Button / Input */}
+            <div className="relative">
+              {searchOpen ? (
+                <form
+                  onSubmit={handleSearchSubmit}
+                  className="flex items-center gap-2 bg-[#181818] border border-[#363636] rounded px-3 py-1.5"
+                >
+                  <Search className="w-3.5 h-3.5 text-[#8D8D8D]" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search showcase..."
+                    className="bg-transparent text-xs text-[#EEEEEE] focus:outline-none w-32 placeholder-[#5D5D5D]"
+                    autoFocus
+                    onBlur={() => !searchQuery && setSearchOpen(false)}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setSearchOpen(false)}
+                    className="text-[#8D8D8D] hover:text-[#EEEEEE] text-xs"
+                  >
+                    ✕
+                  </button>
+                </form>
+              ) : (
                 <button
                   type="button"
-                  onClick={() => setSearchOpen(false)}
-                  className="text-gray-400 hover:text-white text-xs"
+                  onClick={() => setSearchOpen(true)}
+                  className="p-2 rounded text-[#8D8D8D] hover:text-[#EEEEEE] hover:bg-[#181818] border border-transparent hover:border-[#262626] transition-colors"
+                  title="Search"
+                  aria-label="Search"
                 >
-                  ✕
+                  <Search className="w-4 h-4" />
                 </button>
-              </div>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setSearchOpen(true)}
-                className="p-2 rounded-full text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
-                title="Search"
-                aria-label="Search"
-              >
-                <Search className="w-4 h-4" />
-              </button>
-            )}
-          </div>
-
-          {/* Notification Bell with Badge & Interactive Dropdown */}
-          <div className="relative" ref={notifRef}>
-            <button
-              type="button"
-              onClick={() => setNotificationsOpen(!notificationsOpen)}
-              className="p-2 rounded-full text-gray-400 hover:text-white hover:bg-white/5 transition-colors relative focus:outline-none"
-              title="Notifications"
-              aria-label="Notifications"
-            >
-              <Bell className="w-4 h-4" />
-              {unreadCount > 0 && (
-                <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center animate-pulse">
-                  {unreadCount > 9 ? '9+' : unreadCount}
-                </span>
-              )}
-            </button>
-
-            {/* Quick Notifications Dropdown */}
-            {notificationsOpen && (
-              <div className="absolute right-0 mt-2 w-80 sm:w-96 rounded-2xl bg-[#111827] border border-white/10 shadow-2xl p-4 z-50 animate-in fade-in zoom-in-95">
-                <div className="flex items-center justify-between pb-3 border-b border-white/10 mb-3">
-                  <h4 className="text-sm font-semibold text-white">Notifications</h4>
-                  {unreadCount > 0 && (
-                    <button
-                      onClick={markAllAsRead}
-                      className="text-xs text-indigo-400 hover:text-indigo-300 font-medium"
-                    >
-                      Mark all read
-                    </button>
-                  )}
-                </div>
-                <div className="max-h-72 overflow-y-auto space-y-2.5">
-                  {notifications.length === 0 ? (
-                    <p className="text-xs text-gray-400 text-center py-6">No notifications yet.</p>
-                  ) : (
-                    notifications.slice(0, 5).map((n) => (
-                      <div
-                        key={n._id}
-                        onClick={() => markAsRead(n._id)}
-                        className={`p-2.5 rounded-xl text-xs transition-colors cursor-pointer border ${
-                          n.isRead
-                            ? 'bg-white/[0.02] border-white/5 text-gray-400'
-                            : 'bg-indigo-500/10 border-indigo-500/20 text-gray-200'
-                        }`}
-                      >
-                        <div className="flex items-start justify-between gap-2">
-                          <span className="font-semibold text-white">{n.title}</span>
-                          {!n.isRead && (
-                            <span className="w-2 h-2 rounded-full bg-indigo-400 shrink-0 mt-1" />
-                          )}
-                        </div>
-                        <p className="mt-1 text-gray-300 text-[11px] leading-relaxed line-clamp-2">
-                          {n.message}
-                        </p>
-                      </div>
-                    ))
-                  )}
-                </div>
-                <div className="pt-3 border-t border-white/10 mt-3 text-center">
-                  <Link
-                    to="/dashboard/notifications"
-                    onClick={() => setNotificationsOpen(false)}
-                    className="text-xs text-indigo-400 hover:text-indigo-300 font-medium inline-flex items-center gap-1"
-                  >
-                    <span>View all notifications</span>
-                    <ArrowRight className="w-3 h-3" />
-                  </Link>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* User Profile Pill matching reference design with dropdown */}
-          {user ? (
-            <div className="relative" ref={userMenuRef}>
-              <button
-                type="button"
-                onClick={() => setUserMenuOpen(!userMenuOpen)}
-                className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 transition-colors focus:outline-none"
-              >
-                <Avatar
-                  src={user.avatar}
-                  name={user.name}
-                  size="xs"
-                  className="!w-7 !h-7 ring-1 ring-white/20"
-                />
-                <div className="text-left text-xs leading-none pr-1">
-                  <span className="font-semibold text-white block truncate max-w-[90px]">
-                    {user.name}
-                  </span>
-                  <span className="text-[10px] text-gray-400 capitalize block mt-0.5">
-                    {user.role || 'User'}
-                  </span>
-                </div>
-                <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
-              </button>
-
-              {userMenuOpen && (
-                <div className="absolute right-0 mt-2 w-56 rounded-2xl bg-[#111827] border border-white/10 shadow-2xl p-2 z-50 animate-in fade-in zoom-in-95">
-                  <div className="px-3 py-2 border-b border-white/10 mb-1">
-                    <p className="text-xs font-bold text-white truncate">{user.name}</p>
-                    <p className="text-[10px] text-gray-400 truncate">{user.email}</p>
-                  </div>
-                  {user.role === 'ADMIN' ? (
-                    <>
-                      <Link
-                        to="/admin"
-                        onClick={() => setUserMenuOpen(false)}
-                        className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-amber-300 bg-amber-500/15 hover:bg-amber-500/25 rounded-xl transition-colors border border-amber-500/30"
-                      >
-                        <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
-                        <span>Admin Console</span>
-                      </Link>
-                      <Link
-                        to="/admin?tab=requests"
-                        onClick={() => setUserMenuOpen(false)}
-                        className="flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-gray-300 hover:bg-white/5 hover:text-white rounded-xl transition-colors mt-1"
-                      >
-                        <FolderGit2 className="w-3.5 h-3.5 text-indigo-400" />
-                        <span>All Website Requests</span>
-                      </Link>
-                      <Link
-                        to="/admin?tab=projects"
-                        onClick={() => setUserMenuOpen(false)}
-                        className="flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-gray-300 hover:bg-white/5 hover:text-white rounded-xl transition-colors"
-                      >
-                        <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-                        <span>Showcase Catalog</span>
-                      </Link>
-                      <Link
-                        to="/admin?tab=messages"
-                        onClick={() => setUserMenuOpen(false)}
-                        className="flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-gray-300 hover:bg-white/5 hover:text-white rounded-xl transition-colors"
-                      >
-                        <UserIcon className="w-3.5 h-3.5 text-emerald-400" />
-                        <span>Client Messages</span>
-                      </Link>
-                      <Link
-                        to="/admin?tab=team"
-                        onClick={() => setUserMenuOpen(false)}
-                        className="flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-gray-300 hover:bg-white/5 hover:text-white rounded-xl transition-colors"
-                      >
-                        <UserIcon className="w-3.5 h-3.5 text-purple-400" />
-                        <span>Team Members</span>
-                      </Link>
-                    </>
-                  ) : (
-                    <>
-                      <Link
-                        to="/dashboard"
-                        onClick={() => setUserMenuOpen(false)}
-                        className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-white bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 rounded-xl transition-colors border border-indigo-500/30"
-                      >
-                        <LayoutDashboard className="w-3.5 h-3.5 text-indigo-400" />
-                        <span>Client Dashboard</span>
-                      </Link>
-                      <Link
-                        to="/dashboard/profile"
-                        onClick={() => setUserMenuOpen(false)}
-                        className="flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-gray-300 hover:bg-white/5 hover:text-white rounded-xl transition-colors mt-1"
-                      >
-                        <UserIcon className="w-3.5 h-3.5 text-indigo-400" />
-                        <span>My Profile</span>
-                      </Link>
-                      <Link
-                        to="/dashboard/requests"
-                        onClick={() => setUserMenuOpen(false)}
-                        className="flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-gray-300 hover:bg-white/5 hover:text-white rounded-xl transition-colors"
-                      >
-                        <FolderGit2 className="w-3.5 h-3.5 text-emerald-400" />
-                        <span>My Requests</span>
-                      </Link>
-                      <Link
-                        to="/request"
-                        onClick={() => setUserMenuOpen(false)}
-                        className="flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-gray-300 hover:bg-white/5 hover:text-white rounded-xl transition-colors"
-                      >
-                        <Sparkles className="w-3.5 h-3.5 text-purple-400" />
-                        <span>Request New Project</span>
-                      </Link>
-                    </>
-                  )}
-                  <div className="border-t border-white/10 my-1" />
-                  <button
-                    onClick={() => {
-                      setUserMenuOpen(false);
-                      logout();
-                    }}
-                    className="flex items-center gap-2.5 w-full text-left px-3 py-2 text-xs text-red-400 hover:bg-red-500/10 rounded-xl transition-colors font-medium"
-                  >
-                    <LogOut className="w-3.5 h-3.5" />
-                    <span>Sign Out</span>
-                  </button>
-                </div>
               )}
             </div>
-          ) : (
-            <Link
-              to="/login"
-              className="text-xs font-medium text-gray-300 hover:text-white transition-colors px-2 py-1"
-            >
-              Sign In
-            </Link>
-          )}
 
-          {/* Get Started Pill Button */}
-          <Link
-            to="/request"
-            className="inline-flex items-center justify-center px-5 py-2 rounded-full text-xs font-semibold text-white bg-gradient-to-r from-devcraft-primary to-devcraft-secondary hover:from-devcraft-primaryHover hover:to-[#7C3AED] shadow-glow-primary transition-all hover:scale-105 active:scale-95"
-          >
-            <span>Get Started</span>
-          </Link>
-        </div>
-
-        {/* Mobile menu button */}
-        <div className="flex md:hidden items-center gap-2">
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 rounded-xl text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
-            aria-label="Toggle navigation"
-          >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile Drawer Dropdown */}
-      {mobileMenuOpen && (
-        <div className="md:hidden bg-[#111827] border-b border-white/10 px-4 pt-3 pb-6 space-y-4 animate-in slide-in-from-top duration-200">
-          <nav className="flex flex-col space-y-2 text-sm font-medium text-gray-300">
-            <Link
-              to="/"
-              onClick={() => setMobileMenuOpen(false)}
-              className={`p-2.5 rounded-xl transition-all ${
-                isHome ? 'bg-[#1E2342] text-white font-semibold' : 'hover:bg-white/5 text-gray-300 hover:text-white'
-              }`}
-            >
-              Home
-            </Link>
-            {user?.role === 'ADMIN' ? (
-              <Link
-                to="/admin"
-                onClick={() => setMobileMenuOpen(false)}
-                className={`p-2.5 rounded-xl flex items-center justify-between transition-all ${
-                  location.pathname.startsWith('/admin')
-                    ? 'bg-amber-500/20 text-amber-300 font-semibold border border-amber-500/40'
-                    : 'bg-amber-500/10 text-amber-300 hover:bg-amber-500/20 border border-amber-500/20 font-semibold'
-                }`}
+            {/* Notification Bell */}
+            <div className="relative" ref={notifRef}>
+              <button
+                type="button"
+                onClick={() => setNotificationsOpen(!notificationsOpen)}
+                className="p-2 rounded text-[#8D8D8D] hover:text-[#EEEEEE] hover:bg-[#181818] border border-transparent hover:border-[#262626] transition-colors relative focus:outline-none"
+                title="Notifications"
+                aria-label="Notifications"
               >
-                <div className="flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4 text-amber-400" />
-                  <span>Admin Console</span>
-                </div>
-                <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">
-                  ADMIN
-                </span>
-              </Link>
-            ) : (
-              <Link
-                to="/dashboard"
-                onClick={() => setMobileMenuOpen(false)}
-                className={`p-2.5 rounded-xl flex items-center justify-between transition-all ${
-                  location.pathname.startsWith('/dashboard')
-                    ? 'bg-gradient-to-r from-devcraft-primary to-devcraft-secondary text-white font-semibold shadow-glow-primary'
-                    : 'bg-indigo-600/10 text-indigo-300 hover:bg-indigo-600/20 border border-indigo-500/20 font-semibold'
-                }`}
-              >
-                <div className="flex items-center gap-2">
-                  <LayoutDashboard className="w-4 h-4 text-indigo-400" />
-                  <span>Client Dashboard</span>
-                </div>
-                <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300">
-                  Workspace
-                </span>
-              </Link>
-            )}
-            <Link
-              to="/projects"
-              onClick={() => setMobileMenuOpen(false)}
-              className="p-2.5 rounded-xl hover:bg-white/5 hover:text-white"
-            >
-              Projects
-            </Link>
-            <Link
-              to="/services"
-              onClick={() => setMobileMenuOpen(false)}
-              className="p-2 rounded-xl hover:bg-white/5 hover:text-white"
-            >
-              Services
-            </Link>
-            <Link
-              to="/about"
-              onClick={() => setMobileMenuOpen(false)}
-              className={`p-2 rounded-xl transition-all ${
-                location.pathname === '/about'
-                  ? 'bg-[#1E2342] text-white'
-                  : 'hover:bg-white/5 hover:text-white text-gray-300'
-              }`}
-            >
-              About
-            </Link>
-            <Link
-              to="/contact"
-              onClick={() => setMobileMenuOpen(false)}
-              className="p-2 rounded-xl hover:bg-white/5 hover:text-white"
-            >
-              Contact Team
-            </Link>
-            <Link
-              to="/intro"
-              onClick={() => setMobileMenuOpen(false)}
-              className="p-2.5 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/30 flex items-center justify-between"
-            >
-              <span>Experience Intro Page</span>
-              <Sparkles className="w-4 h-4 text-cyan-400" />
-            </Link>
-          </nav>
-          <div className="pt-2 border-t border-white/10 flex flex-col gap-2.5">
+                <Bell className="w-4 h-4" />
+                {unreadCount > 0 && (
+                  <span className="absolute top-1 right-1 w-3.5 h-3.5 rounded-full bg-[#EEEEEE] text-[#121212] text-[9px] font-bold flex items-center justify-center">
+                    {unreadCount > 9 ? '9+' : unreadCount}
+                  </span>
+                )}
+              </button>
+
+              {/* Quick Notifications Dropdown */}
+              <AnimatePresence>
+                {notificationsOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 6, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 4, scale: 0.98 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute right-0 mt-2 w-80 sm:w-96 rounded bg-[#181818] border border-[#363636] shadow-2xl p-4 z-50"
+                  >
+                    <div className="flex items-center justify-between pb-3 border-b border-[#262626] mb-3">
+                      <h4 className="text-xs font-semibold uppercase tracking-wider text-[#EEEEEE] font-mono">
+                        Notifications
+                      </h4>
+                      {unreadCount > 0 && (
+                        <button
+                          onClick={markAllAsRead}
+                          className="text-[11px] text-[#A1A1AA] hover:text-[#EEEEEE] font-medium"
+                        >
+                          Mark all read
+                        </button>
+                      )}
+                    </div>
+                    <div className="max-h-72 overflow-y-auto space-y-2">
+                      {notifications.length === 0 ? (
+                        <p className="text-xs text-[#8D8D8D] text-center py-6 font-mono">
+                          No notifications yet.
+                        </p>
+                      ) : (
+                        notifications.slice(0, 5).map((n) => (
+                          <div
+                            key={n._id}
+                            onClick={() => markAsRead(n._id)}
+                            className={`p-2.5 rounded text-xs transition-colors cursor-pointer border ${
+                              n.isRead
+                                ? 'bg-[#121212] border-[#262626] text-[#8D8D8D]'
+                                : 'bg-[#1E1E1E] border-[#363636] text-[#EEEEEE]'
+                            }`}
+                          >
+                            <div className="flex items-start justify-between gap-2">
+                              <span className="font-semibold text-[#EEEEEE]">{n.title}</span>
+                              {!n.isRead && (
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#EEEEEE] shrink-0 mt-1" />
+                              )}
+                            </div>
+                            <p className="mt-1 text-[#A1A1AA] text-[11px] leading-relaxed line-clamp-2">
+                              {n.message}
+                            </p>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                    <div className="pt-3 border-t border-[#262626] mt-3 text-center">
+                      <Link
+                        to="/dashboard/notifications"
+                        onClick={() => setNotificationsOpen(false)}
+                        className="text-xs text-[#C9C9C9] hover:text-[#EEEEEE] font-medium inline-flex items-center gap-1 font-mono"
+                      >
+                        <span>View all notifications</span>
+                        <ArrowRight className="w-3 h-3" />
+                      </Link>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* User Profile Pill / Dropdown */}
             {user ? (
-              <Link
-                to={user.role === 'ADMIN' ? '/admin' : '/dashboard'}
-                onClick={() => setMobileMenuOpen(false)}
-                className="w-full py-2.5 text-center text-sm font-semibold text-white bg-white/10 rounded-full"
-              >
-                {user.role === 'ADMIN' ? 'Go to Admin Console' : 'Go to Dashboard'}
-              </Link>
+              <div className="relative" ref={userMenuRef}>
+                <button
+                  type="button"
+                  onClick={() => setUserMenuOpen(!userMenuOpen)}
+                  className="flex items-center gap-2.5 px-3 py-1.5 rounded bg-[#181818] hover:bg-[#1E1E1E] border border-[#262626] hover:border-[#363636] transition-colors focus:outline-none"
+                >
+                  <Avatar
+                    src={user.avatar}
+                    name={user.name}
+                    size="xs"
+                    className="!w-6 !h-6 ring-1 ring-[#363636]"
+                  />
+                  <div className="text-left text-xs leading-none pr-1">
+                    <span className="font-semibold text-[#EEEEEE] block truncate max-w-[90px]">
+                      {user.name}
+                    </span>
+                    <span className="text-[10px] text-[#8D8D8D] capitalize block mt-0.5 font-mono">
+                      {user.role || 'User'}
+                    </span>
+                  </div>
+                  <ChevronDown className="w-3 h-3 text-[#8D8D8D]" />
+                </button>
+
+                <AnimatePresence>
+                  {userMenuOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 6, scale: 0.98 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 4, scale: 0.98 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute right-0 mt-2 w-56 rounded bg-[#181818] border border-[#363636] shadow-2xl p-2 z-50"
+                    >
+                      <div className="px-3 py-2 border-b border-[#262626] mb-1">
+                        <p className="text-xs font-semibold text-[#EEEEEE] truncate">{user.name}</p>
+                        <p className="text-[10px] text-[#8D8D8D] truncate font-mono">{user.email}</p>
+                      </div>
+                      {user.role === 'ADMIN' ? (
+                        <>
+                          <Link
+                            to="/admin"
+                            onClick={() => setUserMenuOpen(false)}
+                            className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 rounded transition-colors border border-amber-500/30"
+                          >
+                            <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
+                            <span>Admin Console</span>
+                          </Link>
+                          <Link
+                            to="/admin?tab=requests"
+                            onClick={() => setUserMenuOpen(false)}
+                            className="flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-[#C9C9C9] hover:bg-[#262626] hover:text-[#EEEEEE] rounded transition-colors mt-1"
+                          >
+                            <FolderGit2 className="w-3.5 h-3.5 text-[#A1A1AA]" />
+                            <span>All Website Requests</span>
+                          </Link>
+                          <Link
+                            to="/admin?tab=projects"
+                            onClick={() => setUserMenuOpen(false)}
+                            className="flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-[#C9C9C9] hover:bg-[#262626] hover:text-[#EEEEEE] rounded transition-colors"
+                          >
+                            <Sparkles className="w-3.5 h-3.5 text-[#A1A1AA]" />
+                            <span>Showcase Catalog</span>
+                          </Link>
+                          <Link
+                            to="/admin?tab=messages"
+                            onClick={() => setUserMenuOpen(false)}
+                            className="flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-[#C9C9C9] hover:bg-[#262626] hover:text-[#EEEEEE] rounded transition-colors"
+                          >
+                            <UserIcon className="w-3.5 h-3.5 text-[#A1A1AA]" />
+                            <span>Client Messages</span>
+                          </Link>
+                        </>
+                      ) : (
+                        <>
+                          <Link
+                            to="/dashboard"
+                            onClick={() => setUserMenuOpen(false)}
+                            className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-[#EEEEEE] bg-[#1E1E1E] hover:bg-[#262626] rounded transition-colors border border-[#363636]"
+                          >
+                            <LayoutDashboard className="w-3.5 h-3.5 text-[#EEEEEE]" />
+                            <span>Client Dashboard</span>
+                          </Link>
+                          <Link
+                            to="/dashboard/profile"
+                            onClick={() => setUserMenuOpen(false)}
+                            className="flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-[#C9C9C9] hover:bg-[#262626] hover:text-[#EEEEEE] rounded transition-colors mt-1"
+                          >
+                            <UserIcon className="w-3.5 h-3.5 text-[#A1A1AA]" />
+                            <span>My Profile</span>
+                          </Link>
+                          <Link
+                            to="/dashboard/requests"
+                            onClick={() => setUserMenuOpen(false)}
+                            className="flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-[#C9C9C9] hover:bg-[#262626] hover:text-[#EEEEEE] rounded transition-colors"
+                          >
+                            <FolderGit2 className="w-3.5 h-3.5 text-[#A1A1AA]" />
+                            <span>My Requests</span>
+                          </Link>
+                        </>
+                      )}
+                      <div className="border-t border-[#262626] my-1" />
+                      <button
+                        onClick={() => {
+                          setUserMenuOpen(false);
+                          logout();
+                        }}
+                        className="flex items-center gap-2.5 w-full text-left px-3 py-2 text-xs text-red-400 hover:bg-red-500/10 rounded transition-colors font-medium"
+                      >
+                        <LogOut className="w-3.5 h-3.5" />
+                        <span>Sign Out</span>
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             ) : (
               <Link
                 to="/login"
-                onClick={() => setMobileMenuOpen(false)}
-                className="w-full py-2.5 text-center text-sm font-medium text-gray-300 hover:text-white bg-white/5 rounded-full"
+                className="text-xs font-medium text-[#C9C9C9] hover:text-[#EEEEEE] transition-colors px-3 py-1.5"
               >
                 Sign In
               </Link>
             )}
+
+            {/* Inverted Template CTA Button */}
             <Link
               to="/request"
-              onClick={() => setMobileMenuOpen(false)}
-              className="w-full py-3 text-center text-sm font-semibold text-white bg-gradient-to-r from-devcraft-primary to-devcraft-secondary rounded-full shadow-glow-primary"
+              className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded text-xs font-semibold text-[#121212] bg-[#EEEEEE] hover:bg-white shadow-sm hover:scale-[1.02] active:scale-95 transition-all"
             >
-              Get Started
+              <span>Get Started</span>
+              <ArrowRight className="w-3 h-3" />
             </Link>
           </div>
+
+          {/* Mobile menu hamburger */}
+          <div className="flex lg:hidden items-center gap-2">
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2 rounded text-[#8D8D8D] hover:text-[#EEEEEE] hover:bg-[#181818] transition-colors"
+              aria-label="Toggle navigation"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
         </div>
-      )}
+
+        {/* Mobile menu dropdown */}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="lg:hidden border-t border-[#262626] px-4 pt-3 pb-6 space-y-3 bg-[#121212]"
+            >
+              <nav className="flex flex-col space-y-1.5 text-sm font-medium">
+                {navLinks.map((item) => (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`p-2 rounded flex items-center justify-between text-xs font-medium ${
+                      item.active
+                        ? 'bg-[#1E1E1E] text-[#EEEEEE] border border-[#363636]'
+                        : 'text-[#8D8D8D] hover:text-[#EEEEEE] hover:bg-[#181818]'
+                    }`}
+                  >
+                    <span className="flex items-center gap-2">
+                      {item.isAdmin && <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />}
+                      {item.isDashboard && <LayoutDashboard className="w-3.5 h-3.5 text-[#A1A1AA]" />}
+                      {item.isIntro && <Sparkles className="w-3.5 h-3.5 text-[#E4E4E7]" />}
+                      <span>{item.label}</span>
+                    </span>
+                  </Link>
+                ))}
+              </nav>
+
+              <div className="pt-3 border-t border-[#262626] flex flex-col gap-2">
+                {user ? (
+                  <Link
+                    to={user.role === 'ADMIN' ? '/admin' : '/dashboard'}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="w-full py-2.5 text-center text-xs font-semibold text-[#EEEEEE] bg-[#181818] border border-[#363636] rounded"
+                  >
+                    {user.role === 'ADMIN' ? 'Go to Admin Console' : 'Go to Dashboard'}
+                  </Link>
+                ) : (
+                  <Link
+                    to="/login"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="w-full py-2 text-center text-xs font-medium text-[#C9C9C9] hover:text-[#EEEEEE] bg-[#181818] rounded"
+                  >
+                    Sign In
+                  </Link>
+                )}
+                <Link
+                  to="/request"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full py-2.5 text-center text-xs font-semibold text-[#121212] bg-[#EEEEEE] hover:bg-white rounded"
+                >
+                  Get Started
+                </Link>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </header>
   );
 };

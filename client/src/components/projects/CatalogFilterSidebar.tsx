@@ -96,28 +96,18 @@ export const CatalogFilterSidebar: React.FC<CatalogFilterSidebarProps> = ({
       className={`relative select-none text-left ${
         isMobile
           ? 'space-y-4 pb-3'
-          : 'rounded-2xl bg-gradient-to-b from-[#0F172A]/95 via-[#0B1222]/90 to-[#080D1A]/95 backdrop-blur-2xl border border-white/10 p-3.5 sm:p-4 space-y-4 shadow-[0_15px_35px_rgba(0,0,0,0.4)] hover:border-indigo-500/30 transition-all duration-300'
+          : 'rounded bg-[#181818] border border-[#262626] p-3.5 sm:p-4 space-y-4 transition-colors'
       }`}
     >
-      {/* Background Decorative Ambient Glows (Desktop only) */}
-      {!isMobile && (
-        <>
-          <div className="absolute -top-20 -left-20 w-44 h-44 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-20 -right-20 w-44 h-44 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
-        </>
-      )}
-
-      {/* =================================================================== */}
-      {/* 1. SIDEBAR HEADER: Icon, Title & Active Filter Counter             */}
-      {/* =================================================================== */}
-      <div className="relative z-10 flex items-center justify-between pb-3 border-b border-white/10">
+      {/* 1. SIDEBAR HEADER: Icon, Title & Active Filter Counter */}
+      <div className="relative z-10 flex items-center justify-between pb-3 border-b border-[#262626]">
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-indigo-500/20 via-purple-500/20 to-cyan-500/10 text-indigo-400 border border-indigo-500/30 flex items-center justify-center shadow-sm">
+          <div className="w-6 h-6 rounded border border-[#363636] bg-[#1E1E1E] text-[#EEEEEE] flex items-center justify-center">
             <Filter className="w-3 h-3" />
           </div>
           <div>
             <div className="flex items-center gap-1.5">
-              <h3 className="text-[11px] font-extrabold text-white tracking-wider uppercase">
+              <h3 className="text-[11px] font-mono font-medium text-[#EEEEEE] tracking-wider uppercase">
                 Filters
               </h3>
               {activeFiltersCount > 0 && (

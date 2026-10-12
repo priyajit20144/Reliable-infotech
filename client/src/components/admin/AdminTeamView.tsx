@@ -17,6 +17,7 @@ import {
   Upload,
   Camera,
   Image as ImageIcon,
+  RotateCcw,
 } from 'lucide-react';
 
 interface TeamMember {
@@ -30,6 +31,12 @@ interface TeamMember {
   status: 'online' | 'away' | 'busy';
   activeProjects: number;
   skills: string[];
+  badge?: string;
+  specialties?: string[];
+  shortBio?: string;
+  bio?: string;
+  linkedin?: string;
+  github?: string;
 }
 
 const PRESET_AVATARS = [
@@ -41,7 +48,62 @@ const PRESET_AVATARS = [
   'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
 ];
 
-const INITIAL_MEMBERS: TeamMember[] = [];
+const INITIAL_MEMBERS: TeamMember[] = [
+  {
+    id: 'sahil-sekh',
+    name: 'Sahil Sekh',
+    role: 'Lead Full Stack & UI Architect',
+    badge: 'UI Architecture Lead',
+    department: 'Full Stack',
+    email: 'sahil@reliableinfotech.io',
+    phone: '+91 98765 43210',
+    avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=400&q=80',
+    status: 'online',
+    activeProjects: 4,
+    skills: ['React 19', 'TypeScript', 'Next.js', 'Tailwind CSS', 'Framer Motion', 'REST/GraphQL', 'UI/UX Design'],
+    specialties: ['React / Next.js', 'Interactive UI & Motion', 'TypeScript Ecosystem', 'Component Systems'],
+    shortBio: 'Frontend architect and full-stack specialist crafting interactive user interfaces and micro-animations.',
+    bio: 'Sahil is a Senior Full Stack Developer specializing in responsive design architectures, high-performance React ecosystems, dynamic animations, and state orchestration.',
+    github: 'https://github.com',
+    linkedin: 'https://linkedin.com',
+  },
+  {
+    id: 'diganta-chakraborty',
+    name: 'Diganta Chakraborty',
+    role: 'Senior Full Stack & Systems Engineer',
+    badge: 'Cloud & API Systems Lead',
+    department: 'Backend',
+    email: 'diganta@reliableinfotech.io',
+    phone: '+91 98765 43211',
+    avatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=400&q=80',
+    status: 'online',
+    activeProjects: 5,
+    skills: ['Node.js', 'Express', 'PostgreSQL', 'MongoDB', 'REST APIs', 'System Design', 'Docker', 'Redis'],
+    specialties: ['Backend Engineering', 'Database Design & SQL', 'Cloud Microservices', 'API Security & Auth'],
+    shortBio: 'Full-stack systems engineer focused on resilient backend microservices, databases, and secure APIs.',
+    bio: 'Diganta leads backend engineering, data modeling, database optimizations, and secure API gateways with a passion for scalable architecture.',
+    github: 'https://github.com',
+    linkedin: 'https://linkedin.com',
+  },
+  {
+    id: 'priyajit-das',
+    name: 'Priyajit Das',
+    role: 'Founder & Principal Systems Architect',
+    badge: 'Founder & Systems Architect',
+    department: 'Full Stack',
+    email: 'priyajit@reliableinfotech.io',
+    phone: '+91 98765 43212',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
+    status: 'online',
+    activeProjects: 6,
+    skills: ['Cloud Architecture', 'DevOps & CI/CD', 'Full Stack Development', 'Product Strategy', 'System Scaling'],
+    specialties: ['Enterprise Architecture', 'Cloud Infrastructure', 'Technical Leadership', 'Full Stack Core'],
+    shortBio: 'Visionary architect and founder steering enterprise digital transformations, cloud infrastructure, and technical strategy.',
+    bio: 'Priyajit is the Founder and Principal Systems Architect behind Reliable InfoTech, steering technical roadmap execution and scalable cloud architectures.',
+    github: 'https://github.com',
+    linkedin: 'https://linkedin.com',
+  },
+];
 
 export const AdminTeamView: React.FC = () => {
   const [filterDept, setFilterDept] = useState<string>('ALL');
@@ -70,7 +132,7 @@ export const AdminTeamView: React.FC = () => {
       const saved = localStorage.getItem('reliable_foundation_team_members');
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed)) {
+        if (Array.isArray(parsed) && parsed.length > 0) {
           const fakeNames = [
             'sarah chen',
             'rahul sharma',
@@ -80,17 +142,20 @@ export const AdminTeamView: React.FC = () => {
             'alex rivera',
           ];
           const demoIds = ['tm_1', 'tm_2', 'tm_3', 'tm_4', 'tm_5', 'tm_6'];
-          return parsed.filter(
+          const filtered = parsed.filter(
             (m: any) =>
               m &&
               m.name &&
               !demoIds.includes(m.id) &&
               !fakeNames.includes(m.name.toLowerCase().trim())
           );
+          if (filtered.length > 0) {
+            return filtered;
+          }
         }
       }
     } catch (e) {}
-    return [];
+    return INITIAL_MEMBERS;
   });
 
   useEffect(() => {
@@ -98,6 +163,7 @@ export const AdminTeamView: React.FC = () => {
       localStorage.removeItem('reliable_admin_team_members');
       localStorage.removeItem('devcraft_team_members');
       localStorage.setItem('reliable_foundation_team_members', JSON.stringify(members));
+      window.dispatchEvent(new Event('reliable_team_updated'));
     } catch (e) {}
   }, [members]);
 
@@ -113,13 +179,17 @@ export const AdminTeamView: React.FC = () => {
         'neha singh',
         'alex rivera',
       ];
-      return prev.filter(
+      const cleaned = prev.filter(
         (m) =>
           m &&
           m.name &&
           !demoIds.includes(m.id) &&
           !fakeNames.includes(m.name.toLowerCase().trim())
       );
+      if (cleaned.length === 0) {
+        return INITIAL_MEMBERS;
+      }
+      return cleaned;
     });
   }, []);
 
@@ -337,6 +407,16 @@ export const AdminTeamView: React.FC = () => {
                 Clear Filter
               </button>
             )}
+            <button
+              onClick={() => {
+                setMembers(INITIAL_MEMBERS);
+                showToast('Core Engineering Creators restored!');
+              }}
+              className="px-4 py-2.5 rounded-xl bg-indigo-600/20 hover:bg-indigo-600/30 text-xs font-bold text-indigo-300 border border-indigo-500/30 flex items-center gap-2 transition-all active:scale-95"
+            >
+              <RotateCcw className="w-4 h-4" />
+              <span>Restore Core Team</span>
+            </button>
             <button
               onClick={() => setAddModal(true)}
               className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white shadow-lg shadow-blue-600/30 flex items-center gap-2 transition-all active:scale-95"

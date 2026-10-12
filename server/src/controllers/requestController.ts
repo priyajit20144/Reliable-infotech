@@ -5,6 +5,7 @@ import { NotificationModel } from '../models/Notification.js';
 import { UserModel } from '../models/User.js';
 import { isConnectedToMongo } from '../config/db.js';
 import { sendCustomRequestConfirmation } from '../services/emailService.js';
+import { notifyNewRequest, notifyNewNotification } from '../services/websocketService.js';
 
 export const createCustomRequest = async (req: Request, res: Response) => {
 
@@ -104,6 +105,17 @@ export const createCustomRequest = async (req: Request, res: Response) => {
         createdAt: new Date(),
       });
     }
+
+    // Real-time WebSocket broadcasts
+    notifyNewRequest(savedRequest);
+    notifyNewNotification({
+      userId: 'usr_admin_1',
+      title: 'New Custom Website Request',
+      message: `${name} requested a new ${websiteType} project.`,
+      type: 'REQUEST_STATUS',
+      referenceId: savedRequest._id,
+      createdAt: new Date().toISOString(),
+    });
 
     // Dispatch custom website request confirmation email via Brevo asynchronously
     sendCustomRequestConfirmation({

@@ -44,33 +44,39 @@ export const AdminRequestTypesDonut: React.FC = () => {
   });
 
   return (
-    <div className="h-full rounded-2xl bg-[#0D1527] border border-slate-800/80 p-4 sm:p-5 flex flex-col justify-between relative">
-      {/* Header */}
-      <div className="flex items-center justify-between pb-2 border-b border-slate-800/60">
-        <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-indigo-600/20 text-indigo-400 flex items-center justify-center">
-            <PieChart className="w-4 h-4" />
-          </div>
-          <h3 className="font-bold text-sm sm:text-base text-white tracking-tight">
-            Request Types
-          </h3>
-        </div>
+    <div className="nf-frame relative h-full">
+      <span className="nf-c nf-c-tl" />
+      <span className="nf-c nf-c-tr" />
+      <span className="nf-c nf-c-bl" />
+      <span className="nf-c nf-c-br" />
 
-        {/* Period dropdown */}
-        <div className="relative">
-          <button
-            onClick={() => setDropdownOpen(!dropdownOpen)}
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-xs text-slate-300 font-medium border border-slate-700/60 transition-colors"
-          >
-            <span>
-              {filterPeriod === 'month'
-                ? 'This Month'
-                : filterPeriod === 'last_month'
-                ? 'Last Month'
-                : 'All Time'}
-            </span>
-            <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
-          </button>
+      <div className="h-full rounded bg-[#121212] border border-[#262626] p-4 sm:p-5 flex flex-col justify-between relative">
+        {/* Header */}
+        <div className="flex items-center justify-between pb-2 border-b border-[#262626]">
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded bg-[#181818] text-[#EEEEEE] border border-[#262626] flex items-center justify-center">
+              <PieChart className="w-4 h-4" />
+            </div>
+            <h3 className="font-semibold text-sm sm:text-base text-white tracking-tight font-mono uppercase">
+              Request Types
+            </h3>
+          </div>
+
+          {/* Period dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#181818] hover:bg-[#262626] text-xs font-mono text-[#A1A1AA] hover:text-white border border-[#262626] transition-colors cursor-pointer"
+            >
+              <span>
+                {filterPeriod === 'month'
+                  ? 'This Month'
+                  : filterPeriod === 'last_month'
+                  ? 'Last Month'
+                  : 'All Time'}
+              </span>
+              <ChevronDown className="w-3.5 h-3.5 text-[#71717A]" />
+            </button>
 
           {dropdownOpen && (
             <div className="absolute right-0 mt-1 w-32 rounded-xl bg-[#0F172A] border border-slate-700/80 shadow-2xl py-1 z-30">
@@ -202,5 +208,6 @@ export const AdminRequestTypesDonut: React.FC = () => {
         </div>
       </div>
     </div>
-  );
+  </div>
+);
 };

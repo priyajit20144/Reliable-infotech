@@ -3,6 +3,7 @@ import { store } from '../seed/seedData.js';
 import { ProjectInquiryModel } from '../models/ProjectInquiry.js';
 import { NotificationModel } from '../models/Notification.js';
 import { isConnectedToMongo } from '../config/db.js';
+import { notifyNewInquiry, notifyNewNotification } from '../services/websocketService.js';
 
 export const createInquiry = async (req: Request, res: Response) => {
   try {
@@ -27,18 +28,20 @@ export const createInquiry = async (req: Request, res: Response) => {
 
     if (isConnectedToMongo) {
       const created = await ProjectInquiryModel.create(newInquiry);
-      await NotificationModel.create({
+      const notif = await NotificationModel.create({
         userId: 'usr_admin_1',
         title: 'New Project Acquisition Inquiry',
         message: `${name} (${email}) sent an inquiry for project ID ${projectId}.`,
         type: 'INQUIRY',
         referenceId: created._id.toString(),
       });
+      notifyNewInquiry(created);
+      notifyNewNotification(notif);
       return res.status(201).json({ success: true, message: 'Inquiry received. We will contact you shortly.', data: created });
     }
 
     store.projectInquiries.unshift(newInquiry);
-    store.notifications.unshift({
+    const mockNotif = {
       _id: `notif_${Date.now()}`,
       userId: 'usr_admin_1',
       title: 'New Project Acquisition Inquiry',
@@ -47,7 +50,10 @@ export const createInquiry = async (req: Request, res: Response) => {
       referenceId: newInquiry._id,
       isRead: false,
       createdAt: new Date(),
-    });
+    };
+    store.notifications.unshift(mockNotif);
+    notifyNewInquiry(newInquiry);
+    notifyNewNotification(mockNotif);
 
     return res.status(201).json({ success: true, message: 'Inquiry received. We will contact you shortly.', data: newInquiry });
   } catch (error: any) {

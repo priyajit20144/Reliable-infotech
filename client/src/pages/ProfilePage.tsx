@@ -270,10 +270,10 @@ export const ProfilePage: React.FC = () => {
         </div>
 
         {/* Status Pill */}
-        <div className="flex items-center gap-2 self-start sm:self-center bg-white/[0.03] border border-white/8 rounded-full px-3 py-1.5 shrink-0">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-          <span className="text-xs font-medium text-gray-300">
-            Account Active: <strong className="text-white capitalize">{user?.role || 'Client'}</strong>
+        <div className="flex items-center gap-2 self-start sm:self-center bg-[#181818] border border-[#262626] rounded px-3 py-1.5 shrink-0 font-mono">
+          <span className="w-2 h-2 rounded-full bg-[#4ADE80] animate-pulse" />
+          <span className="text-xs text-[#A1A1AA]">
+            ACCOUNT: <strong className="text-white uppercase">{user?.role || 'Client'}</strong>
           </span>
         </div>
       </div>
@@ -282,24 +282,24 @@ export const ProfilePage: React.FC = () => {
       {feedback && (
         <div
           role="alert"
-          className={`p-3.5 sm:p-4 rounded-2xl border text-xs sm:text-sm flex items-start justify-between gap-3 transition-all duration-300 animate-in fade-in slide-in-from-top-2 ${
+          className={`p-3.5 sm:p-4 rounded border text-xs sm:text-sm flex items-start justify-between gap-3 transition-all duration-300 font-mono ${
             feedback.type === 'success'
-              ? 'bg-emerald-500/15 border-emerald-500/30 text-emerald-200'
-              : 'bg-rose-500/15 border-rose-500/30 text-rose-200'
+              ? 'bg-[#181818] border-[#4ADE80]/30 text-[#4ADE80]'
+              : 'bg-[#181818] border-rose-500/30 text-rose-300'
           }`}
         >
           <div className="flex items-start gap-2.5">
             {feedback.type === 'success' ? (
-              <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-4 h-4 text-[#4ADE80] shrink-0 mt-0.5" />
             ) : (
-              <AlertCircle className="w-5 h-5 text-rose-400 shrink-0 mt-0.5" />
+              <AlertCircle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
             )}
-            <span className="font-medium leading-relaxed">{feedback.message}</span>
+            <span className="leading-relaxed">{feedback.message}</span>
           </div>
           <button
             type="button"
             onClick={() => setFeedback(null)}
-            className="p-1 rounded-lg hover:bg-white/10 text-gray-300 transition-colors"
+            className="p-1 rounded hover:bg-white/10 text-[#A1A1AA] hover:text-white transition-colors cursor-pointer"
             aria-label="Dismiss message"
           >
             <X className="w-4 h-4" />
@@ -312,7 +312,7 @@ export const ProfilePage: React.FC = () => {
         {/* =========================================================
             SECTION 1: HIGH-POLISH RESPONSIVE AVATAR MANAGEMENT CARD
         ========================================================= */}
-        <Card className="p-4 sm:p-6 md:p-8 space-y-6">
+        <Card brackets={true} className="p-4 sm:p-6 md:p-8 space-y-6">
           <div className="flex flex-col sm:flex-row items-center sm:items-start md:items-center gap-5 sm:gap-6 pb-6 border-b border-white/10">
             {/* Interactive Avatar Container */}
             <div className="relative group shrink-0">
@@ -460,18 +460,18 @@ export const ProfilePage: React.FC = () => {
               COLLAPSIBLE DRAWER: CURATED PRESET AVATARS SELECTOR
           ========================================================= */}
           {showPresets && (
-            <div className="p-4 sm:p-5 rounded-2xl bg-[#0F172A]/70 border border-indigo-500/20 space-y-3 animate-in fade-in slide-in-from-top-2">
+            <div className="p-4 sm:p-5 rounded bg-[#181818] border border-[#262626] space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-amber-400" />
-                  <span className="text-xs sm:text-sm font-semibold text-white">
+                  <Sparkles className="w-4 h-4 text-[#EEEEEE]" />
+                  <span className="text-xs sm:text-sm font-semibold text-white font-mono uppercase">
                     Select a Curated Studio Avatar
                   </span>
                 </div>
                 <button
                   type="button"
                   onClick={() => setShowPresets(false)}
-                  className="text-xs text-gray-400 hover:text-white transition-colors"
+                  className="text-xs text-[#A1A1AA] hover:text-white transition-colors cursor-pointer"
                 >
                   Close
                 </button>
@@ -485,10 +485,10 @@ export const ProfilePage: React.FC = () => {
                       key={preset.id}
                       type="button"
                       onClick={() => handleSelectPreset(preset.url)}
-                      className={`group relative flex flex-col items-center rounded-xl p-1.5 transition-all duration-200 ${
+                      className={`group relative flex flex-col items-center rounded p-1.5 transition-all duration-200 cursor-pointer ${
                         isSelected
-                          ? 'bg-indigo-500/20 ring-2 ring-indigo-500 shadow-glow-primary scale-105'
-                          : 'bg-white/[0.02] hover:bg-white/[0.08] hover:scale-105'
+                          ? 'bg-[#262626] ring-1 ring-[#EEEEEE] scale-105'
+                          : 'bg-[#121212] hover:bg-[#262626] hover:scale-105 border border-[#262626]'
                       }`}
                       title={preset.label}
                     >
@@ -498,7 +498,7 @@ export const ProfilePage: React.FC = () => {
                         size="lg"
                         className="pointer-events-none"
                       />
-                      <span className="text-[10px] text-gray-400 group-hover:text-gray-200 mt-1 truncate max-w-full text-center">
+                      <span className="text-[10px] text-[#A1A1AA] group-hover:text-white mt-1 truncate max-w-full text-center font-mono">
                         {preset.label.split(' ')[0]}
                       </span>
                     </button>
@@ -512,11 +512,11 @@ export const ProfilePage: React.FC = () => {
               COLLAPSIBLE DRAWER: DIRECT IMAGE URL INPUT
           ========================================================= */}
           {showUrlInput && (
-            <div className="p-4 sm:p-5 rounded-2xl bg-[#0F172A]/70 border border-white/10 space-y-3 animate-in fade-in slide-in-from-top-2">
+            <div className="p-4 sm:p-5 rounded bg-[#181818] border border-[#262626] space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Link2 className="w-4 h-4 text-sky-400" />
-                  <span className="text-xs sm:text-sm font-semibold text-white">
+                  <Link2 className="w-4 h-4 text-[#EEEEEE]" />
+                  <span className="text-xs sm:text-sm font-semibold text-white font-mono uppercase">
                     Custom Image URL Source
                   </span>
                 </div>

@@ -176,25 +176,31 @@ export const AdminRecentRequestsTable: React.FC<AdminRecentRequestsTableProps> =
   };
 
   return (
-    <div className="h-full rounded-2xl bg-[#0D1527] border border-slate-800/80 p-4 sm:p-5 flex flex-col justify-between">
-      {/* Header */}
-      <div className="flex items-center justify-between pb-3 border-b border-slate-800/60">
-        <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-blue-600/20 text-blue-400 flex items-center justify-center">
-            <Layers className="w-4 h-4" />
-          </div>
-          <h3 className="font-bold text-sm sm:text-base text-white tracking-tight">
-            Recent Requests
-          </h3>
-        </div>
+    <div className="nf-frame relative h-full">
+      <span className="nf-c nf-c-tl" />
+      <span className="nf-c nf-c-tr" />
+      <span className="nf-c nf-c-bl" />
+      <span className="nf-c nf-c-br" />
 
-        <button
-          onClick={onViewAll}
-          className="text-xs text-blue-400 hover:text-blue-300 font-semibold transition-colors"
-        >
-          View All
-        </button>
-      </div>
+      <div className="h-full rounded bg-[#121212] border border-[#262626] p-4 sm:p-5 flex flex-col justify-between">
+        {/* Header */}
+        <div className="flex items-center justify-between pb-3 border-b border-[#262626]">
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded bg-[#181818] text-[#EEEEEE] border border-[#262626] flex items-center justify-center">
+              <Layers className="w-4 h-4" />
+            </div>
+            <h3 className="font-semibold text-sm sm:text-base text-white tracking-tight font-mono uppercase">
+              Recent Requests
+            </h3>
+          </div>
+
+          <button
+            onClick={onViewAll}
+            className="text-xs text-[#EEEEEE] hover:underline font-mono transition-colors cursor-pointer"
+          >
+            VIEW ALL
+          </button>
+        </div>
 
       {/* Empty State or Table Content */}
       {displayRows.length === 0 ? (
@@ -310,7 +316,8 @@ export const AdminRecentRequestsTable: React.FC<AdminRecentRequestsTableProps> =
         </table>
       </div>
     </>
-  )}
-</div>
+      )}
+      </div>
+    </div>
   );
 };

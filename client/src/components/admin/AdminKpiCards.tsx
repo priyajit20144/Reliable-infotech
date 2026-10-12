@@ -77,39 +77,43 @@ export const AdminKpiCards: React.FC<AdminKpiCardsProps> = ({ stats }) => {
         return (
           <div
             key={kpi.id}
-            className={`group relative overflow-hidden rounded-2xl bg-[#0D1527] border border-slate-800/80 hover:border-slate-700 p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-950/30 flex items-center gap-3.5 ${
+            className={`nf-frame relative ${
               idx === 4 ? 'sm:col-span-2 lg:col-span-1 xl:col-span-1' : ''
             }`}
           >
-            {/* Subtle card corner shine */}
-            <div className="absolute top-0 right-0 w-20 h-20 bg-white/[0.02] rounded-full blur-xl pointer-events-none group-hover:bg-white/[0.04] transition-all" />
+            <span className="nf-c nf-c-tl" />
+            <span className="nf-c nf-c-tr" />
+            <span className="nf-c nf-c-bl" />
+            <span className="nf-c nf-c-br" />
 
-            {/* Left: Icon square */}
-            <div
-              className={`w-12 h-12 rounded-xl ${kpi.iconBg} flex items-center justify-center shrink-0 shadow-lg ${kpi.iconGlow} group-hover:scale-105 transition-transform duration-300`}
-            >
-              <Icon className={`w-5 h-5 ${kpi.iconColor}`} />
-            </div>
-
-            {/* Right: Text and values */}
-            <div className="min-w-0 flex-1">
-              <p className="text-[11px] font-medium text-slate-400 tracking-wide truncate">
-                {kpi.label}
-              </p>
-
-              <div className="flex items-baseline gap-2 mt-0.5">
-                <span className="text-xl sm:text-2xl font-black text-white tracking-tight leading-none">
-                  {kpi.value}
-                </span>
-                <span className="inline-flex items-center text-[11px] font-bold text-emerald-400 shrink-0">
-                  <ArrowUpRight className="w-3 h-3 stroke-[2.5]" />
-                  <span>{kpi.trend}</span>
-                </span>
+            <div className="rounded bg-[#121212] border border-[#262626] p-4 transition-colors hover:border-[#EEEEEE]/30 flex items-center gap-3.5 h-full">
+              {/* Left: Icon square */}
+              <div
+                className="w-10 h-10 rounded bg-[#181818] border border-[#262626] flex items-center justify-center shrink-0 text-[#EEEEEE]"
+              >
+                <Icon className="w-5 h-5" />
               </div>
 
-              <p className="text-[10px] text-slate-400 mt-1 truncate font-normal">
-                {kpi.subtext}
-              </p>
+              {/* Right: Text and values */}
+              <div className="min-w-0 flex-1">
+                <p className="text-[11px] font-mono text-[#A1A1AA] uppercase tracking-wider truncate">
+                  {kpi.label}
+                </p>
+
+                <div className="flex items-baseline gap-2 mt-0.5">
+                  <span className="text-xl sm:text-2xl font-bold text-white tracking-tight leading-none">
+                    {kpi.value}
+                  </span>
+                  <span className="inline-flex items-center text-[10px] font-mono font-bold text-[#4ADE80] shrink-0">
+                    <ArrowUpRight className="w-3 h-3 stroke-[2.5]" />
+                    <span>{kpi.trend}</span>
+                  </span>
+                </div>
+
+                <p className="text-[10px] text-[#71717A] mt-1 truncate font-mono">
+                  {kpi.subtext}
+                </p>
+              </div>
             </div>
           </div>
         );

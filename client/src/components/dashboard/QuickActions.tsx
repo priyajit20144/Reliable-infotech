@@ -36,9 +36,9 @@ export const QuickActions: React.FC = () => {
   ];
 
   return (
-    <Card className="p-5 sm:p-6">
-      <h3 className="text-base font-bold text-white mb-1">Quick Actions</h3>
-      <p className="text-xs text-gray-400 mb-4">Direct shortcuts to key platform workflows</p>
+    <Card brackets={true} className="p-5 sm:p-6">
+      <h3 className="text-base font-semibold text-white mb-1">Quick Actions</h3>
+      <p className="text-xs text-[#A1A1AA] mb-4 font-mono">Direct shortcuts to key platform workflows</p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {actions.map((act, i) => {

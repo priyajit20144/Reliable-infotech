@@ -14,6 +14,7 @@ import {
   Zap,
 } from 'lucide-react';
 import { messageService } from '../services/messageService';
+import { websocketService } from '../services/websocketService';
 import { Conversation, Message } from '../types';
 import { Card } from '../components/common/Card';
 import { Button } from '../components/common/Button';
@@ -94,14 +95,36 @@ export const MessagesPage: React.FC = () => {
     }
   }, [activeConvId]);
 
-  // Live polling every 4 seconds to sync replies from Admin seamlessly
+  // Real-time WebSocket listener + fallback 4s polling
   useEffect(() => {
     if (!activeConvId) return;
+
+    const unsubscribe = websocketService.subscribe('NEW_MESSAGE', (incoming: any) => {
+      if (incoming && (incoming.conversationId === activeConvId || !incoming.conversationId)) {
+        setMessages((prev) => {
+          const exists = prev.some((m) => m._id === incoming._id || m.id === incoming.id);
+          if (exists) return prev;
+          return [
+            ...prev,
+            {
+              ...incoming,
+              isMe: incoming.senderId === user?.id,
+              time: incoming.time || new Date(incoming.createdAt || Date.now()).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }),
+            },
+          ];
+        });
+      }
+    });
+
     const interval = setInterval(() => {
       fetchMessages(activeConvId, true);
     }, 4000);
-    return () => clearInterval(interval);
-  }, [activeConvId]);
+
+    return () => {
+      clearInterval(interval);
+      unsubscribe();
+    };
+  }, [activeConvId, user]);
 
   // Handle Send Message
   const handleSend = async (e?: React.FormEvent) => {

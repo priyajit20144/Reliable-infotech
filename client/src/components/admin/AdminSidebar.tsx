@@ -100,7 +100,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
   };
 
   return (
-    <aside className="h-full w-full bg-[#0D1322] border-r border-slate-800/80 flex flex-col justify-between overflow-y-auto select-none p-3.5 scrollbar-thin scrollbar-thumb-slate-800">
+    <aside className="h-full w-full bg-[#121212] border-r border-[#262626] flex flex-col justify-between overflow-y-auto select-none p-3.5 scrollbar-thin scrollbar-thumb-[#262626]">
       {/* Top Section: Logo & Navigation */}
       <div className="space-y-4">
         {/* Logo and Brand */}
@@ -114,15 +114,14 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
             <img
               src="/reliable-symbol.png"
               alt="Reliable InfoTech Logo"
-              className="w-9 h-9 object-contain drop-shadow-[0_0_10px_rgba(6,182,212,0.5)] shrink-0 group-hover:scale-105 transition-transform"
+              className="w-9 h-9 object-contain shrink-0 group-hover:scale-105 transition-transform"
             />
             <div>
               <div className="flex items-center">
-                <span className="font-extrabold text-base text-white tracking-tight">Reliable</span>
-                <span className="text-cyan-400 font-extrabold text-base ml-1">Info</span>
-                <span className="text-purple-400 font-extrabold text-base">Tech</span>
+                <span className="font-extrabold text-base text-[#EEEEEE] tracking-tight">Reliable</span>
+                <span className="text-[#AAAAAA] font-normal text-base ml-1">InfoTech</span>
               </div>
-              <p className="text-[11px] text-slate-400 font-medium tracking-wide">Admin Panel</p>
+              <p className="text-[10px] font-mono uppercase tracking-wider text-[#777777]">Console Admin</p>
             </div>
           </Link>
 
@@ -130,7 +129,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
           {onCloseMobile && (
             <button
               onClick={onCloseMobile}
-              className="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors"
+              className="lg:hidden p-1.5 rounded-none text-[#777777] hover:text-[#EEEEEE] hover:bg-[#181818] transition-colors"
               aria-label="Close menu"
             >
               <X className="w-5 h-5" />
@@ -148,16 +147,16 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
               <button
                 key={item.id}
                 onClick={() => handleNavClick(item.id)}
-                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-[13px] font-medium transition-all duration-200 group text-left ${
+                className={`w-full flex items-center justify-between px-3 py-2 rounded-none text-xs sm:text-[13px] font-medium transition-all duration-200 group text-left ${
                   isActive
-                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 font-semibold'
-                    : 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/40'
+                    ? 'bg-[#EEEEEE] text-[#0B0B0B] font-bold shadow-md'
+                    : 'text-[#999999] hover:text-[#EEEEEE] hover:bg-[#181818]'
                 }`}
               >
                 <div className="flex items-center gap-3 truncate">
                   <Icon
                     className={`w-4 h-4 shrink-0 transition-transform duration-200 group-hover:scale-110 ${
-                      isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-200'
+                      isActive ? 'text-[#0B0B0B]' : 'text-[#777777] group-hover:text-[#CCCCCC]'
                     }`}
                   />
                   <span className="truncate">{item.label}</span>
@@ -165,10 +164,10 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
 
                 {item.badge !== undefined && item.badge > 0 && (
                   <span
-                    className={`ml-2 px-2 py-0.5 rounded-full text-[10px] font-bold shrink-0 transition-colors ${
+                    className={`ml-2 px-1.5 py-0.5 text-[10px] font-mono shrink-0 transition-colors ${
                       isActive
-                        ? 'bg-white/20 text-white'
-                        : 'bg-indigo-600/30 text-indigo-300 group-hover:bg-indigo-600/40'
+                        ? 'bg-[#0B0B0B] text-[#EEEEEE]'
+                        : 'bg-[#181818] text-[#888888] border border-[#262626] group-hover:text-[#CCCCCC]'
                     }`}
                   >
                     {item.badge}
@@ -179,41 +178,35 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
           })}
 
           {/* Quick Exit Links */}
-          <div className="pt-3 mt-3 border-t border-slate-800/80 space-y-1">
+          <div className="pt-3 mt-3 border-t border-[#262626] space-y-1">
             <Link
               to="/"
-              className="w-full flex items-center gap-2.5 px-3.5 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all group"
+              className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-mono text-[#888888] hover:text-[#EEEEEE] hover:bg-[#181818] transition-all group"
             >
-              <ArrowLeft className="w-4 h-4 text-cyan-400 group-hover:-translate-x-1 transition-transform" />
+              <ArrowLeft className="w-4 h-4 text-[#888888] group-hover:-translate-x-1 transition-transform" />
               <span>Back to Main Site</span>
             </Link>
           </div>
         </nav>
       </div>
 
-      {/* Bottom Sidebar Card: Build Amazing Digital Solutions */}
+      {/* Bottom Sidebar Card */}
       <div className="pt-6 pb-2">
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-950/70 via-blue-950/60 to-slate-900 border border-blue-500/20 p-4 text-center group shadow-xl">
-          {/* Subtle curved background glow effect */}
-          <div className="absolute -top-12 -right-12 w-28 h-28 bg-blue-500/20 rounded-full blur-2xl pointer-events-none group-hover:bg-blue-500/30 transition-all duration-500" />
-          <div className="absolute -bottom-8 -left-8 w-24 h-24 bg-indigo-500/20 rounded-full blur-xl pointer-events-none" />
+        <div className="nf-frame relative bg-[#181818] border border-[#262626] p-3.5 text-center group">
+          <span className="nf-c nf-c-tl" />
+          <span className="nf-c nf-c-tr" />
+          <span className="nf-c nf-c-bl" />
+          <span className="nf-c nf-c-br" />
 
-          {/* Floating glowing rocket icon */}
-          <div className="relative z-10 w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 p-0.5 mx-auto mb-3 shadow-lg shadow-blue-500/30 group-hover:scale-105 transition-transform duration-300">
-            <div className="w-full h-full bg-[#0D1424] rounded-[10px] flex items-center justify-center">
-              <Rocket className="w-5 h-5 text-cyan-400" />
-            </div>
+          <div className="relative z-10 w-8 h-8 bg-[#0B0B0B] border border-[#262626] p-1 mx-auto mb-2 flex items-center justify-center">
+            <Rocket className="w-4 h-4 text-[#CCCCCC]" />
           </div>
 
-          <h4 className="relative z-10 text-xs font-bold text-white tracking-tight leading-snug">
-            Build Amazing
-            <br />
-            Digital Solutions
+          <h4 className="relative z-10 text-xs font-bold text-[#EEEEEE] tracking-tight leading-snug">
+            Reliable InfoTech
           </h4>
-          <p className="relative z-10 text-[10px] text-slate-400 mt-1 leading-relaxed">
-            Together we create
-            <br />
-            better tomorrow.
+          <p className="relative z-10 text-[10px] font-mono text-[#777777] mt-1 leading-relaxed">
+            Enterprise SaaS Suite
           </p>
         </div>
       </div>

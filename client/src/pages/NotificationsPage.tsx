@@ -49,57 +49,58 @@ export const NotificationsPage: React.FC = () => {
       <div className="flex items-center gap-2">
         <button
           onClick={() => setFilter('all')}
-          className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+          className={`px-3 py-1.5 rounded text-xs font-mono font-medium transition-colors cursor-pointer ${
             filter === 'all'
-              ? 'bg-devcraft-primary text-white'
-              : 'bg-white/5 text-gray-400 hover:text-white'
+              ? 'bg-[#EEEEEE] text-[#0B0B0B]'
+              : 'bg-[#181818] text-[#A1A1AA] hover:text-white border border-[#262626]'
           }`}
         >
-          All ({notifications.length})
+          ALL ({notifications.length})
         </button>
         <button
           onClick={() => setFilter('unread')}
-          className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+          className={`px-3 py-1.5 rounded text-xs font-mono font-medium transition-colors cursor-pointer ${
             filter === 'unread'
-              ? 'bg-devcraft-primary text-white'
-              : 'bg-white/5 text-gray-400 hover:text-white'
+              ? 'bg-[#EEEEEE] text-[#0B0B0B]'
+              : 'bg-[#181818] text-[#A1A1AA] hover:text-white border border-[#262626]'
           }`}
         >
-          Unread ({unreadCount})
+          UNREAD ({unreadCount})
         </button>
       </div>
 
       {/* Notifications list */}
       {filtered.length === 0 ? (
-        <Card className="text-center py-16">
-          <Bell className="w-8 h-8 text-gray-500 mx-auto mb-2" />
+        <Card brackets={true} className="text-center py-16">
+          <Bell className="w-8 h-8 text-[#71717A] mx-auto mb-2" />
           <p className="text-sm font-semibold text-white">No notifications</p>
-          <p className="text-xs text-gray-400 mt-1">You are all caught up.</p>
+          <p className="text-xs text-[#A1A1AA] mt-1 font-mono">You are all caught up.</p>
         </Card>
       ) : (
         <div className="space-y-3">
           {filtered.map((n) => (
             <Card
               key={n._id}
+              brackets={true}
               className={`p-4 transition-all flex items-start justify-between gap-4 ${
                 n.isRead
-                  ? 'bg-white/[0.01] border-white/5 opacity-80'
-                  : 'bg-indigo-500/10 border-indigo-500/30'
+                  ? 'opacity-80'
+                  : 'border-[#EEEEEE]/30'
               }`}
             >
               <div className="flex items-start gap-3">
-                <div className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center shrink-0 mt-0.5">
+                <div className="w-9 h-9 rounded bg-[#181818] border border-[#262626] flex items-center justify-center shrink-0 mt-0.5">
                   {getIcon(n.type)}
                 </div>
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
                     <h4 className="text-sm font-semibold text-white">{n.title}</h4>
                     {!n.isRead && (
-                      <span className="w-2 h-2 rounded-full bg-indigo-400 shrink-0" />
+                      <span className="w-2 h-2 rounded-full bg-[#4ADE80] shrink-0" />
                     )}
                   </div>
-                  <p className="text-xs text-gray-300 leading-relaxed">{n.message}</p>
-                  <p className="text-[10px] text-gray-500">
+                  <p className="text-xs text-[#A1A1AA] leading-relaxed">{n.message}</p>
+                  <p className="text-[10px] text-[#71717A] font-mono">
                     {new Date(n.createdAt).toLocaleString()}
                   </p>
                 </div>
@@ -109,7 +110,7 @@ export const NotificationsPage: React.FC = () => {
                 <Button
                   size="sm"
                   variant="ghost"
-                  className="text-xs shrink-0"
+                  className="text-xs shrink-0 cursor-pointer"
                   onClick={() => markAsRead(n._id)}
                 >
                   Mark read

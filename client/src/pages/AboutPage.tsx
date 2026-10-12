@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Rocket,
@@ -31,18 +31,105 @@ interface TeamMember {
   id: string;
   name: string;
   role: string;
+  badge?: string;
   image: string;
+  shortBio?: string;
   bio: string;
+  specialties?: string[];
   skills: string[];
   linkedin: string;
   github: string;
-  instagram: string;
+  instagram?: string;
+  email?: string;
+  accent?: {
+    text: string;
+    badgeBg: string;
+    border: string;
+    glow: string;
+    ring: string;
+    gradient: string;
+  };
 }
+
+const DEFAULT_ACCENTS = [
+  {
+    text: 'text-cyan-400',
+    badgeBg: 'bg-cyan-500/15 border-cyan-500/30 text-cyan-300',
+    border: 'hover:border-cyan-500/50',
+    glow: 'group-hover:shadow-[0_0_25px_rgba(6,182,212,0.25)]',
+    ring: 'ring-cyan-500/40',
+    gradient: 'from-cyan-500/20 via-blue-500/10 to-transparent',
+  },
+  {
+    text: 'text-indigo-400',
+    badgeBg: 'bg-indigo-500/15 border-indigo-500/30 text-indigo-300',
+    border: 'hover:border-indigo-500/50',
+    glow: 'group-hover:shadow-[0_0_25px_rgba(99,102,241,0.25)]',
+    ring: 'ring-indigo-500/40',
+    gradient: 'from-indigo-500/20 via-purple-500/10 to-transparent',
+  },
+  {
+    text: 'text-purple-400',
+    badgeBg: 'bg-purple-500/15 border-purple-500/30 text-purple-300',
+    border: 'hover:border-purple-500/50',
+    glow: 'group-hover:shadow-[0_0_25px_rgba(168,85,247,0.25)]',
+    ring: 'ring-purple-500/40',
+    gradient: 'from-purple-500/20 via-pink-500/10 to-transparent',
+  },
+];
+
+const CORE_CREATORS: TeamMember[] = [
+  {
+    id: 'sahil-sekh',
+    name: 'Sahil Sekh',
+    role: 'Lead Full Stack & UI Architect',
+    badge: 'UI Architecture Lead',
+    image: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=400&q=80',
+    shortBio: 'Frontend architect and full-stack specialist crafting interactive user interfaces and micro-animations.',
+    bio: 'Sahil is a Senior Full Stack Developer specializing in responsive design architectures, high-performance React ecosystems, dynamic animations, and state orchestration. He leads the visual fidelity, UX design language, and frontend performance at Reliable InfoTech.',
+    specialties: ['React / Next.js', 'Interactive UI & Motion', 'TypeScript Ecosystem', 'Component Systems'],
+    skills: ['React 19', 'TypeScript', 'Next.js', 'Tailwind CSS', 'Framer Motion', 'REST/GraphQL', 'UI/UX Design'],
+    github: 'https://github.com',
+    linkedin: 'https://linkedin.com',
+    email: 'sahil@reliableinfotech.io',
+    accent: DEFAULT_ACCENTS[0],
+  },
+  {
+    id: 'diganta-chakraborty',
+    name: 'Diganta Chakraborty',
+    role: 'Senior Full Stack & Systems Engineer',
+    badge: 'Cloud & API Systems Lead',
+    image: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=400&q=80',
+    shortBio: 'Full-stack systems engineer focused on resilient backend microservices, databases, and secure APIs.',
+    bio: 'Diganta leads backend engineering, data modeling, database optimizations, and secure API gateways. With a deep passion for scalable architecture, he ensures every system behind Reliable InfoTech is lightning fast, reliable, and fault-tolerant.',
+    specialties: ['Backend Engineering', 'Database Design & SQL', 'Cloud Microservices', 'API Security & Auth'],
+    skills: ['Node.js', 'Express', 'PostgreSQL', 'MongoDB', 'REST APIs', 'System Design', 'Docker', 'Redis'],
+    github: 'https://github.com',
+    linkedin: 'https://linkedin.com',
+    email: 'diganta@reliableinfotech.io',
+    accent: DEFAULT_ACCENTS[1],
+  },
+  {
+    id: 'priyajit-das',
+    name: 'Priyajit Das',
+    role: 'Founder & Principal Systems Architect',
+    badge: 'Founder & Systems Architect',
+    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
+    shortBio: 'Visionary architect and founder steering enterprise digital transformations, cloud infrastructure, and technical strategy.',
+    bio: 'Priyajit is the Founder and Principal Systems Architect behind Reliable InfoTech. He leads technical roadmap execution, enterprise web strategy, scalable cloud platforms, and end-to-end full-stack digital transformations with unwavering dedication to engineering excellence.',
+    specialties: ['Enterprise Architecture', 'Cloud Infrastructure', 'Technical Leadership', 'Full Stack Core'],
+    skills: ['Cloud Architecture', 'DevOps & CI/CD', 'Full Stack Development', 'Product Strategy', 'System Scaling'],
+    github: 'https://github.com',
+    linkedin: 'https://linkedin.com',
+    email: 'priyajit@reliableinfotech.io',
+    accent: DEFAULT_ACCENTS[2],
+  },
+];
 
 export const AboutPage: React.FC = () => {
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
 
-  const [teamMembers, setTeamMembers] = useState<TeamMember[]>(() => {
+  const parseStoredMembers = (): TeamMember[] => {
     try {
       localStorage.removeItem('reliable_admin_team_members');
       localStorage.removeItem('devcraft_team_members');
@@ -67,62 +154,46 @@ export const AboutPage: React.FC = () => {
               !fakeNames.includes(m.name.toLowerCase().trim())
           );
           if (valid.length > 0) {
-            return valid.map((m: any) => ({
-              id: m.id,
-              name: m.name,
-              role: m.role,
-              image: m.avatar,
-              bio: `Core engineering specialist in ${m.department} contributing to scalable, enterprise web platforms and client solutions.`,
-              skills: m.skills || ['Full Stack', 'Modern Web', 'Reliable Info Tech'],
-              linkedin: 'https://linkedin.com',
-              github: 'https://github.com',
-              instagram: 'https://instagram.com',
-            }));
+            return valid.map((m: any, idx: number) => {
+              const matchedCreator = CORE_CREATORS.find((c) => c.id === m.id || c.name.toLowerCase() === m.name?.toLowerCase());
+              return {
+                id: m.id,
+                name: m.name,
+                role: m.role || matchedCreator?.role || 'Core Engineer',
+                badge: m.badge || matchedCreator?.badge || (m.department ? `${m.department} Lead` : 'Engineering Specialist'),
+                image: m.avatar || m.image || matchedCreator?.image || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80',
+                shortBio: m.shortBio || matchedCreator?.shortBio || m.bio || `Specialist in ${m.department || 'full-stack engineering'} architecting resilient digital platforms.`,
+                bio: m.bio || matchedCreator?.bio || `Core specialist contributing to scalable enterprise web platforms at Reliable Info Tech.`,
+                specialties: m.specialties || matchedCreator?.specialties || (m.skills?.slice(0, 4)) || ['Full Stack', 'Modern Web', 'Reliable Tech', 'Cloud Architecture'],
+                skills: m.skills || matchedCreator?.skills || ['Full Stack', 'Modern Web', 'Reliable Info Tech'],
+                linkedin: m.linkedin || matchedCreator?.linkedin || 'https://linkedin.com',
+                github: m.github || matchedCreator?.github || 'https://github.com',
+                instagram: m.instagram || matchedCreator?.instagram || 'https://instagram.com',
+                email: m.email || matchedCreator?.email || 'contact@reliableinfotech.io',
+                accent: matchedCreator?.accent || DEFAULT_ACCENTS[idx % DEFAULT_ACCENTS.length],
+              };
+            });
           }
         }
       }
     } catch (e) {}
+    return CORE_CREATORS;
+  };
 
-    // Core Engineering Team & Creators
-    return [
-      {
-        id: 'sahil-sekh',
-        name: 'Sahil Sekh',
-        role: 'Lead Full Stack & UI Architect',
-        image:
-          'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=400&q=80',
-        bio: 'Frontend architect and full-stack specialist spearheading responsive user interfaces, reactive state paradigms, dynamic animations, and enterprise web solutions.',
-        skills: ['React / Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'REST & GraphQL APIs'],
-        linkedin: 'https://linkedin.com',
-        github: 'https://github.com',
-        instagram: 'https://instagram.com',
-      },
-      {
-        id: 'diganta-chakraborty',
-        name: 'Diganta Chakraborty',
-        role: 'Senior Full Stack & Cloud Systems Engineer',
-        image:
-          'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=400&q=80',
-        bio: 'Senior full-stack engineer leading backend architecture, database optimizations, resilient microservices, and secure cloud pipelines.',
-        skills: ['Node.js & Express', 'PostgreSQL / MongoDB', 'System Design', 'Cloud DevOps', 'Docker / CI/CD'],
-        linkedin: 'https://linkedin.com',
-        github: 'https://github.com',
-        instagram: 'https://instagram.com',
-      },
-      {
-        id: 'priyajit-das',
-        name: 'Priyajit Das',
-        role: 'Founder & Principal Systems Architect',
-        image:
-          'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
-        bio: 'Visionary architect and lead developer leading reliable digital transformations, custom full-stack web platforms, and modern enterprise software architectures.',
-        skills: ['System Architecture', 'Product Strategy', 'Cloud Infrastructure', 'Full Stack Development'],
-        linkedin: 'https://linkedin.com',
-        github: 'https://github.com',
-        instagram: 'https://instagram.com',
-      },
-    ];
-  });
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>(parseStoredMembers);
+
+  useEffect(() => {
+    const handleUpdate = () => {
+      setTeamMembers(parseStoredMembers());
+    };
+
+    window.addEventListener('storage', handleUpdate);
+    window.addEventListener('reliable_team_updated', handleUpdate);
+    return () => {
+      window.removeEventListener('storage', handleUpdate);
+      window.removeEventListener('reliable_team_updated', handleUpdate);
+    };
+  }, []);
 
   const values = [
     {
@@ -168,7 +239,7 @@ export const AboutPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0B0F19] text-[#F8FAFC]">
+    <div className="min-h-screen bg-[#0B0B0B] text-[#EEEEEE] selection:bg-[#EEEEEE] selection:text-[#121212] font-sans">
       <PublicNavbar />
 
       <main className="space-y-24 py-10 md:py-16">
@@ -176,29 +247,29 @@ export const AboutPage: React.FC = () => {
         {/* ========================================================================= */}
         {/* 1. HERO SECTION: About Reliable Info Tech                                */}
         {/* ========================================================================= */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-          {/* Ambient background glows */}
-          <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[600px] h-[350px] bg-gradient-to-r from-blue-600/15 via-indigo-600/20 to-purple-600/15 rounded-full blur-[140px] pointer-events-none" />
+        <section className="max-w-7xl 2xl:max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="nf-frame nf-frame-hover relative overflow-hidden rounded bg-[#121212] border border-[#262626] p-6 sm:p-10 shadow-xl">
+            <span className="nf-c nf-c-tl" />
+            <span className="nf-c nf-c-tr" />
+            <span className="nf-c nf-c-bl" />
+            <span className="nf-c nf-c-br" />
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center relative z-10">
-            {/* Left Column: Heading, Subtitle, 3 Badges */}
-            <div className="lg:col-span-7 space-y-6 text-left">
-              {/* Top Pill Tag */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.03] border border-indigo-500/30 backdrop-blur-md shadow-sm">
-                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                <span className="text-xs font-semibold tracking-wide text-indigo-300">
-                  • About Reliable Info Tech
-                </span>
-              </div>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center relative z-10">
+              {/* Left Column: Heading, Subtitle, 3 Badges */}
+              <div className="lg:col-span-7 space-y-6 text-left">
+                {/* Top Pill Tag */}
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded text-[11px] font-mono tracking-wider text-[#A1A1AA] bg-[#181818] border border-[#262626]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E] animate-ping" />
+                  <span>ABOUT · RELIABLE INFOTECH</span>
+                </div>
 
-              {/* Main Headline */}
-              <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-extrabold tracking-tight text-white leading-[1.12]">
-                We Build{' '}
-                <span className="text-gradient-brand drop-shadow-[0_0_35px_rgba(192,132,252,0.35)]">
-                  Digital Solutions
-                </span>{' '}
-                That Matter
-              </h1>
+                {/* Main Headline */}
+                <div className="py-2.5 px-3 -mx-3 border-y border-[#262626] bg-gradient-to-r from-[#181818] via-[#141414] to-transparent">
+                  <h1 className="text-3xl sm:text-5xl font-medium tracking-tight text-white leading-tight">
+                    <span>We Build </span>
+                    <span className="font-serif italic text-white/90">Digital Systems That Matter</span>
+                  </h1>
+                </div>
 
               {/* Subtitle */}
               <p className="text-sm sm:text-base text-gray-300 leading-relaxed max-w-xl font-normal">
@@ -325,7 +396,8 @@ export const AboutPage: React.FC = () => {
               </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
         {/* ========================================================================= */}
         {/* 2. SECTION: OUR STORY (Text, Workstation Photo & 4 Stats Cards)            */}
@@ -497,74 +569,141 @@ export const AboutPage: React.FC = () => {
             </div>
           </div>
 
-          {/* 5 Team Member Cards Grid (5 Columns on Desktop, 3 Tablet, 1 Mobile) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
-            {teamMembers.map((member) => (
-              <div
-                key={member.id}
-                onClick={() => setSelectedMember(member)}
-                className="rounded-2xl bg-[#0F172A]/80 hover:bg-[#131B33]/90 border border-white/8 hover:border-indigo-500/40 p-4 transition-all duration-300 hover:-translate-y-1.5 group cursor-pointer shadow-xl text-center flex flex-col justify-between"
-              >
-                <div>
-                  {/* Avatar Photo Frame */}
-                  <div className="relative w-full aspect-square rounded-xl overflow-hidden mb-3.5 bg-slate-800">
-                    <img
-                      src={member.image}
-                      alt={member.name}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      onError={(e) => {
-                        // High-quality fallback avatar
-                        (e.target as HTMLImageElement).src =
-                          'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80';
-                      }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F19]/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          {/* Connected Team Member Cards Grid matching Image 2 */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {teamMembers.map((member) => {
+              const accent = member.accent || DEFAULT_ACCENTS[0];
+
+              return (
+                <div
+                  key={member.id}
+                  onClick={() => setSelectedMember(member)}
+                  className="nf-frame nf-frame-hover rounded bg-[#181818] hover:bg-[#1C1C1C] border border-[#262626] hover:border-[#363636] p-5 transition-colors cursor-pointer text-left shadow-md flex flex-col justify-between relative"
+                >
+                  <span className="nf-c nf-c-tl" />
+                  <span className="nf-c nf-c-tr" />
+                  <span className="nf-c nf-c-bl" />
+                  <span className="nf-c nf-c-br" />
+
+                  <div className="relative z-10 space-y-3.5">
+                    {/* Top Row: Avatar & Status + Micro Badge */}
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="relative">
+                        <div
+                          className={`w-14 h-14 rounded-2xl overflow-hidden ring-2 ${accent.ring} bg-slate-800 shadow-md group-hover:scale-105 transition-transform duration-300`}
+                        >
+                          <img
+                            src={member.image}
+                            alt={member.name}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                                member.name
+                              )}&background=2563eb&color=fff&bold=true`;
+                            }}
+                          />
+                        </div>
+                        {/* Active Beacon Dot */}
+                        <span className="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#090E1A] ring-1 ring-white/10">
+                          <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+                        </span>
+                      </div>
+
+                      {/* Role Pill */}
+                      <span
+                        className={`text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded-full border ${accent.badgeBg}`}
+                      >
+                        {member.badge || 'Engineering Lead'}
+                      </span>
+                    </div>
+
+                    {/* Developer Name & Role */}
+                    <div>
+                      <h4
+                        className={`text-base font-extrabold text-white group-hover:${accent.text} transition-colors flex items-center gap-1.5`}
+                      >
+                        <span>{member.name}</span>
+                        <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                      </h4>
+                      <p className="text-xs font-medium text-gray-300 mt-0.5">
+                        {member.role}
+                      </p>
+                      <p className="text-[11px] text-gray-400 leading-relaxed mt-2 line-clamp-2">
+                        {member.shortBio || member.bio}
+                      </p>
+                    </div>
+
+                    {/* Tech Badges */}
+                    <div className="flex flex-wrap gap-1.5 pt-1">
+                      {(member.specialties || member.skills.slice(0, 4)).map((spec, sIdx) => (
+                        <span
+                          key={sIdx}
+                          className="text-[10px] px-2 py-0.5 rounded-md bg-white/[0.03] text-gray-300 border border-white/5 font-mono"
+                        >
+                          {spec}
+                        </span>
+                      ))}
+                    </div>
                   </div>
 
-                  {/* Name and Role */}
-                  <h3 className="text-sm font-bold text-white group-hover:text-indigo-300 transition-colors">
-                    {member.name}
-                  </h3>
-                  <p className="text-xs text-gray-400 mt-0.5">
-                    {member.role}
-                  </p>
-                </div>
+                  {/* Card Footer: Interactive Links & View Profile CTA */}
+                  <div
+                    className="relative z-10 pt-4 mt-4 border-t border-white/5 flex items-center justify-between gap-2"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <a
+                        href={member.github}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="w-7 h-7 rounded-lg bg-white/5 hover:bg-white/15 flex items-center justify-center text-gray-400 hover:text-white transition-all text-xs"
+                        title="GitHub Profile"
+                      >
+                        <Github className="w-3.5 h-3.5" />
+                      </a>
+                      <a
+                        href={member.linkedin}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="w-7 h-7 rounded-lg bg-white/5 hover:bg-white/15 flex items-center justify-center text-gray-400 hover:text-white transition-all text-xs"
+                        title="LinkedIn Profile"
+                      >
+                        <Linkedin className="w-3.5 h-3.5" />
+                      </a>
+                      {member.email ? (
+                        <a
+                          href={`mailto:${member.email}`}
+                          className="w-7 h-7 rounded-lg bg-white/5 hover:bg-white/15 flex items-center justify-center text-gray-400 hover:text-white transition-all text-xs"
+                          title={`Email ${member.name}`}
+                        >
+                          <Mail className="w-3.5 h-3.5" />
+                        </a>
+                      ) : member.instagram ? (
+                        <a
+                          href={member.instagram}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="w-7 h-7 rounded-lg bg-white/5 hover:bg-white/15 flex items-center justify-center text-gray-400 hover:text-white transition-all text-xs"
+                          title="Instagram"
+                        >
+                          <Instagram className="w-3.5 h-3.5" />
+                        </a>
+                      ) : null}
+                    </div>
 
-                {/* Social Icons matching reference */}
-                <div
-                  className="flex items-center justify-center gap-2.5 pt-3.5 mt-2 border-t border-white/5"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <a
-                    href={member.linkedin}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="w-7 h-7 rounded-lg bg-white/5 hover:bg-indigo-600 hover:text-white flex items-center justify-center text-gray-400 transition-colors text-xs"
-                    title="LinkedIn"
-                  >
-                    <Linkedin className="w-3.5 h-3.5" />
-                  </a>
-                  <a
-                    href={member.github}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="w-7 h-7 rounded-lg bg-white/5 hover:bg-indigo-600 hover:text-white flex items-center justify-center text-gray-400 transition-colors text-xs"
-                    title="GitHub"
-                  >
-                    <Github className="w-3.5 h-3.5" />
-                  </a>
-                  <a
-                    href={member.instagram}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="w-7 h-7 rounded-lg bg-white/5 hover:bg-indigo-600 hover:text-white flex items-center justify-center text-gray-400 transition-colors text-xs"
-                    title="Instagram"
-                  >
-                    <Instagram className="w-3.5 h-3.5" />
-                  </a>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedMember(member)}
+                      className={`text-[11px] font-semibold text-gray-400 group-hover:${accent.text} flex items-center gap-1 transition-colors`}
+                    >
+                      <span>Spotlight</span>
+                      <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
 
@@ -679,66 +818,99 @@ export const AboutPage: React.FC = () => {
       <Modal
         isOpen={Boolean(selectedMember)}
         onClose={() => setSelectedMember(null)}
-        title={selectedMember?.name || 'Team Spotlight'}
+        title={selectedMember?.name || 'Developer Spotlight'}
       >
         {selectedMember && (
-          <div className="space-y-5 text-left text-xs">
-            <div className="flex items-center gap-4 p-3 rounded-2xl bg-white/[0.02] border border-white/5">
-              <img
-                src={selectedMember.image}
-                alt={selectedMember.name}
-                className="w-16 h-16 rounded-xl object-cover ring-2 ring-indigo-500/40"
-              />
-              <div>
-                <h4 className="text-base font-bold text-white">{selectedMember.name}</h4>
-                <p className="text-xs text-indigo-300">{selectedMember.role}</p>
-                <div className="flex items-center gap-2 mt-2">
-                  <a
-                    href={selectedMember.linkedin}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="p-1 rounded bg-white/5 hover:bg-indigo-600 text-gray-300 hover:text-white transition-colors"
+          <div className="space-y-6 text-left text-xs">
+            {/* Header with Avatar & Title */}
+            <div className="flex items-center gap-4 p-4 rounded-2xl bg-white/[0.02] border border-white/8 relative overflow-hidden">
+              <div
+                className={`w-16 h-16 rounded-2xl overflow-hidden ring-2 ${
+                  selectedMember.accent?.ring || 'ring-indigo-500/40'
+                } shrink-0 bg-slate-800`}
+              >
+                <img
+                  src={selectedMember.image}
+                  alt={selectedMember.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="space-y-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h4 className="text-lg font-black text-white">{selectedMember.name}</h4>
+                  <span
+                    className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full border ${
+                      selectedMember.accent?.badgeBg || 'bg-indigo-500/15 border-indigo-500/30 text-indigo-300'
+                    }`}
                   >
-                    <Linkedin className="w-3.5 h-3.5" />
-                  </a>
+                    {selectedMember.badge || 'Engineering Lead'}
+                  </span>
+                </div>
+                <p className="text-xs text-gray-300 font-medium">{selectedMember.role}</p>
+                <div className="flex items-center gap-2 pt-1">
                   <a
                     href={selectedMember.github}
                     target="_blank"
                     rel="noreferrer"
-                    className="p-1 rounded bg-white/5 hover:bg-indigo-600 text-gray-300 hover:text-white transition-colors"
+                    className="p-1.5 rounded-lg bg-white/5 hover:bg-white/15 text-gray-300 hover:text-white transition-colors"
+                    title="GitHub"
                   >
                     <Github className="w-3.5 h-3.5" />
                   </a>
                   <a
-                    href={selectedMember.instagram}
+                    href={selectedMember.linkedin}
                     target="_blank"
                     rel="noreferrer"
-                    className="p-1 rounded bg-white/5 hover:bg-indigo-600 text-gray-300 hover:text-white transition-colors"
+                    className="p-1.5 rounded-lg bg-white/5 hover:bg-white/15 text-gray-300 hover:text-white transition-colors"
+                    title="LinkedIn"
                   >
-                    <Instagram className="w-3.5 h-3.5" />
+                    <Linkedin className="w-3.5 h-3.5" />
                   </a>
+                  {selectedMember.email ? (
+                    <a
+                      href={`mailto:${selectedMember.email}`}
+                      className="p-1.5 rounded-lg bg-white/5 hover:bg-white/15 text-gray-300 hover:text-white transition-colors"
+                      title="Email"
+                    >
+                      <Mail className="w-3.5 h-3.5" />
+                    </a>
+                  ) : selectedMember.instagram ? (
+                    <a
+                      href={selectedMember.instagram}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="p-1.5 rounded-lg bg-white/5 hover:bg-white/15 text-gray-300 hover:text-white transition-colors"
+                      title="Instagram"
+                    >
+                      <Instagram className="w-3.5 h-3.5" />
+                    </a>
+                  ) : null}
                 </div>
               </div>
             </div>
 
-            <div>
-              <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">
-                About & Experience
-              </p>
-              <p className="text-xs text-gray-300 leading-relaxed bg-[#0B0F19] p-3 rounded-xl border border-white/5">
+            {/* Engineering Dossier / Biography */}
+            <div className="space-y-2">
+              <h5 className="text-[11px] font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+                <Code2 className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Engineering Biography</span>
+              </h5>
+              <div className="p-3.5 rounded-xl bg-[#090E1A] border border-white/5 text-gray-300 leading-relaxed font-normal">
                 {selectedMember.bio}
-              </p>
+              </div>
             </div>
 
-            <div>
-              <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2">
-                Core Tech & Focus Areas
-              </p>
+            {/* Core Tech Stack */}
+            <div className="space-y-2">
+              <h5 className="text-[11px] font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+                <span>Core Technologies &amp; Architecture Focus</span>
+              </h5>
               <div className="flex flex-wrap gap-1.5">
-                {selectedMember.skills.map((skill, idx) => (
+                {selectedMember.skills.map((skill, sIdx) => (
                   <span
-                    key={idx}
-                    className="text-[11px] px-2.5 py-1 rounded-lg bg-indigo-500/15 text-indigo-300 border border-indigo-500/30 font-medium"
+                    key={sIdx}
+                    className="text-[11px] px-2.5 py-1 rounded-lg bg-indigo-500/10 text-indigo-300 border border-indigo-500/25 font-mono font-medium"
                   >
                     {skill}
                   </span>
@@ -746,16 +918,22 @@ export const AboutPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="pt-3 border-t border-white/10 flex items-center justify-between gap-3">
-              <Link to="/contact" className="flex-1">
-                <Button variant="primary" size="sm" className="w-full">
-                  <span>Connect With Our Team</span>
-                  <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
-                </Button>
-              </Link>
-              <Button variant="secondary" size="sm" onClick={() => setSelectedMember(null)}>
+            {/* Modal Actions */}
+            <div className="pt-4 border-t border-white/8 flex items-center justify-between gap-3">
+              <a
+                href={selectedMember.email ? `mailto:${selectedMember.email}` : '/contact'}
+                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-devcraft-primary to-devcraft-secondary hover:brightness-110 shadow-glow-primary transition-all active:scale-95"
+              >
+                <Mail className="w-3.5 h-3.5" />
+                <span>Connect With {selectedMember.name.split(' ')[0]}</span>
+              </a>
+              <button
+                type="button"
+                onClick={() => setSelectedMember(null)}
+                className="px-4 py-2.5 rounded-xl text-xs font-semibold text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 transition-colors"
+              >
                 Close
-              </Button>
+              </button>
             </div>
           </div>
         )}

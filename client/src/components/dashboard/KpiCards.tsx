@@ -60,32 +60,32 @@ export const KpiCards: React.FC<KpiCardsProps> = ({ stats }) => {
       {cards.map((c, i) => {
         const Icon = c.icon;
         return (
-          <Card key={i} className="p-5 flex flex-col justify-between hover:border-indigo-500/30">
+          <Card key={i} brackets={true} className="p-5 flex flex-col justify-between hover:border-[#EEEEEE]/30">
             <div className="flex items-start justify-between">
               <div className="space-y-1">
-                <p className="text-xs font-medium text-gray-400">{c.title}</p>
-                <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                <p className="text-xs font-mono text-[#A1A1AA] uppercase tracking-wider">{c.title}</p>
+                <h3 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
                   {c.value}
                 </h3>
               </div>
               <div
-                className={`w-10 h-10 rounded-xl border flex items-center justify-center shrink-0 ${c.iconBg}`}
+                className={`w-9 h-9 rounded border flex items-center justify-center shrink-0 ${c.iconBg}`}
               >
-                <Icon className="w-5 h-5" />
+                <Icon className="w-4 h-4" />
               </div>
             </div>
 
-            <div className="pt-4 border-t border-white/5 mt-4 flex items-center justify-between text-xs">
-              <span className="flex items-center gap-1 text-[11px] font-medium text-gray-400">
-                <TrendingUp className="w-3 h-3 text-emerald-400" />
+            <div className="pt-4 border-t border-[#262626] mt-4 flex items-center justify-between text-xs">
+              <span className="flex items-center gap-1.5 text-[11px] font-mono text-[#A1A1AA]">
+                <TrendingUp className="w-3 h-3 text-[#4ADE80]" />
                 <span>{c.trend}</span>
               </span>
               <Link
                 to={c.link}
-                className="w-7 h-7 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-colors"
+                className="w-6 h-6 rounded bg-[#262626] hover:bg-[#363636] flex items-center justify-center text-[#A1A1AA] hover:text-white transition-colors"
                 aria-label={`View ${c.title}`}
               >
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="w-3 h-3" />
               </Link>
             </div>
           </Card>

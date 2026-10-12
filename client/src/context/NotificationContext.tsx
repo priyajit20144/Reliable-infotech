@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { Notification } from '../types';
 import { notificationService } from '../services/notificationService';
+import { websocketService } from '../services/websocketService';
 import { useAuth } from './AuthContext';
 
 interface NotificationContextType {
@@ -79,9 +80,23 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
   useEffect(() => {
     refreshNotifications();
+    if (user) {
+      websocketService.identify({ id: user.id, role: user.role });
+    }
+
+    const unsubscribe = websocketService.subscribe('NEW_NOTIFICATION', (newNotif: Notification) => {
+      if (newNotif) {
+        setNotifications((prev) => [newNotif, ...prev]);
+        setUnreadCount((c) => c + 1);
+      }
+    });
+
     const interval = setInterval(refreshNotifications, 30000);
-    return () => clearInterval(interval);
-  }, [refreshNotifications]);
+    return () => {
+      clearInterval(interval);
+      unsubscribe();
+    };
+  }, [refreshNotifications, user]);
 
   const markAsRead = async (id: string) => {
     try {

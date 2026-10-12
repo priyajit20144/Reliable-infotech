@@ -205,7 +205,7 @@ export const ServicesPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0B0F19] text-[#F8FAFC]">
+    <div className="min-h-screen bg-[#0B0B0B] text-[#EEEEEE]">
       <PublicNavbar />
 
       <main className="space-y-20 py-10 md:py-14">
@@ -213,70 +213,71 @@ export const ServicesPage: React.FC = () => {
         {/* ========================================================================= */}
         {/* 1. HERO SECTION (Our Services)                                            */}
         {/* ========================================================================= */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-          {/* Ambient background glows */}
-          <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[600px] h-[350px] bg-gradient-to-r from-blue-600/15 via-indigo-600/20 to-purple-600/15 rounded-full blur-[140px] pointer-events-none" />
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="nf-frame nf-frame-hover relative overflow-hidden rounded bg-[#121212] border border-[#262626] p-6 sm:p-10 shadow-xl">
+            <span className="nf-c nf-c-tl" />
+            <span className="nf-c nf-c-tr" />
+            <span className="nf-c nf-c-bl" />
+            <span className="nf-c nf-c-br" />
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center relative z-10">
-            {/* Left Column: Heading, Subtitle, 3 Badges */}
-            <div className="lg:col-span-7 space-y-6 text-left">
-              {/* Top Pill Tag */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.03] border border-indigo-500/30 backdrop-blur-md shadow-sm">
-                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                <span className="text-xs font-semibold tracking-wide text-indigo-300">
-                  • Our Services
-                </span>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center relative z-10">
+              {/* Left Column: Heading, Subtitle, 3 Badges */}
+              <div className="lg:col-span-7 space-y-6 text-left">
+                {/* Top Pill Tag */}
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded text-[11px] font-mono tracking-wider text-[#A1A1AA] bg-[#181818] border border-[#262626]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E] animate-ping" />
+                  <span>PLATFORM · SERVICES & CAPABILITIES</span>
+                </div>
+
+                {/* Main Headline */}
+                <div className="py-2.5 px-3 -mx-3 border-y border-[#262626] bg-gradient-to-r from-[#181818] via-[#141414] to-transparent">
+                  <h1 className="text-3xl sm:text-5xl font-medium tracking-tight text-white leading-tight">
+                    <span>We Build Digital Solutions for </span>
+                    <span className="font-serif italic text-white/90">Your Growth</span>
+                  </h1>
+                </div>
+
+                {/* Subtitle */}
+                <p className="text-sm sm:text-base text-[#A1A1AA] leading-relaxed max-w-xl font-normal">
+                  From high-speed web apps to scalable digital platforms, we provide end-to-end digital engineering to help businesses turn ambitious ideas into reality.
+                </p>
+
+                {/* 3 Key Trust Badges */}
+                <div className="pt-2 grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-2xl">
+                  {/* Badge 1 */}
+                  <div className="p-3.5 rounded bg-[#181818] border border-[#262626] flex items-center gap-3">
+                    <div className="w-8 h-8 rounded border border-[#363636] bg-[#1E1E1E] text-[#EEEEEE] flex items-center justify-center shrink-0">
+                      <Zap className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-semibold text-[#EEEEEE] leading-tight">Modern Tech</h4>
+                      <p className="text-[10px] font-mono text-[#71717A] mt-0.5">Sub-second speeds</p>
+                    </div>
+                  </div>
+
+                  {/* Badge 2 */}
+                  <div className="p-3.5 rounded bg-[#181818] border border-[#262626] flex items-center gap-3">
+                    <div className="w-8 h-8 rounded border border-[#363636] bg-[#1E1E1E] text-[#EEEEEE] flex items-center justify-center shrink-0">
+                      <ShieldCheck className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-semibold text-[#EEEEEE] leading-tight">Enterprise SLA</h4>
+                      <p className="text-[10px] font-mono text-[#71717A] mt-0.5">High availability</p>
+                    </div>
+                  </div>
+
+                  {/* Badge 3 */}
+                  <div className="p-3.5 rounded bg-[#181818] border border-[#262626] flex items-center gap-3">
+                    <div className="w-8 h-8 rounded border border-[#363636] bg-[#1E1E1E] text-[#EEEEEE] flex items-center justify-center shrink-0">
+                      <Clock className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-semibold text-[#EEEEEE] leading-tight">Fast Delivery</h4>
+                      <p className="text-[10px] font-mono text-[#71717A] mt-0.5">Rapid sprints</p>
+                    </div>
+                  </div>
+                </div>
               </div>
-
-              {/* Main Headline */}
-              <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-extrabold tracking-tight text-white leading-[1.12]">
-                We Build Digital Solutions for{' '}
-                <span className="text-gradient-brand drop-shadow-[0_0_35px_rgba(192,132,252,0.35)]">
-                  Your Growth
-                </span>
-              </h1>
-
-              {/* Subtitle */}
-              <p className="text-sm sm:text-base text-gray-300 leading-relaxed max-w-xl font-normal">
-                From stunning websites to powerful web applications, we offer end-to-end digital solutions to help businesses and individuals turn their ideas into reality.
-              </p>
-
-              {/* 3 Key Trust Badges */}
-              <div className="pt-2 grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-2xl">
-                {/* Badge 1 */}
-                <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/8 backdrop-blur-md flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
-                    <Zap className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-bold text-white leading-tight">Modern Technology</h4>
-                    <p className="text-[10px] text-gray-400 mt-0.5">Latest tools & frameworks</p>
-                  </div>
-                </div>
-
-                {/* Badge 2 */}
-                <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/8 backdrop-blur-md flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-400 shrink-0">
-                    <ShieldCheck className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-bold text-white leading-tight">Secure & Reliable</h4>
-                    <p className="text-[10px] text-gray-400 mt-0.5">Your data, our priority</p>
-                  </div>
-                </div>
-
-                {/* Badge 3 */}
-                <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/8 backdrop-blur-md flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-purple-400 shrink-0">
-                    <Clock className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-bold text-white leading-tight">On-Time Delivery</h4>
-                    <p className="text-[10px] text-gray-400 mt-0.5">We respect your time</p>
-                  </div>
-                </div>
-              </div>
-            </div>
 
             {/* Right Column: 3D Laptop, Phone, and Floating Badges */}
             <div className="lg:col-span-5 relative flex items-center justify-center">
@@ -344,11 +345,11 @@ export const ServicesPage: React.FC = () => {
                     <div className="w-6 h-0.5 rounded-full bg-white/20 mx-auto" />
                   </div>
                 </div>
-
               </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
         {/* ========================================================================= */}
         {/* 2. SECTION: WHAT WE OFFER — OUR SERVICES (6 Rich Detailed Cards)         */}
@@ -375,8 +376,13 @@ export const ServicesPage: React.FC = () => {
                 <div
                   key={s.id}
                   onClick={() => setSelectedService(s)}
-                  className="rounded-2xl bg-[#0F172A]/75 hover:bg-[#131B33]/90 border border-white/8 hover:border-indigo-500/40 p-6 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 group shadow-xl cursor-pointer text-left relative overflow-hidden"
+                  className="nf-frame nf-frame-hover rounded bg-[#181818] hover:bg-[#1C1C1C] border border-[#262626] hover:border-[#363636] p-6 flex flex-col justify-between transition-colors group shadow-md cursor-pointer text-left relative overflow-hidden"
                 >
+                  <span className="nf-c nf-c-tl" />
+                  <span className="nf-c nf-c-tr" />
+                  <span className="nf-c nf-c-bl" />
+                  <span className="nf-c nf-c-br" />
+
                   <div className="space-y-4">
                     {/* Top Row: Service Icon (Left) + Graphic/Illustration Box (Right) */}
                     <div className="flex items-start justify-between gap-4">
